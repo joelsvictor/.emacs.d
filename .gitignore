@@ -1,0 +1,10 @@
+/transient/
+/elpa/
+/eln-cache/
+/backups/
+/.DS_Store
+/.cache/
+/.lsp-session-v1
+/.mc-lists.el
+/auto-save-list/
+/bookmarks
