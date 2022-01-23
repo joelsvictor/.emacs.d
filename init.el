@@ -1,4 +1,4 @@
-;;; 
+;;;
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'super)
@@ -6,7 +6,7 @@
   (setq mac-allow-anti-aliasing t))
 
 (add-hook 'after-init-hook (lambda () (progn
-			           (global-prettify-symbols-mode)
+                                   (global-prettify-symbols-mode)
                                    (save-place-mode +1)
                                    (blink-cursor-mode -1)
                                    (global-linum-mode +1)
@@ -17,9 +17,15 @@
 
 
 ;; "-*-JetBrains Mono-bold-normal-normal-*-15-*-*-*-m-0-iso10646-"
-(set-frame-font (font-spec :family "Ayuthaya"
-			   :size 18
-			   :weight 'bold))
+(set-frame-font (font-spec :family "Iosevka"
+                           :size 20
+                           :weight 'normal))
+
+
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+
+(add-hook 'before-save-hook 'whitespace-cleanup)
 
 
 (setq cursor-type 'box)
@@ -38,7 +44,6 @@
 
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (add-to-list 'package-archives '("gnu-elpa-devel" . "http://elpa.gnu.org/devel/") t)
-(add-to-list 'package-archives '("gnu-elpa" . "http://elpa.gnu.org/") t)
 
 (or (file-exists-p "~/.emacs.d/elpa/archives/melpa/archive-contents") (package-refresh-contents))
 
@@ -51,68 +56,32 @@
 (use-package cider
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
-  :config (add-hook 'before-save-hook (lambda ()
-                                        (clojure-sort-ns))))
+  )
 
 (use-package clj-refactor
   :ensure t
-  :hook (clojure-mode . clj-refactor-mode)
-  ;; :config (add-hook 'before-save-hook (lambda ()
-  ;;                                       (cljr-clean-ns)))
-  )
-
+  :hook (clojure-mode . clj-refactor-mode))
 
 (use-package flycheck
   :ensure t
   :pin "melpa")
 
-
 (use-package lsp-mode
-  :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-  (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         (clojure-mode . lsp)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
+  :ensure t
+  :init (setq lsp-keymap-prefix "C-c l")
+  :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
+  ;; :config (add-hook 'before-save-hook (lambda ()
+  ;;                                       (progn (lsp-format-buffer)
+  ;;                                              (lsp-organize-imports))))
   :commands lsp)
-
-;; optionally
-(use-package lsp-ui :commands lsp-ui-mode)
-;; if you are helm user
-(use-package helm-lsp :commands helm-lsp-workspace-symbol)
-;; if you are ivy user
-(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-
-;; optionally if you want to use debugger
-;; (use-package dap-mode)
-;; (use-package dap-LANGUAGE) to load the dap adapter for your language
-
-;; optional if you want which-key integration
-;; (use-package which-key
-;;     :config
-;;     (which-key-mode))
-
-
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :config (progn
-;; 	    (add-hook 'clojure-mode-hook (lambda () (progn
-;; 						 (add-hook 'before-save-hook 'lsp-format-buffer)
-;; 						 (add-hook 'before-save-hook 'lsp-organize-imports)
-;; 						 (lsp-mode)
-;; 						 (lsp))))))
-
-;; (use-package lsp-treemacs
-;;   :ensure t
-;;   :hook ((lsp-mode) . (lambda () (lsp-treemacs-sync-mode 1))))
 
 ;; (use-package lsp-ui
 ;;   :ensure t
-;;   :config (progn
-;;             (setq lsp-ui-doc-position 'top)
-;;             (setq lsp-ui-sideline-show-code-actions nil)))
+;;   :commands lsp-ui-mode)
+
+;; (use-package lsp-treemacs
+;;   :ensure t
+;;   :commands lsp-treemacs-errors-list)
 
 (use-package magit
   :ensure t)
@@ -172,10 +141,49 @@ that used by the user's shell.
 This is particularly useful under Mac OS X and macOS, where GUI
 apps are not started from a shell."
   (let ((path-from-shell (replace-regexp-in-string
-			  "[ \t\n]*$" "" (shell-command-to-string
-					  "$SHELL --login -c 'echo $PATH'"
-						    ))))
+                          "[ \t\n]*$" "" (shell-command-to-string
+                                          "$SHELL --login -c 'echo $PATH'"
+                                                    ))))
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
 
 (set-exec-path-from-shell-PATH)
+
+
+;; (use-package eaf
+;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+;;   :custom
+;;   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+;;   (eaf-browser-continue-where-left-off t)
+;;   (eaf-browser-enable-adblocker t)
+;;   (browse-url-browser-function 'eaf-open-browser)
+;;   :config
+;;   (progn
+;;     (require 'eaf-demo)
+;;     (require 'eaf-file-sender)
+;;     (require 'eaf-music-player)
+;;     (require 'eaf-camera)
+;;     (require 'eaf-rss-reader)
+;;     (require 'eaf-terminal)
+;;     (require 'eaf-image-viewer)
+;;     (require 'eaf-vue-demo)
+;;     (require 'eaf-pdf-viewer)
+;;     (require 'eaf-browser)
+;;     (require 'eaf-markdown-previewer)
+;;     (require 'eaf-file-browser)
+;;     ;; (require 'eaf-mermaid)
+;;     (require 'eaf-file-manager)
+;;     (require 'eaf-mindmap)
+;;     (require 'eaf-video-player)
+;;     (require 'eaf-org-previewer)
+;;     (require 'eaf-airshare)
+;;     (require 'eaf-jupyter)
+;;     (require 'eaf-netease-cloud-music)
+;;     (require 'eaf-system-monitor)
+;;     (defalias 'browse-web #'eaf-open-browser)
+;;     (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
+;;     (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
+;;     (eaf-bind-key take_photo "p" eaf-camera-keybinding)
+;;     (eaf-bind-key nil "M-q" eaf-browser-keybinding))
+;;   )
+;; unbind, see more in the Wiki
