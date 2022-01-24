@@ -1,8 +1,8 @@
 ;;;
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'super)
-  (setq mac-right-command-modifier 'hyper)
+  ;; (setq mac-option-modifier 'super)
+  ;; (setq mac-right-command-modifier 'hyper)
   (setq mac-allow-anti-aliasing t))
 
 (add-hook 'after-init-hook (lambda () (progn
@@ -17,8 +17,8 @@
 
 
 ;; "-*-JetBrains Mono-bold-normal-normal-*-15-*-*-*-m-0-iso10646-"
-(set-frame-font (font-spec :family "Iosevka"
-                           :size 20
+(set-frame-font (font-spec :family "Monaco"
+                           :size 13
                            :weight 'normal))
 
 
@@ -27,7 +27,8 @@
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
-
+(setq gc-cons-threshold 1024000000)
+(setq read-process-output-max 16777216)
 (setq cursor-type 'box)
 (setq inhibit-splash-screen t)
 (setq-default indent-tabs-mode nil)
@@ -55,7 +56,9 @@
 
 (use-package cider
   :ensure t
-  :hook ((clojure-mode cider-repl-mode) . paredit-mode))
+  :hook ((clojure-mode cider-repl-mode) . paredit-mode)
+  :config (setq cider-repl-display-help-banner nil))
+
 
 (use-package clj-refactor
   :ensure t
@@ -69,18 +72,20 @@
   :ensure t
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-  :config (add-hook 'before-save-hook (lambda ()
-                                        (progn (lsp-format-buffer)
-                                               (lsp-organize-imports))))
+  :config (progn
+            ;; (setq lsp-use-plists t)
+            (add-hook 'before-save-hook (lambda ()
+                                          (progn (lsp-format-buffer)
+                                                 (lsp-organize-imports)))))
   :commands lsp)
 
 ;; (use-package lsp-ui
 ;;   :ensure t
 ;;   :commands lsp-ui-mode)
 
-;; (use-package lsp-treemacs
-;;   :ensure t
-;;   :commands lsp-treemacs-errors-list)
+(use-package lsp-treemacs
+  :ensure t
+  :commands lsp-treemacs-errors-list)
 
 (use-package magit
   :ensure t)
