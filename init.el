@@ -55,8 +55,7 @@
 
 (use-package cider
   :ensure t
-  :hook ((clojure-mode cider-repl-mode) . paredit-mode)
-  )
+  :hook ((clojure-mode cider-repl-mode) . paredit-mode))
 
 (use-package clj-refactor
   :ensure t
@@ -70,9 +69,9 @@
   :ensure t
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-  ;; :config (add-hook 'before-save-hook (lambda ()
-  ;;                                       (progn (lsp-format-buffer)
-  ;;                                              (lsp-organize-imports))))
+  :config (add-hook 'before-save-hook (lambda ()
+                                        (progn (lsp-format-buffer)
+                                               (lsp-organize-imports))))
   :commands lsp)
 
 ;; (use-package lsp-ui
@@ -133,6 +132,18 @@
 (use-package yaml-mode
   :ensure t
   :pin "melpa")
+
+
+(use-package projectile
+  :ensure t
+  :config (progn
+            (projectile-mode +1)
+            (setq projectile-sort-order 'recentf)
+            (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)))
+
+
+(use-package restclient
+  :ensure t)
 
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
