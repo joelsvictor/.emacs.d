@@ -1,19 +1,27 @@
 ;;;
+
+(require 'server)
+(when (not server-name)
+  (server-edit))
+
+
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
   ;; (setq mac-option-modifier 'super)
   ;; (setq mac-right-command-modifier 'hyper)
   (setq mac-allow-anti-aliasing t))
 
-(add-hook 'after-init-hook (lambda () (progn
-                                   (global-prettify-symbols-mode)
-                                   (save-place-mode +1)
-                                   (blink-cursor-mode -1)
-                                   (global-linum-mode +1)
-                                   (column-number-mode +1)
-                                   (tool-bar-mode -1)
-                                   (scroll-bar-mode -1)
-                                   (show-paren-mode t))))
+
+(add-hook 'after-init-hook
+          (lambda () (progn
+                  (global-prettify-symbols-mode)
+                  (save-place-mode +1)
+                  (blink-cursor-mode -1)
+                  (global-linum-mode +1)
+                  (column-number-mode +1)
+                  (tool-bar-mode -1)
+                  (scroll-bar-mode -1)
+                  (show-paren-mode t))))
 
 
 ;; "-*-JetBrains Mono-bold-normal-normal-*-15-*-*-*-m-0-iso10646-"
@@ -27,6 +35,7 @@
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
+
 (setq gc-cons-threshold 1024000000)
 (setq read-process-output-max 16777216)
 (setq cursor-type 'box)
@@ -38,6 +47,7 @@
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
+(load-theme 'leuven t)
 
 (package-initialize)
 
@@ -79,9 +89,9 @@
                                                  (lsp-organize-imports)))))
   :commands lsp)
 
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode)
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
 
 (use-package lsp-treemacs
   :ensure t
@@ -93,8 +103,6 @@
 (use-package git-gutter-fringe
   :ensure t
   :config (global-git-gutter-mode))
-
-(load-theme 'leuven t)
 
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
@@ -162,6 +170,7 @@ apps are not started from a shell."
                                                     ))))
     (setenv "PATH" path-from-shell)
     (setq exec-path (split-string path-from-shell path-separator))))
+
 
 (set-exec-path-from-shell-PATH)
 
