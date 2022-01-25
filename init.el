@@ -1,15 +1,6 @@
 ;;;
-
-(require 'server)
-
-(when (not server-name)
-  (server-edit))
-
-
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
-  ;; (setq mac-option-modifier 'super)
-  ;; (setq mac-right-command-modifier 'hyper)
   (setq mac-allow-anti-aliasing t))
 
 
@@ -25,10 +16,8 @@
                   (show-paren-mode t))))
 
 
-;; "-*-JetBrains Mono-bold-normal-normal-*-15-*-*-*-m-0-iso10646-"
-(set-frame-font (font-spec :family "Monaco"
-                           :size 13
-                           :weight 'normal))
+(add-to-list 'default-frame-alist
+             '(font . "Monaco-13"))
 
 
 (defalias 'yes-or-no-p 'y-or-n-p)
