@@ -13,3 +13,6 @@
 /workspace/
 /site-lisp/
 /places
+/.local/
+/projectile-bookmarks.eld
+/projectile.cache
