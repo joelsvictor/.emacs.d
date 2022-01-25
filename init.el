@@ -1,6 +1,7 @@
 ;;;
 
 (require 'server)
+
 (when (not server-name)
   (server-edit))
 
@@ -64,10 +65,12 @@
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
+
 (use-package cider
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
-  :config (setq cider-repl-display-help-banner nil))
+  :config (setq cider-repl-display-help-banner nil)
+  :bind (("C-c c d d" . cider-debug-defun-at-point)))
 
 
 (use-package clj-refactor
@@ -157,6 +160,11 @@
 
 (use-package restclient
   :ensure t)
+
+(use-package org
+  :ensure t
+  :bind (("C-c o a" . org-agenda)
+         ("C-c o c" . org-capture)))
 
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
