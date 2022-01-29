@@ -13,7 +13,8 @@
                   (column-number-mode +1)
                   (tool-bar-mode -1)
                   (scroll-bar-mode -1)
-                  (show-paren-mode t))))
+                  (show-paren-mode t)
+                  (savehist-mode +1))))
 
 
 (add-to-list 'default-frame-alist
@@ -56,6 +57,9 @@
 
 (or (package-installed-p 'use-package) (package-install 'use-package))
 
+(setq use-package-always-ensure t)
+(setq use-package-verbose t)
+
 (use-package paredit
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
@@ -64,7 +68,13 @@
 (use-package cider
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
-  :config (setq cider-repl-display-help-banner nil)
+  :custom
+  (cider-prompt-for-symbol nil)
+  (cider-repl-pop-to-buffer-on-connect 'display-only)
+  (cider-repl-prompt-function 'cider-repl-prompt-abbreviated)
+  (cider-repl-buffer-size-limit 100000)
+  (nrepl-log-messages t)
+  (cider-auto-test-mode t)
   :bind (:map clojure-mode-map
               ("C-c c d d" . cider-debug-defn-at-point)))
 
@@ -83,23 +93,28 @@
   :ensure t
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-  ;; :config (progn
-  ;;           ;; (setq lsp-use-plists t)
-  ;;           (add-hook 'before-save-hook (lambda ()
-  ;;                                         (progn (lsp-format-buffer)
-  ;;                                                (lsp-organize-imports)))
-  ;;                     nil
-  ;;                     t))
+  :custom
+  (lsp-lens-enable t)
+  (lsp-eldoc-enable-hover t)
+  (lsp-enable-folding t)
+  (lsp-headerline-breadcrumb-enable t)
+  (lsp-idle-delay .01)
   :commands lsp)
 
 
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode)
+  :commands lsp-ui-mode
+  :config
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (setq lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-show))
+
 
 (use-package lsp-treemacs
   :ensure t
   :commands lsp-treemacs-errors-list)
+
 
 (use-package magit
   :ensure t)
@@ -189,7 +204,28 @@
 (use-package yasnippet
   :ensure t
   :pin "melpa"
-  :hook (clojure-mode . yas-minor-mode))
+  :custom
+  (yas-verbosity 2)
+  (yas-wrap-around-region t)
+  :config
+  (yas-global-mode))
+
+
+(use-package command-log-mode)
+
+
+(use-package docker)
+
+
+(use-package dockerfile-mode)
+
+
+(use-package eldoc
+  :diminish eldoc-mode
+  :config (global-eldoc-mode))
+
+
+(use-package json-mode)
 
 
 (defun set-exec-path-from-shell-PATH ()
@@ -246,3 +282,5 @@ apps are not started from a shell."
 ;;     (eaf-bind-key nil "M-q" eaf-browser-keybinding))
 ;;   )
 ;; unbind, see more in the Wiki
+
+(server-start)
