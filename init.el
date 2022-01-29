@@ -83,11 +83,13 @@
   :ensure t
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-  :config (progn
-            ;; (setq lsp-use-plists t)
-            (add-hook 'before-save-hook (lambda ()
-                                          (progn (lsp-format-buffer)
-                                                 (lsp-organize-imports)))))
+  ;; :config (progn
+  ;;           ;; (setq lsp-use-plists t)
+  ;;           (add-hook 'before-save-hook (lambda ()
+  ;;                                         (progn (lsp-format-buffer)
+  ;;                                                (lsp-organize-imports)))
+  ;;                     nil
+  ;;                     t))
   :commands lsp)
 
 
