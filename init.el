@@ -14,6 +14,7 @@
                   (tool-bar-mode -1)
                   (scroll-bar-mode -1)
                   (show-paren-mode t)
+                  (subword-mode +1)
                   (savehist-mode +1))))
 
 
@@ -86,7 +87,8 @@
 
 (use-package flycheck
   :ensure t
-  :pin "melpa")
+  :pin "melpa"
+  :config (global-flycheck-mode))
 
 
 (use-package lsp-mode
@@ -209,6 +211,11 @@
   (yas-wrap-around-region t)
   :config
   (yas-global-mode))
+
+
+(use-package yasnippet-snippets
+  :ensure t
+  :pin "melpa")
 
 
 (use-package command-log-mode)
