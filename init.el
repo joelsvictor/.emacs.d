@@ -109,8 +109,7 @@
   :commands lsp-ui-mode
   :config
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (setq lsp-ui-doc-position 'bottom)
-  (lsp-ui-doc-show))
+  (setq lsp-ui-doc-position 'bottom))
 
 
 (use-package lsp-treemacs
