@@ -39,6 +39,12 @@
 
 (load-theme 'leuven t)
 
+(require 'windmove)
+(windmove-default-keybindings)
+
+(require 'winner)
+(winner-mode)
+
 (package-initialize)
 
 (require 'package)
@@ -59,16 +65,19 @@
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
   :config (setq cider-repl-display-help-banner nil)
-  :bind (("C-c c d d" . cider-debug-defun-at-point)))
+  :bind (:map clojure-mode-map
+              ("C-c c d d" . cider-debug-defn-at-point)))
 
 
 (use-package clj-refactor
   :ensure t
   :hook (clojure-mode . clj-refactor-mode))
 
+
 (use-package flycheck
   :ensure t
   :pin "melpa")
+
 
 (use-package lsp-mode
   :ensure t
@@ -80,6 +89,7 @@
                                           (progn (lsp-format-buffer)
                                                  (lsp-organize-imports)))))
   :commands lsp)
+
 
 (use-package lsp-ui
   :ensure t
@@ -116,9 +126,10 @@
   :pin "melpa"
   :hook ((after-init) . marginalia-mode))
 
-;; (use-package consult
-;;   :ensure t
-;;   :pin "gnu-elpa-devel")
+
+(use-package consult
+  :ensure t
+  :pin "gnu-elpa-devel")
 
 
 (use-package embark
@@ -150,10 +161,34 @@
 (use-package restclient
   :ensure t)
 
+
 (use-package org
   :ensure t
   :bind (("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
+
+
+(use-package lsp-java
+  :ensure t
+  :pin "melpa")
+
+
+(use-package ansible
+  :ensure t
+  :pin "melpa")
+
+
+(use-package which-key
+  :ensure t
+  :pin "melpa"
+  :config (which-key-mode))
+
+
+(use-package yasnippet
+  :ensure t
+  :pin "melpa"
+  :hook (clojure-mode . yas-minor-mode))
+
 
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
