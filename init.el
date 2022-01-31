@@ -118,7 +118,10 @@
 
 
 (use-package magit
-  :ensure t)
+  :ensure t
+  :config
+  (transient-append-suffix 'magit-pull "-r"
+    '("-a" "Autostash" "--autostash")))
 
 (use-package git-gutter-fringe
   :ensure t
