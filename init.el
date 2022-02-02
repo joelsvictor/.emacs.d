@@ -66,6 +66,39 @@
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
 
+(defun portal.api/open
+    ()
+  "Open the portal inspector."
+  (interactive)
+  (cider-nrepl-sync-request:eval
+   "(require 'portal.api) (portal.api/tap) (portal.api/open)"))
+
+
+(defun portal.api/clear
+    ()
+  "Clear the portal inspector."
+  (interactive)
+  (cider-nrepl-sync-request:eval "(portal.api/clear)"))
+
+
+(defun portal.api/close
+    ()
+  "Close the portal inspector."
+  (interactive)
+  (cider-nrepl-sync-request:eval "(portal.api/close)"))
+
+
+(defun cider-tap (&rest r)
+  (cons (concat "(let [__value "
+                (caar r)
+                "] (tap> __value) __value)")
+        (cdar r)))
+
+
+(advice-add 'cider-nrepl-request:eval
+            :filter-args #'cider-tap)
+
+
 (use-package cider
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
@@ -77,7 +110,10 @@
   (nrepl-log-messages t)
   (cider-auto-test-mode t)
   :bind (:map clojure-mode-map
-              ("C-c c d d" . cider-debug-defn-at-point)))
+              ("C-c c d d" . cider-debug-defn-at-point)
+              ("C-c c p o" . portal.api/open)
+              ("C-c c p c" . portal.api/clear)
+              ("C-c c p x" . portal.api/close)))
 
 
 (use-package clj-refactor
