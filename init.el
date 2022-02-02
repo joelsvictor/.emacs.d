@@ -256,7 +256,9 @@
   :pin "melpa")
 
 
-(use-package command-log-mode)
+(use-package command-log-mode
+  :hook (after-init . global-command-log-mode)
+  :commands (global-command-log-mode))
 
 
 (use-package docker)
