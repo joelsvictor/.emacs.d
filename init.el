@@ -110,10 +110,11 @@
   (nrepl-log-messages t)
   (cider-auto-test-mode t)
   :bind (:map clojure-mode-map
-              ("C-c c d d" . cider-debug-defn-at-point)
               ("C-c c p o" . portal.api/open)
               ("C-c c p c" . portal.api/clear)
-              ("C-c c p x" . portal.api/close)))
+              ("C-c c p x" . portal.api/close)
+              ("C-c c d d" . cider-debug-defun-at-point))
+  :commands cider-debug-defun-at-point)
 
 
 (use-package clj-refactor
@@ -159,19 +160,23 @@
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
 
+
 (use-package git-gutter-fringe
   :ensure t
   :config (global-git-gutter-mode))
 
+
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+
 
 (use-package company
   :ensure t
   :init (global-company-mode)
   :config (setq company-show-numbers 'left
                 company-selection-wrap-around t))
+
 
 (use-package vertico
   :ensure t
