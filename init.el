@@ -61,6 +61,7 @@
 (setq use-package-always-ensure t)
 (setq use-package-verbose t)
 
+
 (use-package paredit
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
@@ -146,7 +147,9 @@
   :commands lsp-ui-mode
   :config
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (setq lsp-ui-doc-position 'bottom))
+  (setq lsp-ui-doc-position 'bottom)
+  :custom
+  (lsp-ui-sideline-enable nil))
 
 
 (use-package lsp-treemacs
