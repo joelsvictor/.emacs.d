@@ -229,8 +229,8 @@
 
 (use-package org
   :ensure t
-  :bind (("C-c o a" . org-agenda)
-         ("C-c o c" . org-capture)))
+  :bind (("C-c C-o a" . org-agenda)
+         ("C-c C-o c" . org-capture)))
 
 
 (use-package lsp-java
@@ -240,7 +240,9 @@
 
 (use-package ansible
   :ensure t
-  :pin "melpa")
+  :pin "melpa"
+  :bind
+  (("C-c a d" . ansible-decrypt-buffer)))
 
 
 (use-package which-key
