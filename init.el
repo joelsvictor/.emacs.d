@@ -241,8 +241,11 @@
 (use-package ansible
   :ensure t
   :pin "melpa"
-  :bind
-  (("C-c a d" . ansible-decrypt-buffer)))
+  :hook (yaml-mode . ansible)
+  :config
+  (add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt)
+  :bind (:map ansible-key-map
+              ("C-c a d" . ansible-decrypt-buffer)))
 
 
 (use-package which-key
