@@ -67,45 +67,12 @@
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
 
-(defun portal.api/open
-    ()
-  "Open the portal inspector."
-  (interactive)
-  (cider-nrepl-sync-request:eval
-   "(require 'portal.api) (portal.api/tap) (portal.api/open)"))
-
-
-(defun portal.api/clear
-    ()
-  "Clear the portal inspector."
-  (interactive)
-  (cider-nrepl-sync-request:eval "(portal.api/clear)"))
-
-
-(defun portal.api/close
-    ()
-  "Close the portal inspector."
-  (interactive)
-  (cider-nrepl-sync-request:eval "(portal.api/close)"))
-
-
-(defun cider-tap (&rest r)
-  (cons (concat "(let [__value "
-                (caar r)
-                "] (tap> __value) __value)")
-        (cdar r)))
-
-
-(advice-add 'cider-nrepl-request:eval
-            :filter-args #'cider-tap)
-
-
 (use-package cider
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
   :custom
   (cider-prompt-for-symbol nil)
-  (cider-repl-pop-to-buffer-on-connect 'display-only)
+  (cider-repl-pop-to-buffer-on-connect nil)
   (cider-repl-prompt-function 'cider-repl-prompt-abbreviated)
   (cider-repl-buffer-size-limit 100000)
   (nrepl-log-messages t)
@@ -241,7 +208,8 @@
 (use-package ansible
   :ensure t
   :pin "melpa"
-  :hook (yaml-mode . ansible)
+  :hook
+  (yaml-mode . ansible)
   :config
   (add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt)
   :bind (:map ansible-key-map
@@ -293,6 +261,13 @@
          ("C-<" .  mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 
+
+(use-package groovy-mode
+  :pin "melpa")
+
+
+(use-package git-timemachine
+  :pin "melpa")
 
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
