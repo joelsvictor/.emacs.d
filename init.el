@@ -8,7 +8,7 @@
           (lambda () (progn
                   (global-prettify-symbols-mode)
                   (save-place-mode +1)
-                  (blink-cursor-mode -1)
+                  (blink-cursor-mode +1)
                   (global-linum-mode +1)
                   (column-number-mode +1)
                   (tool-bar-mode -1)
@@ -62,6 +62,17 @@
 (setq use-package-verbose t)
 
 
+(use-package evil
+  :ensure t
+  :pin "melpa"
+  :commands evil-mode
+  :init (evil-mode)
+  :demand t
+  :config
+  (progn (evil-set-leader 'normal (kbd "SPC"))
+         (require 'evil)))
+
+
 (use-package paredit
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
@@ -78,9 +89,6 @@
   (nrepl-log-messages t)
   (cider-auto-test-mode t)
   :bind (:map clojure-mode-map
-              ("C-c c p o" . portal.api/open)
-              ("C-c c p c" . portal.api/clear)
-              ("C-c c p x" . portal.api/close)
               ("C-c c d d" . cider-debug-defun-at-point))
   :commands cider-debug-defun-at-point)
 
@@ -106,7 +114,7 @@
   (lsp-enable-folding t)
   (lsp-headerline-breadcrumb-enable t)
   (lsp-idle-delay .01)
-  :commands lsp)
+  :commands (lsp lsp-command-map))
 
 
 (use-package lsp-ui
@@ -127,6 +135,7 @@
 (use-package magit
   :ensure t
   :config
+  (evil-define-key 'normal 'global (kbd "<leader>g") 'magit)
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
 
@@ -187,7 +196,7 @@
   :config (progn
             (projectile-mode +1)
             (setq projectile-sort-order 'recentf)
-            (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)))
+            (evil-define-key 'normal 'projectile-mode-map (kbd "<leader>p") 'projectile-command-map)))
 
 
 (use-package restclient
@@ -196,8 +205,8 @@
 
 (use-package org
   :ensure t
-  :bind (("C-c C-o a" . org-agenda)
-         ("C-c C-o c" . org-capture)))
+  :config (progn (evil-define-key 'normal 'global (kbd "<leader>oa") 'org-agenda)
+                 (evil-define-key 'normal 'global (kbd "<leader>oc") 'org-capture)))
 
 
 (use-package lsp-java
@@ -262,8 +271,7 @@
          ("C-c C-<" . mc/mark-all-like-this)))
 
 
-(use-package groovy-mode
-  :pin "melpa")
+(use-package groovy-mode)
 
 
 (use-package git-timemachine
