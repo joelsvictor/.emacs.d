@@ -101,6 +101,8 @@
 (use-package flycheck
   :ensure t
   :pin "melpa"
+  :config (setq flycheck-indication-mode 'left-margin
+                flycheck-highlighting-mode 'columns)
   :config (global-flycheck-mode))
 
 
