@@ -69,6 +69,7 @@
   :init (evil-mode)
   :demand t
   :config
+  (evil-set-initial-state 'special-mode 'emacs)
   (progn (evil-set-leader 'normal (kbd "SPC"))
          (require 'evil)))
 
