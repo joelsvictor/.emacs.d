@@ -280,6 +280,10 @@
 (use-package git-timemachine
   :pin "melpa")
 
+(use-package anzu
+  :pin "melpa"
+  :ensure t)
+
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
 that used by the user's shell.
