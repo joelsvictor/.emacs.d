@@ -224,8 +224,7 @@
   (yaml-mode . ansible)
   :config
   (add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt)
-  :bind (:map ansible-key-map
-              ("C-c a d" . ansible-decrypt-buffer)))
+  (evil-define-key 'normal 'ansible-key-map (kbd "<leader>ad") 'ansible-decrypt-buffer))
 
 
 (use-package which-key
