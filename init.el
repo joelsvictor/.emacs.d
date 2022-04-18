@@ -270,19 +270,29 @@
 
 (use-package multiple-cursors
   :bind (("C->" . mc/mark-next-like-this)
-         ("C-<" .  mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
+         ("C-<" .  mc/mark-previous-like-this)))
 
 
-(use-package groovy-mode)
+(use-package groovy-mode
+  :ensure t)
 
 
 (use-package git-timemachine
-  :pin "melpa")
+  :pin "melpa"
+  :ensure t)
+
 
 (use-package anzu
   :pin "melpa"
   :ensure t)
+
+
+(use-package auto-virtualenv
+  :pin "melpa"
+  :ensure t
+  :config
+  (add-hook 'window-configuration-change-hook 'auto-virtualenv-set-virtualenv))
+
 
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
