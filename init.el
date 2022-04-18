@@ -19,7 +19,7 @@
 
 
 (add-to-list 'default-frame-alist
-             '(font . "Monaco-13"))
+             '(font . "JetBrains Mono-12"))
 
 
 (defalias 'yes-or-no-p 'y-or-n-p)
