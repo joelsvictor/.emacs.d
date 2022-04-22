@@ -15,7 +15,8 @@
                   (scroll-bar-mode -1)
                   (show-paren-mode t)
                   (subword-mode +1)
-                  (savehist-mode +1))))
+                  (savehist-mode +1)
+                  (global-visual-line-mode +1))))
 
 
 (add-to-list 'default-frame-alist
@@ -60,6 +61,11 @@
 
 (setq use-package-always-ensure t)
 (setq use-package-verbose t)
+
+
+(use-package gruvbox-theme
+  :config
+  (load-theme 'gruvbox-light-hard t))
 
 
 (use-package evil
@@ -208,8 +214,17 @@
 
 (use-package org
   :ensure t
-  :config (progn (evil-define-key 'normal 'global (kbd "<leader>oa") 'org-agenda)
-                 (evil-define-key 'normal 'global (kbd "<leader>oc") 'org-capture)))
+  :config
+  (require 'ob-sql)
+  (require 'ob-clojure)
+  (setq org-babel-clojure-backend 'cider)
+  (setq org-babel-python-command "python3")
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (clojure . t)
+     (python . t)
+     (sql . t))))
 
 
 (use-package lsp-java
