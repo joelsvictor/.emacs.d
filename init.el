@@ -253,8 +253,7 @@
   :hook
   (yaml-mode . ansible)
   :config
-  (add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt)
-  (evil-define-key 'normal 'ansible-key-map (kbd "<leader>ad") 'ansible-decrypt-buffer))
+  (add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt))
 
 
 (use-package which-key
