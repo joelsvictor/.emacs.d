@@ -1,4 +1,6 @@
-;;;
+;;; package --- init.el
+;;; Commentary:
+;;; Code:
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
   (setq mac-allow-anti-aliasing t))
@@ -22,15 +24,9 @@
 (add-to-list 'default-frame-alist
              '(font . "JetBrains Mono-12"))
 
-
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 
-(setq gc-cons-threshold 1024000000)
-(setq read-process-output-max 16777216)
 (setq cursor-type 'box)
 (setq inhibit-splash-screen t)
 (setq-default indent-tabs-mode nil)
@@ -40,7 +36,6 @@
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-(load-theme 'leuven t)
 
 (require 'windmove)
 (windmove-default-keybindings)
@@ -62,16 +57,16 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(require 'straight)
+(require 'straight )
 
 (straight-use-package 'use-package)
 
-(setq use-package-always-ensure t)
 (setq use-package-verbose t)
 
 
 (use-package gruvbox-theme
   :straight t
+  :ensure t
   :config
   (load-theme 'gruvbox-light-hard t))
 
@@ -121,7 +116,7 @@
   :ensure t
   :config
   (setq flycheck-indication-mode 'left-margin
-        flycheck-highlighting-mode 'columns)
+        flycheck-highlighting-mode 'symbols)
   (global-flycheck-mode))
 
 
@@ -285,32 +280,37 @@
 
 (use-package command-log-mode
   :straight t
+  :ensure t
   :hook (after-init . global-command-log-mode)
   :commands (global-command-log-mode))
 
 
 (use-package docker
-  :straight t)
+  :straight t
+  :ensure t)
 
 
 
 (use-package dockerfile-mode
-  :straight t)
+  :straight t
+  :ensure t)
 
 
 (use-package eldoc
   :straight t
-  :diminish eldoc-mode
+  :ensure t
   :config (global-eldoc-mode))
 
 
 (use-package json-mode
-  :straight t)
+  :straight t
+  :ensure t)
 
 
 
 (use-package multiple-cursors
   :straight t
+  :ensure t
   :bind (("C->" . mc/mark-next-like-this)
          ("C-<" .  mc/mark-previous-like-this)))
 
@@ -393,3 +393,8 @@ apps are not started from a shell."
 ;; unbind, see more in the Wiki
 
 (server-start)
+
+(toggle-frame-maximized)
+
+
+;;; init.el ends here
