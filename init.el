@@ -48,29 +48,37 @@
 (require 'winner)
 (winner-mode)
 
-(package-initialize)
+(defvar bootstrap-version)
 
-(require 'package)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("gnu-elpa-devel" . "http://elpa.gnu.org/devel/") t)
+(require 'straight)
 
-(or (file-exists-p "~/.emacs.d/elpa/archives/melpa/archive-contents") (package-refresh-contents))
-
-(or (package-installed-p 'use-package) (package-install 'use-package))
+(straight-use-package 'use-package)
 
 (setq use-package-always-ensure t)
 (setq use-package-verbose t)
 
 
 (use-package gruvbox-theme
+  :straight t
   :config
   (load-theme 'gruvbox-light-hard t))
 
 
 (use-package evil
+  :straight t
   :ensure t
-  :pin "melpa"
   :commands evil-mode
   :init (evil-mode)
   :demand t
@@ -81,11 +89,13 @@
 
 
 (use-package paredit
+  :straight t
   :ensure t
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
 
 (use-package cider
+  :straight t
   :ensure t
   :hook ((clojure-mode cider-repl-mode) . paredit-mode)
   :custom
@@ -101,19 +111,22 @@
 
 
 (use-package clj-refactor
+  :straight t
   :ensure t
   :hook (clojure-mode . clj-refactor-mode))
 
 
 (use-package flycheck
+  :straight t
   :ensure t
-  :pin "melpa"
-  :config (setq flycheck-indication-mode 'left-margin
-                flycheck-highlighting-mode 'columns)
-  :config (global-flycheck-mode))
+  :config
+  (setq flycheck-indication-mode 'left-margin
+        flycheck-highlighting-mode 'columns)
+  (global-flycheck-mode))
 
 
 (use-package lsp-mode
+  :straight t
   :ensure t
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
@@ -127,6 +140,7 @@
 
 
 (use-package lsp-ui
+  :straight t
   :ensure t
   :commands lsp-ui-mode
   :config
@@ -137,11 +151,13 @@
 
 
 (use-package lsp-treemacs
+  :straight t
   :ensure t
   :commands lsp-treemacs-errors-list)
 
 
 (use-package magit
+  :straight t
   :ensure t
   :config
   (evil-define-key 'normal 'global (kbd "<leader>g") 'magit)
@@ -150,6 +166,7 @@
 
 
 (use-package git-gutter-fringe
+  :straight t
   :ensure t
   :config (global-git-gutter-mode))
 
@@ -160,6 +177,7 @@
 
 
 (use-package company
+  :straight t
   :ensure t
   :init (global-company-mode)
   :config (setq company-show-numbers 'left
@@ -167,40 +185,41 @@
 
 
 (use-package vertico
+  :straight t
   :ensure t
-  :pin "gnu-elpa-devel"
   :hook ((after-init) .  vertico-mode))
 
 (use-package marginalia
+  :straight t
   :ensure t
-  :pin "melpa"
   :hook ((after-init) . marginalia-mode))
 
 
 (use-package consult
-  :ensure t
-  :pin "gnu-elpa-devel")
+  :straight t
+  :ensure t)
 
 
 (use-package embark
+  :straight t
   :ensure t
-  :pin "gnu-elpa-devel"
   :bind (("M-." . embark-dwim)
          ("C-." . embark-act)))
 
 
 (use-package orderless
+  :straight t
   :ensure t
-  :pin "melpa"
   :config (setq completion-styles '(orderless)))
 
 
 (use-package yaml-mode
-  :ensure t
-  :pin "melpa")
+  :straight t
+  :ensure t)
 
 
 (use-package projectile
+  :straight t
   :ensure t
   :config (progn
             (projectile-mode +1)
@@ -209,11 +228,12 @@
 
 
 (use-package restclient
+  :straight t
   :ensure t)
 
-
 (use-package org
-  :ensure t
+  ;; :straight t
+  ;; :ensure t
   :config
   (require 'ob-sql)
   (require 'ob-clojure)
@@ -228,13 +248,13 @@
 
 
 (use-package lsp-java
-  :ensure t
-  :pin "melpa")
+  :straight t
+  :ensure t)
 
 
 (use-package ansible
+  :straight t
   :ensure t
-  :pin "melpa"
   :hook
   (yaml-mode . ansible)
   :config
@@ -243,14 +263,14 @@
 
 
 (use-package which-key
+  :straight t
   :ensure t
-  :pin "melpa"
   :config (which-key-mode))
 
 
 (use-package yasnippet
+  :straight t
   :ensure t
-  :pin "melpa"
   :custom
   (yas-verbosity 2)
   (yas-wrap-around-region t)
@@ -259,50 +279,59 @@
 
 
 (use-package yasnippet-snippets
-  :ensure t
-  :pin "melpa")
+  :straight t
+  :ensure t)
 
 
 (use-package command-log-mode
+  :straight t
   :hook (after-init . global-command-log-mode)
   :commands (global-command-log-mode))
 
 
-(use-package docker)
+(use-package docker
+  :straight t)
 
 
-(use-package dockerfile-mode)
+
+(use-package dockerfile-mode
+  :straight t)
 
 
 (use-package eldoc
+  :straight t
   :diminish eldoc-mode
   :config (global-eldoc-mode))
 
 
-(use-package json-mode)
+(use-package json-mode
+  :straight t)
+
 
 
 (use-package multiple-cursors
+  :straight t
   :bind (("C->" . mc/mark-next-like-this)
          ("C-<" .  mc/mark-previous-like-this)))
 
 
 (use-package groovy-mode
+  :straight t
   :ensure t)
 
 
 (use-package git-timemachine
-  :pin "melpa"
+  :straight t
   :ensure t)
 
 
 (use-package anzu
-  :pin "melpa"
+  :straight t
   :ensure t)
 
 
 (use-package auto-virtualenv
-  :pin "melpa"
+  :straight t
   :ensure t
   :config
   (add-hook 'window-configuration-change-hook 'auto-virtualenv-set-virtualenv))
