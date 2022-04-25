@@ -1,10 +1,14 @@
 ;;; package --- init.el
 ;;; Commentary:
 ;;; Code:
+(add-to-list 'default-frame-alist
+             '(font . "JetBrains Mono-14"))
+
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
   (setq mac-allow-anti-aliasing t))
 
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (add-hook 'after-init-hook
           (lambda () (progn
@@ -17,12 +21,8 @@
                   (scroll-bar-mode -1)
                   (show-paren-mode t)
                   (subword-mode +1)
-                  (savehist-mode +1)
-                  (global-visual-line-mode +1))))
+                  (savehist-mode +1))))
 
-
-(add-to-list 'default-frame-alist
-             '(font . "JetBrains Mono-12"))
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
@@ -57,7 +57,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(require 'straight )
+(require 'straight)
 
 (straight-use-package 'use-package)
 
@@ -71,16 +71,18 @@
   (load-theme 'gruvbox-light-hard t))
 
 
-(use-package evil
-  :straight t
-  :ensure t
-  :commands evil-mode
-  :init (evil-mode)
-  :demand t
-  :config
-  (evil-set-initial-state 'special-mode 'emacs)
-  (progn (evil-set-leader 'normal (kbd "SPC"))
-         (require 'evil)))
+;; (use-package evil
+;;   :straight t
+;;   :ensure t
+;;   :commands evil-mode
+;;   :init (evil-mode)
+;;   :demand t
+;;   :config
+;;   (evil-set-initial-state 'special-mode 'emacs)
+;;   (progn (evil-set-leader 'normal (kbd "SPC"))
+;;          (require 'evil))
+;;   (define-key evil-ex-map "f " 'find-file)
+;;   (define-key evil-ex-map "b " 'ibuffer))
 
 
 (use-package paredit
@@ -155,7 +157,7 @@
   :straight t
   :ensure t
   :config
-  (evil-define-key 'normal 'global (kbd "<leader>g") 'magit)
+  ;; (evil-set-initial-state 'git-commit-mode 'emacs)
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
 
@@ -164,11 +166,6 @@
   :straight t
   :ensure t
   :config (global-git-gutter-mode))
-
-
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 
 (use-package company
@@ -219,7 +216,9 @@
   :config (progn
             (projectile-mode +1)
             (setq projectile-sort-order 'recentf)
-            (evil-define-key 'normal 'projectile-mode-map (kbd "<leader>p") 'projectile-command-map)))
+            (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+            ;; (evil-define-key 'normal 'projectile-mode-map (kbd "<leader>p") 'projectile-command-map)
+            ))
 
 
 (use-package restclient
@@ -230,16 +229,90 @@
   ;; :straight t
   ;; :ensure t
   :config
-  (require 'ob-sql)
-  (require 'ob-clojure)
   (setq org-babel-clojure-backend 'cider)
   (setq org-babel-python-command "python3")
+  (setq org-hide-emphasis-markers t)
+  (setq org-src-fontify-natively t)
+  (require 'ob-haskell)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
+     (ruby . t)
+     ;; ( io . t )
+     ;; ( erlang . t )
+     (haskell . t)
      (clojure . t)
      (python . t)
-     (sql . t))))
+     (shell . t)
+     (plantuml . t)
+     (sql . t)))
+
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    (add-hook 'org-mode-hook 'visual-line-mode))
+
+;; (use-package org-bullets
+;;   :straight t
+;;   :config
+;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+
+;; (let* ((variable-tuple
+;;         (cond ((x-list-fonts "ETBembo")         '(:font "ETBembo"))
+;;               ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+;;               ((x-list-fonts "JetBrains Mono")         '(:font "JetBrains Mono"))
+;;               ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+;;               ((x-list-fonts "Verdana")         '(:font "Verdana"))
+;;               ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+;;               (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+;;        (base-font-color     (face-foreground 'default nil 'default))
+;;        (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+;;   (custom-theme-set-faces
+;;    'user
+;;    `(org-level-8 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-7 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-6 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-5 ((t (,@headline ,@variable-tuple))))
+;;    `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+;;    `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+;;    `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+;;    `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+;;    `(org-document-title ((t (,@headline ,@variable-tuple :height 2.0 :underline nil))))))
+
+;; (custom-theme-set-faces
+;;    'user
+;;    '(variable-pitch ((t (:family "JetBrains Mono" :height 180 :weight thin))))
+;;    '(fixed-pitch ((t ( :family "Ayuthaya" :height 160)))))
+
+;; (add-hook 'org-mode-hook 'variable-pitch-mode)
+
+;; (custom-theme-set-faces
+;;    'user
+;;    '(org-block ((t (:inherit fixed-pitch))))
+;;    '(org-code ((t (:inherit (shadow fixed-pitch)))))
+;;    '(org-document-info ((t (:foreground "dark orange"))))
+;;    '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+;;    '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+;;    '(org-link ((t (:foreground "royal blue" :underline t))))
+;;    '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;;    '(org-property-value ((t (:inherit fixed-pitch))) t)
+;;    '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+;;    '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+;;    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+;;    '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+
+
+(use-package lsp-haskell
+  :straight t
+  :ensure t)
+
+
+(use-package haskell-mode
+  :straight t
+  :ensure t
+  :config (setq haskell-process-type 'stack-ghci))
 
 
 (use-package lsp-java
@@ -336,6 +409,16 @@
   (add-hook 'window-configuration-change-hook 'auto-virtualenv-set-virtualenv))
 
 
+(use-package tramp
+  :config
+  (setq tramp-default-method "ssh"))
+
+
+(use-package io-mode-inf
+  :straight (:host github :repo "slackorama/io-emacs"
+             :branch "master"))
+
+
 (defun set-exec-path-from-shell-PATH ()
   "Set up Emacs' `exec-path' and PATH environment variable to match
 that used by the user's shell.
@@ -395,5 +478,8 @@ apps are not started from a shell."
 
 (toggle-frame-maximized)
 
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
 ;;; init.el ends here
