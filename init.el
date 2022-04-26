@@ -4,11 +4,8 @@
 (add-to-list 'default-frame-alist
              '(font . "JetBrains Mono-14"))
 
-(when (eq system-type 'darwin) ;; mac specific settings
-  (setq mac-command-modifier 'meta)
-  (setq mac-allow-anti-aliasing t))
-
-(defalias 'yes-or-no-p 'y-or-n-p)
+(run-at-time "10:00" nil (lambda () (load-theme 'gruvbox-light-soft t)))
+(run-at-time "14:00" nil (lambda () (load-theme 'gruvbox-dark-soft t)))
 
 (add-hook 'after-init-hook
           (lambda () (progn
@@ -23,9 +20,13 @@
                   (subword-mode +1)
                   (savehist-mode +1))))
 
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-command-modifier 'meta)
+  (setq mac-allow-anti-aliasing t))
+
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
-
 
 (setq cursor-type 'box)
 (setq inhibit-splash-screen t)
@@ -91,6 +92,14 @@
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
 
+;; (use-package flycheck-clj-kondo
+;;   :straight t)
+
+
+;; (use-package cljstyle-mode
+;;   :straight (:host github :repo "jstokes/cljstyle-mode" :branch "master"))
+
+
 (use-package cider
   :straight t
   :ensure t
@@ -104,7 +113,11 @@
   (cider-auto-test-mode t)
   :bind (:map clojure-mode-map
               ("C-c c d d" . cider-debug-defun-at-point))
-  :commands cider-debug-defun-at-point)
+  :commands cider-debug-defun-at-point
+  :config
+  (require 'flycheck-clj-kondo)
+  ;; (add-hook 'clojure-mode-hook 'cljstyle-mode)
+  )
 
 
 (use-package clj-refactor
@@ -129,11 +142,11 @@
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
   :custom
   (lsp-lens-enable t)
-  (lsp-eldoc-enable-hover t)
-  (lsp-enable-folding t)
-  (lsp-headerline-breadcrumb-enable t)
-  (lsp-idle-delay .01)
-  :commands (lsp lsp-command-map))
+  (lsp-signature-auto-activate nil)
+  (lsp-eldoc-enable-hover nil)
+  (lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
+  (lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
+  :commands (lsp))
 
 
 (use-package lsp-ui
@@ -150,6 +163,8 @@
 (use-package lsp-treemacs
   :straight t
   :ensure t
+  :custom
+  (treemacs-space-between-root-nodes nil)
   :commands lsp-treemacs-errors-list)
 
 
@@ -171,6 +186,8 @@
 (use-package company
   :straight t
   :ensure t
+  :custom
+  (company-minimum-prefix-length 1)
   :init (global-company-mode)
   :config (setq company-show-numbers 'left
                 company-selection-wrap-around t))
