@@ -1,11 +1,14 @@
 ;;; package --- init.el
 ;;; Commentary:
 ;;; Code:
+
 (add-to-list 'default-frame-alist
              '(font . "JetBrains Mono-14"))
 
-(run-at-time "10:00" nil (lambda () (load-theme 'gruvbox-light-soft t)))
-(run-at-time "14:00" nil (lambda () (load-theme 'gruvbox-dark-soft t)))
+
+(run-at-time "10:00" nil (lambda () (load-theme 'gruvbox-light-hard t)))
+(run-at-time "14:00" nil (lambda () (load-theme 'gruvbox-dark-hard t)))
+
 
 (add-hook 'after-init-hook
           (lambda () (progn
@@ -20,13 +23,17 @@
                   (subword-mode +1)
                   (savehist-mode +1))))
 
+
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
   (setq mac-allow-anti-aliasing t))
 
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
 
 (setq cursor-type 'box)
 (setq inhibit-splash-screen t)
@@ -41,10 +48,13 @@
 (require 'windmove)
 (windmove-default-keybindings)
 
+
 (require 'winner)
 (winner-mode)
 
+
 (defvar bootstrap-version)
+
 
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -60,7 +70,8 @@
 
 (require 'straight)
 
-(straight-use-package 'use-package)
+(straight-use-package '(use-package :type git :host github :repo "jwiegley/use-package"))
+
 
 (setq use-package-verbose t)
 
@@ -97,6 +108,9 @@
 
 
 ;; (use-package cljstyle-mode
+;;   :straight t
+;;   :ensure-system-package
+;;   (cljstyle . "brew install --cask cljstyle")
 ;;   :straight (:host github :repo "jstokes/cljstyle-mode" :branch "master"))
 
 
@@ -113,11 +127,7 @@
   (cider-auto-test-mode t)
   :bind (:map clojure-mode-map
               ("C-c c d d" . cider-debug-defun-at-point))
-  :commands cider-debug-defun-at-point
-  :config
-  (require 'flycheck-clj-kondo)
-  ;; (add-hook 'clojure-mode-hook 'cljstyle-mode)
-  )
+  :commands cider-debug-defun-at-point)
 
 
 (use-package clj-refactor
@@ -129,9 +139,10 @@
 (use-package flycheck
   :straight t
   :ensure t
+  :custom
+  (flycheck-indication-mode 'left-margin)
+  (flycheck-highlighting-mode 'symbols)
   :config
-  (setq flycheck-indication-mode 'left-margin
-        flycheck-highlighting-mode 'symbols)
   (global-flycheck-mode))
 
 
@@ -152,11 +163,10 @@
 (use-package lsp-ui
   :straight t
   :ensure t
+  :hook ((lsp-mode) . lsp-ui-mode)
   :commands lsp-ui-mode
-  :config
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  (setq lsp-ui-doc-position 'bottom)
   :custom
+  (lsp-ui-doc-position 'bottom)
   (lsp-ui-sideline-enable nil))
 
 
@@ -198,6 +208,7 @@
   :ensure t
   :hook ((after-init) .  vertico-mode))
 
+
 (use-package marginalia
   :straight t
   :ensure t
@@ -212,8 +223,7 @@
 (use-package embark
   :straight t
   :ensure t
-  :bind (("M-." . embark-dwim)
-         ("C-." . embark-act)))
+  :bind (("C-." . embark-act)))
 
 
 (use-package orderless
@@ -238,19 +248,18 @@
             ))
 
 
-(use-package restclient
+(use-package verb
   :straight t
   :ensure t)
 
+
 (use-package org
-  ;; :straight t
-  ;; :ensure t
+  :custom
+  (org-babel-clojure-backend 'cider)
+  (org-babel-python-command "python3")
+  (org-hide-emphasis-markers t)
+  (org-src-fontify-natively t)
   :config
-  (setq org-babel-clojure-backend 'cider)
-  (setq org-babel-python-command "python3")
-  (setq org-hide-emphasis-markers t)
-  (setq org-src-fontify-natively t)
-  (require 'ob-haskell)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
@@ -262,12 +271,9 @@
      (python . t)
      (shell . t)
      (plantuml . t)
-     (sql . t)))
+     (sql . t)
+     (verb . t))))
 
-  (font-lock-add-keywords 'org-mode
-                          '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-    (add-hook 'org-mode-hook 'visual-line-mode))
 
 ;; (use-package org-bullets
 ;;   :straight t
@@ -394,7 +400,6 @@
 (use-package json-mode
   :straight t
   :ensure t)
-
 
 
 (use-package multiple-cursors
