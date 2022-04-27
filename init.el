@@ -6,10 +6,6 @@
              '(font . "JetBrains Mono-14"))
 
 
-(run-at-time "10:00" nil (lambda () (load-theme 'gruvbox-light-hard t)))
-(run-at-time "14:00" nil (lambda () (load-theme 'gruvbox-dark-hard t)))
-
-
 (add-hook 'after-init-hook
           (lambda () (progn
                   (global-prettify-symbols-mode)
@@ -70,17 +66,27 @@
 
 (require 'straight)
 
-(straight-use-package '(use-package :type git :host github :repo "jwiegley/use-package"))
+(straight-use-package 'use-package)
 
+(straight-use-package 'use-package-ensure-system-package)
+
+(require 'use-package)
 
 (setq use-package-verbose t)
+
+
+(use-package exec-path-from-shell
+  :straight (:type git :host github :repo "purcell/exec-path-from-shell" :branch "master")
+  :ensure t)
 
 
 (use-package gruvbox-theme
   :straight t
   :ensure t
   :config
-  (load-theme 'gruvbox-light-hard t))
+  (load-theme 'gruvbox-light-hard t)
+  (run-at-time "10:00" nil (lambda () (load-theme 'gruvbox-light-hard t)))
+  (run-at-time "14:00" nil (lambda () (load-theme 'gruvbox-dark-hard t))))
 
 
 ;; (use-package evil
@@ -103,17 +109,6 @@
   :hook ((emacs-lisp-mode lisp-mode) . paredit-mode))
 
 
-;; (use-package flycheck-clj-kondo
-;;   :straight t)
-
-
-;; (use-package cljstyle-mode
-;;   :straight t
-;;   :ensure-system-package
-;;   (cljstyle . "brew install --cask cljstyle")
-;;   :straight (:host github :repo "jstokes/cljstyle-mode" :branch "master"))
-
-
 (use-package cider
   :straight t
   :ensure t
@@ -128,6 +123,17 @@
   :bind (:map clojure-mode-map
               ("C-c c d d" . cider-debug-defun-at-point))
   :commands cider-debug-defun-at-point)
+
+
+(use-package flycheck-clj-kondo
+  :straight t
+  :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo"))
+
+
+(use-package cljstyle-mode
+  :straight (:host github :repo "jstokes/cljstyle-mode" :branch "master")
+  :hook ((clojure-mode) . cljstyle-mode)
+  :ensure-system-package (cljstyle . "brew install --cask cljstyle"))
 
 
 (use-package clj-refactor
@@ -439,23 +445,6 @@
 (use-package io-mode-inf
   :straight (:host github :repo "slackorama/io-emacs"
              :branch "master"))
-
-
-(defun set-exec-path-from-shell-PATH ()
-  "Set up Emacs' `exec-path' and PATH environment variable to match
-that used by the user's shell.
-
-This is particularly useful under Mac OS X and macOS, where GUI
-apps are not started from a shell."
-  (let ((path-from-shell (replace-regexp-in-string
-                          "[ \t\n]*$" "" (shell-command-to-string
-                                          "$SHELL --login -c 'echo $PATH'"
-                                                    ))))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
-
-
-(set-exec-path-from-shell-PATH)
 
 
 ;; (use-package eaf
