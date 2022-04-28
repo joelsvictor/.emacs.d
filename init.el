@@ -78,7 +78,8 @@
                    :host github
                    :repo "purcell/exec-path-from-shell"
                    :branch "master")
-  :ensure t)
+  :ensure t
+  :config (exec-path-from-shell-initialize))
 
 
 (use-package gruvbox-theme
