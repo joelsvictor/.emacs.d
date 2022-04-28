@@ -183,6 +183,11 @@
                 company-selection-wrap-around t))
 
 
+(use-package company-box
+  :straight t
+  :hook (company-mode . company-box-mode))
+
+
 (use-package vertico
   :straight t
   :ensure t
@@ -410,15 +415,13 @@
 ;; unbind, see more in the Wiki
 
 
-(use-package tree-sitter
-  :straight t
-  :config
-  (global-tree-sitter-mode))
+;; (use-package tree-sitter
+;;   :straight t
+;;   :config
+;;   (global-tree-sitter-mode))
 
-(use-package tree-sitter-langs
-  :straight t)
-
-
+;; (use-package tree-sitter-langs
+;;   :straight t)
 
 (server-start)
 
