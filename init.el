@@ -12,9 +12,12 @@
                   (save-place-mode +1)
                   (blink-cursor-mode +1)
                   ;; (global-linum-mode +1)
+                  ;; (hs-minor-mode)
                   (column-number-mode +1)
                   (tool-bar-mode -1)
                   (scroll-bar-mode -1)
+                  (menu-bar-mode -1)
+                  (horizontal-scroll-bar-mode -1)
                   (show-paren-mode t)
                   (subword-mode +1)
                   (savehist-mode +1))))
@@ -51,6 +54,7 @@
 
 (defvar bootstrap-version)
 
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -69,6 +73,14 @@
 (straight-use-package 'use-package-ensure-system-package)
 
 (require 'use-package)
+
+
+(use-package expand-region
+  :straight t
+  :config
+  (pending-delete-mode)
+  :bind
+  ("C-@" . er/expand-region))
 
 
 (use-package selectrum
@@ -114,20 +126,6 @@
   (load-theme 'zerodark t))
 
 
-;; (use-package evil
-;;   :straight t
-;;   :ensure t
-;;   :commands evil-mode
-;;   :init (evil-mode)
-;;   :demand t
-;;   :config
-;;   (evil-set-initial-state 'special-mode 'emacs)
-;;   (progn (evil-set-leader 'normal (kbd "SPC"))
-;;          (require 'evil))
-;;   (define-key evil-ex-map "f " 'find-file)
-;;   (define-key evil-ex-map "b " 'ibuffer))
-
-
 (use-package flycheck
   :straight t
   :ensure t
@@ -138,7 +136,7 @@
   (global-flycheck-mode))
 
 
-(require 'clojure (expand-file-name "clojure.el" user-emacs-directory))
+(require 'clojure)
 
 
 (use-package paredit
@@ -147,47 +145,36 @@
   :hook ((emacs-lisp-mode lisp-mode clojure-mode cider-repl-mode) . paredit-mode))
 
 
-;; (use-package lsp-mode
-;;   :straight t
-;;   :ensure t
-;;   :init (setq lsp-keymap-prefix "C-c l")
-;;   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-;;   :custom
-;;   (lsp-lens-enable t)
-;;   (lsp-signature-auto-activate nil)
-;;   (lsp-eldoc-enable-hover nil)
-;;   (lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
-;;   (lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
-;;   :commands (lsp))
-
-
-;; (use-package lsp-ui
-;;   :straight t
-;;   :ensure t
-;;   :hook ((lsp-mode) . lsp-ui-mode)
-;;   :commands lsp-ui-mode
-;;   :custom
-;;   (lsp-ui-doc-position 'bottom)
-;;   (lsp-ui-sideline-enable nil))
-
-
-;; (use-package lsp-treemacs
-;;   :straight t
-;;   :ensure t
-;;   :custom
-;;   (treemacs-space-between-root-nodes nil)
-;;   :commands lsp-treemacs-errors-list)
-
-
-(use-package eglot
+(use-package lsp-mode
   :straight t
-  :config
-  (add-to-list 'eglot-stay-out-of 'eldoc)
-  (add-to-list 'eglot-stay-out-of 'flycheck)
-  :bind (("C-c l r" . eglot-rename)
-         ("C-c l a" . eglot-code-actions)
-         ("C-c l f" . eglot-format)
-         ("C-c l w s" . eglot)))
+  :ensure t
+  :init (setq lsp-keymap-prefix "C-c l")
+  :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
+  :custom
+  (lsp-lens-enable t)
+  (lsp-signature-auto-activate nil)
+  (lsp-eldoc-enable-hover nil)
+  (lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
+  (lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
+  :commands (lsp))
+
+
+(use-package lsp-ui
+  :straight t
+  :ensure t
+  :hook ((lsp-mode) . lsp-ui-mode)
+  :commands lsp-ui-mode
+  :custom
+  (lsp-ui-doc-position 'bottom)
+  (lsp-ui-sideline-enable nil))
+
+
+(use-package lsp-treemacs
+  :straight t
+  :ensure t
+  :custom
+  (treemacs-space-between-root-nodes nil)
+  :commands lsp-treemacs-errors-list)
 
 
 (use-package magit
@@ -199,10 +186,15 @@
     '("-a" "Autostash" "--autostash")))
 
 
-(use-package git-gutter-fringe
+(use-package git-timemachine
+  :straight t
+  :ensure t)
+
+
+(use-package diff-hl
   :straight t
   :ensure t
-  :config (global-git-gutter-mode))
+  :config (global-diff-hl-mode))
 
 
 (use-package company
@@ -246,12 +238,10 @@
 (use-package projectile
   :straight t
   :ensure t
-  :config (progn
-            (projectile-mode +1)
-            (setq projectile-sort-order 'recentf)
-            (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-            ;; (evil-define-key 'normal 'projectile-mode-map (kbd "<leader>p") 'projectile-command-map)
-            ))
+  :config
+  (projectile-mode +1)
+  (setq projectile-sort-order 'recentf)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 
 (use-package verb
@@ -270,8 +260,6 @@
    'org-babel-load-languages
    '((emacs-lisp . t)
      (ruby . t)
-     ;; ( io . t )
-     ;; ( erlang . t )
      (haskell . t)
      (clojure . t)
      (python . t)
@@ -367,23 +355,11 @@
   :ensure t)
 
 
-(use-package git-timemachine
-  :straight t
-  :ensure t)
-
-
 (use-package anzu
   :straight t
   :ensure t
   :config
   (global-anzu-mode))
-
-
-(use-package auto-virtualenv
-  :straight t
-  :ensure t
-  :config
-  (add-hook 'window-configuration-change-hook 'auto-virtualenv-set-virtualenv))
 
 
 (use-package tramp
@@ -396,52 +372,9 @@
              :branch "master"))
 
 
-;; (use-package eaf
-;;   :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-;;   :custom
-;;   ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-;;   (eaf-browser-continue-where-left-off t)
-;;   (eaf-browser-enable-adblocker t)
-;;   (browse-url-browser-function 'eaf-open-browser)
-;;   :config
-;;   (progn
-;;     (require 'eaf-demo)
-;;     (require 'eaf-file-sender)
-;;     (require 'eaf-music-player)
-;;     (require 'eaf-camera)
-;;     (require 'eaf-rss-reader)
-;;     (require 'eaf-terminal)
-;;     (require 'eaf-image-viewer)
-;;     (require 'eaf-vue-demo)
-;;     (require 'eaf-pdf-viewer)
-;;     (require 'eaf-browser)
-;;     (require 'eaf-markdown-previewer)
-;;     (require 'eaf-file-browser)
-;;     ;; (require 'eaf-mermaid)
-;;     (require 'eaf-file-manager)
-;;     (require 'eaf-mindmap)
-;;     (require 'eaf-video-player)
-;;     (require 'eaf-org-previewer)
-;;     (require 'eaf-airshare)
-;;     (require 'eaf-jupyter)
-;;     (require 'eaf-netease-cloud-music)
-;;     (require 'eaf-system-monitor)
-;;     (defalias 'browse-web #'eaf-open-browser)
-;;     (eaf-bind-key scroll_up "C-n" eaf-pdf-viewer-keybinding)
-;;     (eaf-bind-key scroll_down "C-p" eaf-pdf-viewer-keybinding)
-;;     (eaf-bind-key take_photo "p" eaf-camera-keybinding)
-;;     (eaf-bind-key nil "M-q" eaf-browser-keybinding))
-;;   )
-;; unbind, see more in the Wiki
+(use-package dumb-jump
+  :straight t)
 
-
-;; (use-package tree-sitter
-;;   :straight t
-;;   :config
-;;   (global-tree-sitter-mode))
-
-;; (use-package tree-sitter-langs
-;;   :straight t)
 
 (server-start)
 
