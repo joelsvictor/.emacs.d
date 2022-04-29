@@ -71,16 +71,6 @@
 (require 'use-package)
 
 
-(use-package apheleia
-  :ensure-system-package (cljstyle . "brew install --cask cljstyle")
-  :straight t
-  :config
-  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
-  (setf (alist-get 'clojure-mode apheleia-mode-alist)
-        '(cljstyle))
-  (apheleia-global-mode +1))
-
-
 (use-package selectrum
   :straight t
   :config (selectrum-mode +1))
@@ -107,13 +97,21 @@
   :config (exec-path-from-shell-initialize))
 
 
-(use-package gruvbox-theme
+(use-package apheleia
+  :ensure-system-package (cljstyle . "brew install --cask cljstyle")
+  :straight t
+  :config
+  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
+  (setf (alist-get 'clojure-mode apheleia-mode-alist)
+        '(cljstyle))
+  (apheleia-global-mode +1))
+
+
+(use-package zerodark-theme
   :straight t
   :ensure t
   :config
-  (load-theme 'gruvbox-light-hard t)
-  (run-at-time "10:00" nil (lambda () (load-theme 'gruvbox-light-hard t)))
-  (run-at-time "14:00" nil (lambda () (load-theme 'gruvbox-dark-hard t))))
+  (load-theme 'zerodark t))
 
 
 ;; (use-package evil
