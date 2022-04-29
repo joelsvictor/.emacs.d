@@ -11,7 +11,7 @@
                   (global-prettify-symbols-mode)
                   (save-place-mode +1)
                   (blink-cursor-mode +1)
-                  (global-linum-mode +1)
+                  ;; (global-linum-mode +1)
                   (column-number-mode +1)
                   (tool-bar-mode -1)
                   (scroll-bar-mode -1)
@@ -70,7 +70,32 @@
 
 (require 'use-package)
 
-;; (setq use-package-verbose t)
+
+(use-package apheleia
+  :ensure-system-package (cljstyle . "brew install --cask cljstyle")
+  :straight t
+  :config
+  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
+  (setf (alist-get 'clojure-mode apheleia-mode-alist)
+        '(cljstyle))
+  (apheleia-global-mode +1))
+
+
+(use-package selectrum
+  :straight t
+  :config (selectrum-mode +1))
+
+
+(use-package selectrum-prescient
+  :straight t
+  :config
+  (selectrum-prescient-mode +1)
+  (prescient-persist-mode +1))
+
+
+(use-package ctrlf
+  :straight t
+  :config (ctrlf-mode +1))
 
 
 (use-package exec-path-from-shell
@@ -104,6 +129,7 @@
 ;;   (define-key evil-ex-map "f " 'find-file)
 ;;   (define-key evil-ex-map "b " 'ibuffer))
 
+
 (use-package flycheck
   :straight t
   :ensure t
@@ -123,39 +149,47 @@
   :hook ((emacs-lisp-mode lisp-mode clojure-mode cider-repl-mode) . paredit-mode))
 
 
-(use-package lsp-mode
-  :disabled
+;; (use-package lsp-mode
+;;   :straight t
+;;   :ensure t
+;;   :init (setq lsp-keymap-prefix "C-c l")
+;;   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
+;;   :custom
+;;   (lsp-lens-enable t)
+;;   (lsp-signature-auto-activate nil)
+;;   (lsp-eldoc-enable-hover nil)
+;;   (lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
+;;   (lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
+;;   :commands (lsp))
+
+
+;; (use-package lsp-ui
+;;   :straight t
+;;   :ensure t
+;;   :hook ((lsp-mode) . lsp-ui-mode)
+;;   :commands lsp-ui-mode
+;;   :custom
+;;   (lsp-ui-doc-position 'bottom)
+;;   (lsp-ui-sideline-enable nil))
+
+
+;; (use-package lsp-treemacs
+;;   :straight t
+;;   :ensure t
+;;   :custom
+;;   (treemacs-space-between-root-nodes nil)
+;;   :commands lsp-treemacs-errors-list)
+
+
+(use-package eglot
   :straight t
-  :ensure t
-  :init (setq lsp-keymap-prefix "C-c l")
-  :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-  :custom
-  (lsp-lens-enable t)
-  (lsp-signature-auto-activate nil)
-  (lsp-eldoc-enable-hover nil)
-  (lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
-  (lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
-  :commands (lsp))
-
-
-(use-package lsp-ui
-  :disabled
-  :straight t
-  :ensure t
-  :hook ((lsp-mode) . lsp-ui-mode)
-  :commands lsp-ui-mode
-  :custom
-  (lsp-ui-doc-position 'bottom)
-  (lsp-ui-sideline-enable nil))
-
-
-(use-package lsp-treemacs
-  :disabled
-  :straight t
-  :ensure t
-  :custom
-  (treemacs-space-between-root-nodes nil)
-  :commands lsp-treemacs-errors-list)
+  :config
+  (add-to-list 'eglot-stay-out-of 'eldoc)
+  (add-to-list 'eglot-stay-out-of 'flycheck)
+  :bind (("C-c l r" . eglot-rename)
+         ("C-c l a" . eglot-code-actions)
+         ("C-c l f" . eglot-format)
+         ("C-c l w s" . eglot)))
 
 
 (use-package magit
@@ -177,7 +211,7 @@
   :straight t
   :ensure t
   :custom
-  (company-minimum-prefix-length 1)
+  (company-minimum-prefix-length 3)
   :init (global-company-mode)
   :config (setq company-show-numbers 'left
                 company-selection-wrap-around t))
@@ -186,12 +220,6 @@
 (use-package company-box
   :straight t
   :hook (company-mode . company-box-mode))
-
-
-(use-package vertico
-  :straight t
-  :ensure t
-  :hook ((after-init) .  vertico-mode))
 
 
 (use-package marginalia
@@ -210,12 +238,6 @@
   :disabled
   :ensure t
   :bind (("C-." . embark-act)))
-
-
-(use-package orderless
-  :straight t
-  :ensure t
-  :config (setq completion-styles '(orderless)))
 
 
 (use-package yaml-mode

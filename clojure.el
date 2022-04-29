@@ -30,12 +30,6 @@
   :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo"))
 
 
-(use-package cljstyle-mode
-  :straight (:host github :repo "jstokes/cljstyle-mode" :branch "master")
-  :hook ((clojure-mode) . cljstyle-mode)
-  :ensure-system-package (cljstyle . "brew install --cask cljstyle"))
-
-
 (use-package clj-refactor
   :straight t
   :ensure t
