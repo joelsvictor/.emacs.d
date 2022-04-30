@@ -2,25 +2,21 @@
 ;;; Commentary:
 ;;; Code:
 
-(add-to-list 'default-frame-alist
-             '(font . "JetBrains Mono-14"))
+(setq initial-major-mode 'fundamental-mode)
 
-
-(add-hook 'after-init-hook
-          (lambda () (progn
-                  (global-prettify-symbols-mode)
-                  (save-place-mode +1)
-                  (blink-cursor-mode +1)
-                  ;; (global-linum-mode +1)
-                  ;; (hs-minor-mode)
-                  (column-number-mode +1)
-                  (tool-bar-mode -1)
-                  (scroll-bar-mode -1)
-                  (menu-bar-mode -1)
-                  (horizontal-scroll-bar-mode -1)
-                  (show-paren-mode t)
-                  (subword-mode +1)
-                  (savehist-mode +1))))
+(setq coding-system-for-read 'utf-8)
+(setq coding-system-for-write 'utf-8)
+(set-language-environment 'utf-8)
+(prefer-coding-system 'utf-8)
+(add-hook 'prog-mode-hook 'prettify-symbols-mode)
+(save-place-mode +1)
+(blink-cursor-mode +1)
+(column-number-mode +1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+(horizontal-scroll-bar-mode -1)
+(add-hook 'prog-mode-hook 'subword-mode)
 
 
 (when (eq system-type 'darwin) ;; mac specific settings
@@ -28,12 +24,13 @@
   (setq mac-allow-anti-aliasing t))
 
 
-(defalias 'yes-or-no-p 'y-or-n-p)
+(fset 'yes-or-no-p 'y-or-n-p)
 
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 
+(setq show-paren-style 'expression)
 (setq cursor-type 'box)
 (setq inhibit-splash-screen t)
 (setq-default indent-tabs-mode nil)
@@ -56,8 +53,8 @@
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+
+(let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
@@ -66,57 +63,18 @@
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
+  ;; This takes a second
   (load bootstrap-file nil 'nomessage))
 
 
 (straight-use-package 'use-package)
 (straight-use-package 'use-package-ensure-system-package)
 
+
 (require 'use-package)
 
 
-(use-package expand-region
-  :straight t
-  :config
-  (pending-delete-mode)
-  :bind
-  ("C-@" . er/expand-region))
-
-
-(use-package selectrum
-  :straight t
-  :config (selectrum-mode +1))
-
-
-(use-package selectrum-prescient
-  :straight t
-  :config
-  (selectrum-prescient-mode +1)
-  (prescient-persist-mode +1))
-
-
-(use-package ctrlf
-  :straight t
-  :config (ctrlf-mode +1))
-
-
-(use-package exec-path-from-shell
-  :straight (:type git
-                   :host github
-                   :repo "purcell/exec-path-from-shell"
-                   :branch "master")
-  :ensure t
-  :config (exec-path-from-shell-initialize))
-
-
-(use-package apheleia
-  :ensure-system-package (cljstyle . "brew install --cask cljstyle")
-  :straight t
-  :config
-  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
-  (setf (alist-get 'clojure-mode apheleia-mode-alist)
-        '(cljstyle))
-  (apheleia-global-mode +1))
+(setq use-package-verbose t)
 
 
 (use-package zerodark-theme
@@ -126,112 +84,160 @@
   (load-theme 'zerodark t))
 
 
-(use-package flycheck
-  :straight t
+;; this takes a second, this is becase of my .zshrc
+(use-package exec-path-from-shell
+  :straight (:type git
+                   :host github
+                   :repo "purcell/exec-path-from-shell"
+                   :branch "master")
   :ensure t
-  :custom
-  (flycheck-indication-mode 'left-margin)
-  (flycheck-highlighting-mode 'symbols)
+  :config (exec-path-from-shell-initialize))
+
+
+(use-package expand-region
+  :straight t
+  :defer t
   :config
-  (global-flycheck-mode))
+  (pending-delete-mode)
+  :bind
+  ("C-@" . er/expand-region))
+
+
+(use-package selectrum
+  :straight t
+  :defer t
+  :hook (minibuffer-setup . selectrum-mode))
+
+
+(use-package selectrum-prescient
+  :straight t
+  :defer t
+  :hook (selectrum-mode . selectrum-prescient-mode)
+  :init
+  (add-hook 'selectrum-prescient-mode-hook 'prescient-persist-mode))
+
+
+(use-package ctrlf
+  :straight t
+  :config (ctrlf-mode +1))
+
+
+(use-package apheleia
+  :ensure-system-package (cljstyle . "brew install --cask cljstyle")
+  :defer t
+  :straight t
+  :hook (prog-mode . apheleia-mode)
+  :config
+  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
+  (setf (alist-get 'clojure-mode apheleia-mode-alist)
+        '(cljstyle)))
 
 
 (require 'clojure)
 
 
+(use-package flycheck
+  :straight t
+  :defer t
+  :ensure t
+  :config
+  (setq flycheck-indication-mode 'left-margin)
+  (setq flycheck-highlighting-mode 'symbols)
+  :hook (prog-mode . flycheck-mode))
+
+
 (use-package paredit
   :straight t
+  :defer t
   :ensure t
-  :hook ((emacs-lisp-mode lisp-mode clojure-mode cider-repl-mode) . paredit-mode))
+  :hook ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
+  :config (add-hook 'paredit-mode-hook 'show-paren-mode))
 
 
 (use-package lsp-mode
   :straight t
   :ensure t
+  :defer t
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
-  :custom
-  (lsp-lens-enable t)
-  (lsp-signature-auto-activate nil)
-  (lsp-eldoc-enable-hover nil)
-  (lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
-  (lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
+  :config
+  (setq lsp-lens-enable t)
+  (setq lsp-signature-auto-activate nil)
+  (setq lsp-eldoc-enable-hover nil)
+  (setq lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
+  (setq lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
   :commands (lsp))
 
 
 (use-package lsp-ui
   :straight t
+  :defer t
   :ensure t
-  :hook ((lsp-mode) . lsp-ui-mode)
+  :hook (lsp-mode . lsp-ui-mode)
   :commands lsp-ui-mode
-  :custom
-  (lsp-ui-doc-position 'bottom)
-  (lsp-ui-sideline-enable nil))
+  :config
+  (setq lsp-ui-doc-position 'bottom)
+  (setq lsp-ui-sideline-enable nil))
 
 
 (use-package lsp-treemacs
   :straight t
   :ensure t
-  :custom
-  (treemacs-space-between-root-nodes nil)
-  :commands lsp-treemacs-errors-list)
+  :after (lsp)
+  :defer t)
 
 
 (use-package magit
   :straight t
+  :defer t
   :ensure t
   :config
-  ;; (evil-set-initial-state 'git-commit-mode 'emacs)
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
 
 
 (use-package git-timemachine
   :straight t
+  :defer t
   :ensure t)
 
 
 (use-package diff-hl
   :straight t
+  :defer t
   :ensure t
-  :config (global-diff-hl-mode))
+  :hook (prog-mode . diff-hl-mode))
 
 
 (use-package company
   :straight t
+  :defer t
   :ensure t
-  :custom
-  (company-minimum-prefix-length 3)
-  :init (global-company-mode)
-  :config (setq company-show-numbers 'left
-                company-selection-wrap-around t))
+  :hook (prog-mode . company-mode)
+  :config
+  (setq company-minimum-prefix-length 3)
+  (setq company-show-numbers 'left)
+  (setq company-selection-wrap-around t))
 
 
 (use-package company-box
   :straight t
+  :defer t
   :hook (company-mode . company-box-mode))
 
 
 (use-package marginalia
   :straight t
   :ensure t
-  :hook ((after-init) . marginalia-mode))
-
-
-(use-package consult
-  :straight t
-  :ensure t)
-
-
-(use-package embark
-  :straight t
-  :disabled
-  :ensure t
-  :bind (("C-." . embark-act)))
+  :defer t
+  :hook (minibuffer-setup . marginalia-mode)
+  :bind (:map minibuffer-local-map
+              ("M-A" . marginalia-cycle)))
 
 
 (use-package yaml-mode
   :straight t
+  :defer t
   :ensure t)
 
 
@@ -245,17 +251,19 @@
 
 
 (use-package verb
+  :defer t
+  :mode "\\.http\\'"
   :straight t
   :ensure t)
 
 
 (use-package org
-  :custom
-  (org-babel-clojure-backend 'cider)
-  (org-babel-python-command "python3")
-  (org-hide-emphasis-markers t)
-  (org-src-fontify-natively t)
+  :defer t
   :config
+  (setq org-babel-clojure-backend 'cider)
+  (setq org-babel-python-command "python3")
+  (setq org-hide-emphasis-markers t)
+  (setq org-src-fontify-natively t)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
@@ -270,23 +278,27 @@
 
 
 (use-package lsp-haskell
+  :defer t
   :straight t
   :ensure t)
 
 
 (use-package haskell-mode
+  :defer t
   :straight t
   :ensure t
   :config (setq haskell-process-type 'stack-ghci))
 
 
 (use-package lsp-java
+  :defer t
   :straight t
   :ensure t)
 
 
 (use-package ansible
   :straight t
+  :defer t
   :ensure t
   :hook
   (yaml-mode . ansible)
@@ -301,33 +313,28 @@
 
 
 (use-package yasnippet
+  :defer t
   :straight t
   :ensure t
-  :custom
-  (yas-verbosity 2)
-  (yas-wrap-around-region t)
+  :hook (prog-mode . yas-global-mode)
   :config
-  (yas-global-mode))
+  (setq yas-wrap-around-region t))
 
 
 (use-package yasnippet-snippets
+  :after (yasnippet)
   :straight t
   :ensure t)
 
 
-(use-package command-log-mode
-  :straight t
-  :ensure t
-  :hook (after-init . global-command-log-mode)
-  :commands (global-command-log-mode))
-
-
 (use-package docker
+  :defer t
   :straight t
   :ensure t)
 
 
 (use-package dockerfile-mode
+  :defer t
   :straight t
   :ensure t)
 
@@ -335,15 +342,17 @@
 (use-package eldoc
   :straight t
   :ensure t
-  :config (global-eldoc-mode))
+  :hook (prog-mode . eldoc-mode))
 
 
 (use-package json-mode
+  :defer t
   :straight t
   :ensure t)
 
 
 (use-package multiple-cursors
+  :defer t
   :straight t
   :ensure t
   :bind (("C->" . mc/mark-next-like-this)
@@ -351,6 +360,7 @@
 
 
 (use-package groovy-mode
+  :defer t
   :straight t
   :ensure t)
 
@@ -363,25 +373,29 @@
 
 
 (use-package tramp
+  :defer t
   :config
   (setq tramp-default-method "ssh"))
 
 
 (use-package io-mode-inf
+  :defer t
   :straight (:host github :repo "slackorama/io-emacs"
              :branch "master"))
 
 
-(use-package dumb-jump
-  :straight t)
-
-
 (server-start)
-
-(toggle-frame-maximized)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+
+
+(setq initial-scratch-message (concat ";; Took " (emacs-init-time)
+                                      " for initializing emacs. Spend "
+                                      (format "%f"  gc-elapsed)
+                                      " seconds performing "
+                                      (format "%d" gcs-done)
+                                      " GCs"))
 
 ;;; init.el ends here
