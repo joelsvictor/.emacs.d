@@ -3,7 +3,7 @@
 ;;; Code:
 
 (setq initial-major-mode 'fundamental-mode)
-
+(add-hook 'after-init-hook (lambda () (toggle-frame-maximized)))
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 (set-language-environment 'utf-8)
@@ -392,7 +392,7 @@
 
 
 (setq initial-scratch-message (concat ";; Took " (emacs-init-time)
-                                      " for initializing emacs. Spend "
+                                      " for initializing emacs. Spent "
                                       (format "%f"  gc-elapsed)
                                       " seconds performing "
                                       (format "%d" gcs-done)
