@@ -216,23 +216,15 @@
   :hook (prog-mode . company-mode)
   :config
   (setq company-minimum-prefix-length 3)
-  (setq company-show-numbers 'left)
+  (setq company-show-numbers 'right)
   (setq company-selection-wrap-around t))
-
-
-;; (use-package company-box
-;;   :straight t
-;;   :defer t
-;;   :hook (company-mode . company-box-mode))
 
 
 (use-package marginalia
   :straight t
   :ensure t
   :defer t
-  :hook (selectrum-mode . marginalia-mode)
-  :bind (:map minibuffer-local-map
-              ("M-A" . marginalia-cycle)))
+  :hook (selectrum-mode . marginalia-mode))
 
 
 (use-package yaml-mode
