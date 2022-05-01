@@ -220,10 +220,10 @@
   (setq company-selection-wrap-around t))
 
 
-(use-package company-box
-  :straight t
-  :defer t
-  :hook (company-mode . company-box-mode))
+;; (use-package company-box
+;;   :straight t
+;;   :defer t
+;;   :hook (company-mode . company-box-mode))
 
 
 (use-package marginalia
