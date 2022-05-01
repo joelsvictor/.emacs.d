@@ -368,13 +368,6 @@
   :ensure t)
 
 
-(use-package anzu
-  :straight t
-  :ensure t
-  :config
-  (global-anzu-mode))
-
-
 (use-package tramp
   :defer t
   :config (setq tramp-default-method "ssh"))
