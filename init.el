@@ -258,12 +258,15 @@
 
 
 (use-package org
+  :straight t
+  :ensure-system-package (plantuml . "brew install plantuml")
   :defer t
   :config
   (setq org-babel-clojure-backend 'cider)
   (setq org-babel-python-command "python3")
   (setq org-hide-emphasis-markers t)
   (setq org-src-fontify-natively t)
+  (setq org-plantuml-exec-mode 'plantuml)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
