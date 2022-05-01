@@ -233,6 +233,12 @@
   :ensure t)
 
 
+(use-package rg
+  :defer t
+  :straight t
+  :ensure t)
+
+
 (use-package projectile
   :straight t
   :ensure t
