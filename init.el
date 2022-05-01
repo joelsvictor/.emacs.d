@@ -155,6 +155,9 @@
   :init (setq lsp-keymap-prefix "C-c l")
   :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
   :config
+  (setq lsp-diagnostics-disabled-modes '(clojurescript-mode
+                                         clojurec-mode
+                                         clojure-mode))
   (setq lsp-lens-enable t)
   (setq lsp-signature-auto-activate nil)
   (setq lsp-eldoc-enable-hover nil)
