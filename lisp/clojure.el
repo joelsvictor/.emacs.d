@@ -31,7 +31,10 @@
   :defer t
   :straight t
   :ensure t
-  :hook (clojure-mode . clj-refactor-mode))
+  :hook (clojure-mode . clj-refactor-mode)
+  :config
+  (setq cljr-add-ns-to-blank-clj-files nil) ; disable clj-refactor adding ns to blank files
+  )
 
 
 (provide 'clojure)
