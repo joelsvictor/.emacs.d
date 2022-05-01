@@ -2,13 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq initial-major-mode 'fundamental-mode)
-(add-hook 'after-init-hook (lambda () (toggle-frame-maximized)))
-(setq coding-system-for-read 'utf-8)
-(setq coding-system-for-write 'utf-8)
-(set-language-environment 'utf-8)
-(prefer-coding-system 'utf-8)
-(add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (save-place-mode +1)
 (blink-cursor-mode +1)
 (column-number-mode +1)
@@ -16,6 +9,8 @@
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (horizontal-scroll-bar-mode -1)
+(add-hook 'after-init-hook (lambda () (toggle-frame-maximized)))
+(add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (add-hook 'prog-mode-hook 'subword-mode)
 
 
@@ -32,9 +27,7 @@
 
 (setq show-paren-style 'expression)
 (setq cursor-type 'box)
-(setq inhibit-splash-screen t)
 (setq-default indent-tabs-mode nil)
-(setq visible-bell t)
 (setq backup-by-copying t)
 (setq backup-directory-alist `(("" . ,(expand-file-name "backups/" user-emacs-directory))))
 (setq auto-save-default t)
@@ -50,6 +43,7 @@
 
 
 (defvar bootstrap-version)
+
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
@@ -106,7 +100,7 @@
 (use-package selectrum
   :straight t
   :defer t
-  :hook (minibuffer-setup . selectrum-mode))
+  :hook (after-init . selectrum-mode))
 
 
 (use-package selectrum-prescient
@@ -176,7 +170,7 @@
   :hook (lsp-mode . lsp-ui-mode)
   :commands lsp-ui-mode
   :config
-  (setq lsp-ui-doc-position 'bottom)
+  (setq lsp-ui-doc-enable nil)
   (setq lsp-ui-sideline-enable nil))
 
 
@@ -230,7 +224,7 @@
   :straight t
   :ensure t
   :defer t
-  :hook (minibuffer-setup . marginalia-mode)
+  :hook (selectrum-mode . marginalia-mode)
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle)))
 
@@ -374,8 +368,7 @@
 
 (use-package tramp
   :defer t
-  :config
-  (setq tramp-default-method "ssh"))
+  :config (setq tramp-default-method "ssh"))
 
 
 (use-package io-mode-inf

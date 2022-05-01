@@ -14,7 +14,7 @@
   :commands cider-debug-defun-at-point
   :config
   (setq cider-prompt-for-symbol nil)
-  (setq cider-repl-pop-to-buffer-on-connect nil)
+  (setq cider-repl-pop-to-buffer-on-connect 'display-only)
   (setq cider-repl-prompt-function 'cider-repl-prompt-abbreviated)
   (setq cider-repl-buffer-size-limit 100000)
   (setq nrepl-log-messages t)
