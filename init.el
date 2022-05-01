@@ -12,6 +12,7 @@
 (add-hook 'after-init-hook (lambda () (toggle-frame-maximized)))
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (add-hook 'prog-mode-hook 'subword-mode)
+(size-indication-mode +1)
 
 
 (when (eq system-type 'darwin) ;; mac specific settings
