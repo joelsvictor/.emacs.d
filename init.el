@@ -174,7 +174,9 @@
   :commands lsp-ui-mode
   :config
   (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-sideline-enable nil))
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-modeline-diagnostics-enable nil)
+  (setq lsp-modeline-code-actions-enable nil))
 
 
 (use-package lsp-treemacs
