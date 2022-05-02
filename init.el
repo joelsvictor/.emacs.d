@@ -25,7 +25,6 @@
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
-
 (setq show-paren-style 'expression)
 (setq cursor-type 'box)
 (setq-default indent-tabs-mode nil)
@@ -70,6 +69,13 @@
 
 
 (setq use-package-verbose t)
+
+
+(use-package hi-lock
+  :defer t
+  :config
+  (setq hi-lock-auto-select-face t)
+  :bind ("C-x w p" . highlight-phrase))
 
 
 (use-package zerodark-theme
