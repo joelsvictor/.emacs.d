@@ -251,10 +251,11 @@
 (use-package projectile
   :straight t
   :ensure t
+  :defer t
+  :bind-keymap* (("C-c p" . projectile-command-map))
   :config
   (projectile-mode +1)
-  (setq projectile-sort-order 'recentf)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+  (setq projectile-sort-order 'default))
 
 
 (use-package verb
