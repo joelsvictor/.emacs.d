@@ -2,28 +2,16 @@
 ;;; Commentary:
 ;;; Code:
 
-(save-place-mode +1)
-(blink-cursor-mode +1)
-(column-number-mode +1)
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
-(horizontal-scroll-bar-mode -1)
 (add-hook 'after-init-hook (lambda () (toggle-frame-maximized)))
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (add-hook 'prog-mode-hook 'subword-mode)
-(size-indication-mode +1)
-
-
-(when (eq system-type 'darwin) ;; mac specific settings
-  (setq mac-command-modifier 'meta)
-  (setq mac-allow-anti-aliasing t))
 
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
 
 (setq show-paren-style 'expression)
 (setq cursor-type 'box)

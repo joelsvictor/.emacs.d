@@ -18,14 +18,18 @@
 
 (setq visible-bell t)
 
-;;(setq-default mode-line-format
-;;              '("%e"
-;;                (:propertize
-;;                 ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote)
-;;                 display
-;;                 (min-width
-;;                  (5.0)))
-;;                mode-line-frame-identification mode-line-buffer-identification "   " mode-line-position (vc-mode vc-mode)
-;;                mode-line-misc-info
-;;                " [%I]"))
+
+(save-place-mode +1)
+(blink-cursor-mode +1)
+(column-number-mode +1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+(horizontal-scroll-bar-mode -1)
+(size-indication-mode +1)
+
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-command-modifier 'meta)
+  (setq mac-allow-anti-aliasing t))
+
 ;;; early-init.el ends here
