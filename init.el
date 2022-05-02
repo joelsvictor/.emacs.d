@@ -352,6 +352,7 @@
 (use-package eldoc
   :straight t
   :ensure t
+  :defer t
   :hook (prog-mode . eldoc-mode))
 
 
