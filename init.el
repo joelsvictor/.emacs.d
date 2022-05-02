@@ -151,6 +151,8 @@
   :straight t
   :defer t
   :ensure t
+  :bind (("M-{" . paredit-wrap-curly)
+         ("M-[" . paredit-wrap-square))
   :hook ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
   :config (add-hook 'paredit-mode-hook 'show-paren-mode))
 
