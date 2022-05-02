@@ -207,7 +207,8 @@
 (use-package git-timemachine
   :straight t
   :defer t
-  :ensure t)
+  :ensure t
+  :after (magit))
 
 
 (use-package diff-hl
