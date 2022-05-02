@@ -387,7 +387,10 @@
              :branch "master"))
 
 
-(server-start)
+(require 'server)
+
+(unless (server-running-p)
+  (server-start))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
