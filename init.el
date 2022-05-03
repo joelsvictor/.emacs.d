@@ -69,8 +69,7 @@
 (use-package zerodark-theme
   :straight t
   :ensure t
-  :config
-  (load-theme 'zerodark t))
+  :hook (after-init . (lambda () (load-theme 'zerodark t))))
 
 
 ;; this takes a second, this is becase of my .zshrc
