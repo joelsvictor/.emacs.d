@@ -10,9 +10,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 
-(add-hook 'before-save-hook 'whitespace-cleanup)
-
-
 (setq show-paren-style 'expression)
 (setq cursor-type 'box)
 (setq-default indent-tabs-mode nil)
@@ -20,14 +17,6 @@
 (setq backup-directory-alist `(("" . ,(expand-file-name "backups/" user-emacs-directory))))
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-
-
-(require 'windmove)
-(windmove-default-keybindings)
-
-
-(require 'winner)
-(winner-mode)
 
 
 (defvar bootstrap-version)
@@ -59,27 +48,52 @@
 (setq use-package-verbose t)
 
 
+(add-hook 'after-init-hook (lambda ()
+                             (save-place-mode +1)
+                             (blink-cursor-mode -1)
+                             (column-number-mode +1)
+                             (size-indication-mode +1)))
+
+
 (use-package hi-lock
   :defer t
   :config
   (setq hi-lock-auto-select-face t)
-  :bind ("C-x w p" . highlight-phrase))
+  :bind
+  ("C-x w p" . highlight-phrase))
+
+
+(use-package windmove
+  :defer t
+  :hook
+  (after-init . windmove-mode)
+  :config
+  (windmove-default-keybindings))
+
+
+(use-package winner
+  :defer t
+  :hook
+  (after-init . winner-mode))
 
 
 (use-package zerodark-theme
   :straight t
   :ensure t
-  :hook (after-init . (lambda () (load-theme 'zerodark t))))
+  :hook
+  (after-init . (lambda () (load-theme 'zerodark t))))
 
 
 ;; this takes a second, this is becase of my .zshrc
 (use-package exec-path-from-shell
-  :straight (:type git
-                   :host github
-                   :repo "purcell/exec-path-from-shell"
-                   :branch "master")
+  :straight
+  (:type git
+         :host github
+         :repo "purcell/exec-path-from-shell"
+         :branch "master")
   :ensure t
-  :config (exec-path-from-shell-initialize))
+  :config
+  (exec-path-from-shell-initialize))
 
 
 (use-package expand-region
@@ -94,13 +108,15 @@
 (use-package selectrum
   :straight t
   :defer t
-  :hook (after-init . selectrum-mode))
+  :hook
+  (after-init . selectrum-mode))
 
 
 (use-package selectrum-prescient
   :straight t
   :defer t
-  :hook (selectrum-mode . selectrum-prescient-mode)
+  :hook
+  (selectrum-mode . selectrum-prescient-mode)
   :init
   (add-hook 'selectrum-prescient-mode-hook 'prescient-persist-mode))
 
@@ -108,14 +124,16 @@
 (use-package ctrlf
   :straight t
   :defer t
-  :hook (after-init . ctrlf-mode))
+  :hook
+  (after-init . ctrlf-mode))
 
 
 (use-package apheleia
   :ensure-system-package (cljstyle . "brew install --cask cljstyle")
   :defer t
   :straight t
-  :hook (prog-mode . apheleia-mode)
+  :hook
+  (prog-mode . apheleia-mode)
   :config
   (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
   (setf (alist-get 'clojure-mode apheleia-mode-alist)
@@ -132,25 +150,31 @@
   :config
   (setq flycheck-indication-mode 'left-margin)
   (setq flycheck-highlighting-mode 'symbols)
-  :hook (prog-mode . flycheck-mode))
+  :hook
+  (prog-mode . flycheck-mode))
 
 
 (use-package paredit
   :straight t
   :defer t
   :ensure t
-  :bind (("M-{" . paredit-wrap-curly)
-         ("M-[" . paredit-wrap-square))
-  :hook ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
-  :config (add-hook 'paredit-mode-hook 'show-paren-mode))
+  :bind
+  (("M-{" . paredit-wrap-curly)
+   ("M-[" . paredit-wrap-square))
+  :hook
+  ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
+  :config
+  (add-hook 'paredit-mode-hook 'show-paren-mode))
 
 
 (use-package lsp-mode
   :straight t
   :ensure t
   :defer t
-  :init (setq lsp-keymap-prefix "C-c l")
-  :hook ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook
+  ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
   :config
   (setq lsp-diagnostics-disabled-modes '(clojurescript-mode
                                          clojurec-mode
@@ -160,15 +184,18 @@
   (setq lsp-eldoc-enable-hover nil)
   (setq lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
   (setq lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
-  :commands (lsp))
+  :commands
+  (lsp))
 
 
 (use-package lsp-ui
   :straight t
   :defer t
   :ensure t
-  :hook (lsp-mode . lsp-ui-mode)
-  :commands lsp-ui-mode
+  :hook
+  (lsp-mode . lsp-ui-mode)
+  :commands
+  lsp-ui-mode
   :config
   (setq lsp-ui-doc-enable nil)
   (setq lsp-ui-sideline-enable nil)
@@ -179,7 +206,8 @@
 (use-package lsp-treemacs
   :straight t
   :ensure t
-  :after (lsp)
+  :after
+  (lsp)
   :defer t)
 
 
@@ -196,21 +224,24 @@
   :straight t
   :defer t
   :ensure t
-  :after (magit))
+  :after
+  (magit))
 
 
 (use-package diff-hl
   :straight t
   :defer t
   :ensure t
-  :hook (prog-mode . diff-hl-mode))
+  :hook
+  (prog-mode . diff-hl-mode))
 
 
 (use-package company
   :straight t
   :defer t
   :ensure t
-  :hook (prog-mode . company-mode)
+  :hook
+  (prog-mode . company-mode)
   :config
   (setq company-minimum-prefix-length 3)
   (setq company-show-numbers 'right)
@@ -221,7 +252,8 @@
   :straight t
   :ensure t
   :defer t
-  :hook (selectrum-mode . marginalia-mode))
+  :hook
+  (selectrum-mode . marginalia-mode))
 
 
 (use-package yaml-mode
@@ -240,7 +272,8 @@
   :straight t
   :ensure t
   :defer t
-  :bind-keymap* (("C-c p" . projectile-command-map))
+  :bind-keymap*
+  (("C-c p" . projectile-command-map))
   :config
   (projectile-mode +1)
   (setq projectile-sort-order 'default))
@@ -255,7 +288,8 @@
 
 (use-package org
   :straight t
-  :ensure-system-package (plantuml . "brew install plantuml")
+  :ensure-system-package
+  (plantuml . "brew install plantuml")
   :defer t
   :config
   (setq org-babel-clojure-backend 'cider)
@@ -309,20 +343,23 @@
   :straight t
   :ensure t
   :defer t
-  :hook (after-init . which-key-mode))
+  :hook
+  (after-init . which-key-mode))
 
 
 (use-package yasnippet
   :defer t
   :straight t
   :ensure t
-  :hook (prog-mode . yas-global-mode)
+  :hook
+  (prog-mode . yas-global-mode)
   :config
   (setq yas-wrap-around-region t))
 
 
 (use-package yasnippet-snippets
-  :after (yasnippet)
+  :after
+  (yasnippet)
   :straight t
   :ensure t)
 
@@ -343,21 +380,14 @@
   :straight t
   :ensure t
   :defer t
-  :hook (prog-mode . eldoc-mode))
+  :hook
+  (prog-mode . eldoc-mode))
 
 
 (use-package json-mode
   :defer t
   :straight t
   :ensure t)
-
-
-(use-package multiple-cursors
-  :defer t
-  :straight t
-  :ensure t
-  :bind (("C->" . mc/mark-next-like-this)
-         ("C-<" .  mc/mark-previous-like-this)))
 
 
 (use-package groovy-mode
@@ -373,8 +403,15 @@
 
 (use-package io-mode-inf
   :defer t
-  :straight (:host github :repo "slackorama/io-emacs"
-             :branch "master"))
+  :straight
+  (:host github :repo "slackorama/io-emacs"
+         :branch "master"))
+
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(add-hook 'before-save-hook 'whitespace-cleanup)
 
 
 (require 'server)
@@ -382,16 +419,13 @@
 (unless (server-running-p)
   (server-start))
 
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-=") 'text-scale-increase)
-(global-set-key (kbd "C--") 'text-scale-decrease)
 
-
-(setq initial-scratch-message (concat ";; Took " (emacs-init-time)
-                                      " for initializing emacs. Spent "
-                                      (format "%f"  gc-elapsed)
-                                      " seconds performing "
-                                      (format "%d" gcs-done)
-                                      " GCs"))
+(setq initial-scratch-message
+      (concat ";; Took " (emacs-init-time)
+              " for initializing emacs. Spent "
+              (format "%f"  gc-elapsed)
+              " seconds performing "
+              (format "%d" gcs-done)
+              " GCs"))
 
 ;;; init.el ends here

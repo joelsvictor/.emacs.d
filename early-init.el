@@ -18,15 +18,11 @@
 
 (setq visible-bell t)
 
-
-(save-place-mode +1)
-(blink-cursor-mode +1)
-(column-number-mode +1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
 (horizontal-scroll-bar-mode -1)
-(size-indication-mode +1)
+
 
 (when (eq system-type 'darwin) ;; mac specific settings
   (setq mac-command-modifier 'meta)
