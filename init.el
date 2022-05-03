@@ -108,7 +108,8 @@
 
 (use-package ctrlf
   :straight t
-  :config (ctrlf-mode +1))
+  :defer t
+  :hook (after-init . ctrlf-mode))
 
 
 (use-package apheleia
@@ -308,7 +309,8 @@
 (use-package which-key
   :straight t
   :ensure t
-  :config (which-key-mode))
+  :defer t
+  :hook (after-init . which-key-mode))
 
 
 (use-package yasnippet
