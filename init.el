@@ -129,7 +129,8 @@
 
 
 (use-package apheleia
-  :ensure-system-package (cljstyle . "brew install --cask cljstyle")
+  :ensure-system-package ((cljstyle . "brew install --cask cljstyle")
+                          (pg_format . "brew install pgformatter"))
   :defer t
   :straight t
   :hook
@@ -137,7 +138,10 @@
   :config
   (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
   (setf (alist-get 'clojure-mode apheleia-mode-alist)
-        '(cljstyle)))
+        '(cljstyle))
+  (push '(pg_format . ("pg_format")) apheleia-formatters)
+  (setf (alist-get 'sql-mode apheleia-mode-alist)
+        '(pg_format)))
 
 
 (require 'clojure)
