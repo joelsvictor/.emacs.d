@@ -25,6 +25,9 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 
+(setq straight-check-for-modifications nil)
+
+
 (let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
