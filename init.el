@@ -420,6 +420,18 @@
   :straight t)
 
 
+(use-package mini-frame
+  :straight t
+  :defer t
+  :hook (after-init . mini-frame-mode)
+  :config
+  (custom-set-variables
+  '(mini-frame-show-parameters
+    '((top . 400)
+      (width . 0.7)
+      (left . 0.5)))))
+
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
