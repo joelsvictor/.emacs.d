@@ -18,6 +18,8 @@
 /projectile.cache
 /tramp
 /history
-/straight/
 /eclipse.jdt.ls/
 /var/
+/straight/*.el
+/straight/build/
+/straight/repos/
