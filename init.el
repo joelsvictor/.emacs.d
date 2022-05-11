@@ -423,13 +423,19 @@
 (use-package mini-frame
   :straight t
   :defer t
-  :hook (after-init . mini-frame-mode)
+  :init
+  (setq mini-frame-ignore-commands '(eval-expression
+                                     "edebug-eval-expression"
+                                     debugger-eval-expression
+                                     "ctrlf-.*"))
+  :hook
+  (after-init . mini-frame-mode)
   :config
-  (custom-set-variables
-  '(mini-frame-show-parameters
-    '((top . 400)
-      (width . 0.7)
-      (left . 0.5)))))
+  (custom-set-variables '(mini-frame-show-parameters
+                          '((left . 0.5)
+                            (top . 0.2)
+                            (width . .5)
+                            (height . 1)))))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
