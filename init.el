@@ -432,9 +432,9 @@
   (after-init . mini-frame-mode)
   :config
   (custom-set-variables '(mini-frame-show-parameters
-                          '((left . 0.5)
-                            (top . 0.2)
-                            (width . .5)
+                          '((left . 0.0)
+                            (top . 0.3)
+                            (width . 1.0)
                             (height . 1)))))
 
 
