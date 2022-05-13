@@ -243,16 +243,26 @@
   (prog-mode . diff-hl-mode))
 
 
-(use-package company
-  :straight t
-  :defer t
+(use-package corfu
+  :straight (:host github
+                   :repo "minad/corfu"
+                   :branch "main")
   :ensure t
-  :hook
-  (prog-mode . company-mode)
+  :defer t
+  :hook (prog-mode . corfu-mode)
   :config
-  (setq company-minimum-prefix-length 3)
-  (setq company-show-numbers 'right)
-  (setq company-selection-wrap-around t))
+  (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+  (setq corfu-auto t)                 ;; Enable auto completion
+  (setq corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  (setq corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  (setq corfu-scroll-margin 5)        ;; Use scroll margin
+  )
+
+
+(use-package emacs
+  :init
+  (setq completion-cycle-threshold 3)
+  (setq tab-always-indent 'complete))
 
 
 (use-package marginalia
