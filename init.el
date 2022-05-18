@@ -262,6 +262,9 @@
    '(("Asia/Calcutta" "Pune")
      ("America/Los_Angeles" "San Francisco")
      ("America/New_York" "New York")
+     ("Europe/Vienna" "Austria")
+     ("Asia/Dubai" "Dubai")
+     ("Australia/Perth" "Perth")
      ("Etc/UTC" "UTC"))
    (world-clock-time-format "%a, %d %b %I:%M %p %Z")))
 
