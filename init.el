@@ -174,48 +174,13 @@
   (add-hook 'paredit-mode-hook 'show-paren-mode))
 
 
-(use-package lsp-mode
+(use-package eglot
   :straight t
   :ensure t
   :defer t
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :hook
-  ((clojurescript-mode clojurec-mode clojure-mode) . lsp)
   :config
-  (setq lsp-diagnostics-disabled-modes '(clojurescript-mode
-                                         clojurec-mode
-                                         clojure-mode))
-  (setq lsp-lens-enable t)
-  (setq lsp-signature-auto-activate nil)
-  (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-enable-indentation nil) ; uncomment to use cider indentation instead of lsp
-  (setq lsp-enable-completion-at-point nil) ; uncomment to use cider completion instead of lsp
-  :commands
-  (lsp))
-
-
-(use-package lsp-ui
-  :straight t
-  :defer t
-  :ensure t
-  :hook
-  (lsp-mode . lsp-ui-mode)
-  :commands
-  lsp-ui-mode
-  :config
-  (setq lsp-ui-doc-enable nil)
-  (setq lsp-ui-sideline-enable nil)
-  (setq lsp-modeline-diagnostics-enable nil)
-  (setq lsp-modeline-code-actions-enable nil))
-
-
-(use-package lsp-treemacs
-  :straight t
-  :ensure t
-  :after
-  (lsp)
-  :defer t)
+  (setq eglot-stay-out-of '(company eldoc flycheck flymake))
+  :hook (clojure-mode . eglot-ensure))
 
 
 (use-package magit
@@ -246,23 +211,59 @@
 (use-package corfu
   :straight (:host github
                    :repo "minad/corfu"
-                   :branch "main")
+                   :branch "main"
+                   :files (:defaults "extensions/*.el"))
   :ensure t
   :defer t
-  :hook (prog-mode . corfu-mode)
+  :hook ((prog-mode . corfu-mode)
+         (corfu-mode . corfu-history-mode))
+  :bind (:map corfu-map
+              ("C-q" . #'corfu-quick-insert))
   :config
-  (setq corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (setq corfu-auto t)                 ;; Enable auto completion
-  (setq corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  (setq corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  (setq corfu-scroll-margin 5)        ;; Use scroll margin
-  )
+  (setq corfu-on-exact-match 'quit)
+  (setq corfu-cycle t)
+  (setq corfu-auto t)
+  (setq corfu-quit-at-boundary nil)
+  (setq corfu-quit-no-match t)
+  (setq corfu-scroll-margin 5))
+
+
+(use-package corfu-doc
+  :straight t
+  :after corfu
+  :custom
+  (corfu-doc-auto nil)
+  (corfu-doc-max-width 85)
+  (corfu-doc-max-height 20)
+  :bind (:map corfu-map
+              ("M-d" . #'corfu-doc-toggle)
+              ("M-p" . #'corfu-doc-scroll-down)
+              ("M-n" . #'corfu-doc-scroll-up))
+  :hook (corfu-mode . corfu-doc-mode))
+
+
+(use-package kind-icon
+  :straight t
+  :after corfu
+  :custom
+  (kind-icon-default-face 'corfu-default)
+  :config
+  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 
 (use-package emacs
   :init
   (setq completion-cycle-threshold 3)
-  (setq tab-always-indent 'complete))
+  (setq tab-always-indent 'complete)
+  :bind
+  ("C-c C-w" . #'world-clock)
+  :custom
+  (world-clock-list
+   '(("Asia/Calcutta" "Pune")
+     ("America/Los_Angeles" "San Francisco")
+     ("America/New_York" "New York")
+     ("Etc/UTC" "UTC"))
+   (world-clock-time-format "%a, %d %b %I:%M %p %Z")))
 
 
 (use-package marginalia
@@ -368,36 +369,8 @@
   :straight (:host github
                    :repo "minad/tempel"
                    :branch "main")
-  ;; Require trigger prefix before template name when completing.
-  ;; :custom
-  ;; (tempel-trigger-prefix "<")
-
-  :bind (("M-+" . tempel-complete) ;; Alternative tempel-expand
-         ("M-*" . tempel-insert))
-
-  :init
-
-  ;; Setup completion at point
-  (defun tempel-setup-capf ()
-    ;; Add the Tempel Capf to `completion-at-point-functions'.
-    ;; `tempel-expand' only triggers on exact matches. Alternatively use
-    ;; `tempel-complete' if you want to see all matches, but then you
-    ;; should also configure `tempel-trigger-prefix', such that Tempel
-    ;; does not trigger too often when you don't expect it. NOTE: We add
-    ;; `tempel-expand' *before* the main programming mode Capf, such
-    ;; that it will be tried first.
-    (setq-local completion-at-point-functions
-                (cons #'tempel-expand
-                      completion-at-point-functions)))
-
-  (add-hook 'prog-mode-hook 'tempel-setup-capf)
-  ;; (add-hook 'text-mode-hook 'tempel-setup-capf)
-
-  ;; Optionally make the Tempel templates available to Abbrev,
-  ;; either locally or globally. `expand-abbrev' is bound to C-x '.
-  ;; (add-hook 'prog-mode-hook #'tempel-abbrev-mode)
-  ;; (global-tempel-abbrev-mode)
-  )
+  :defer t
+  :bind (("M-+" . tempel-complete)))
 
 
 (use-package docker
@@ -449,22 +422,22 @@
   :straight t)
 
 
-(use-package mini-frame
-  :straight t
-  :defer t
-  :init
-  (setq mini-frame-ignore-commands '(eval-expression
-                                     "edebug-eval-expression"
-                                     debugger-eval-expression
-                                     "ctrlf-.*"))
-  :hook
-  (after-init . mini-frame-mode)
-  :config
-  (custom-set-variables '(mini-frame-show-parameters
-                          '((left . 0.0)
-                            (top . 0.3)
-                            (width . 1.0)
-                            (height . 1)))))
+;; (use-package mini-frame
+;;   :straight t
+;;   :defer t
+;;   :init
+;;   (setq mini-frame-ignore-commands '(eval-expression
+;;                                      "edebug-eval-expression"
+;;                                      debugger-eval-expression
+;;                                      "ctrlf-.*"))
+;;   :hook
+;;   (after-init . mini-frame-mode)
+;;   :config
+;;   (custom-set-variables '(mini-frame-show-parameters
+;;                           '((left . 0.0)
+;;                             (top . 0.3)
+;;                             (width . 1.0)
+;;                             (height . 1)))))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
