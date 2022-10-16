@@ -479,6 +479,13 @@
   :defer t)
 
 
+(use-package treemacs
+  :straight t
+  :defer t
+  :bind (:map global-map
+              ("C-c t t" . treemacs)))
+
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
