@@ -14,7 +14,7 @@
 (setq initial-major-mode 'fundamental-mode)
 (setq inhibit-splash-screen t)
 
-(setq default-frame-alist '((font . "JetBrains Mono-14")))
+(setq default-frame-alist '((font . "Source Code Pro-17")))
 
 (setq visible-bell t)
 
