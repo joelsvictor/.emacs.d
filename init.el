@@ -172,16 +172,20 @@
   (add-hook 'paredit-mode-hook 'show-paren-mode))
 
 
-(use-package eglot
-  ;; :ensure-system-package
-  ;; (clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
-  ;; (sqls . "go install github.com/lighttiger2505/sqls@latest")
+(use-package lsp-mode
   :straight t
-  :ensure t
   :defer t
-  :config
-  (setq eglot-stay-out-of '(company eldoc flycheck flymake))
-  :hook ((clojure-mode sql-mode) . eglot-ensure))
+  :init (setq lsp-keymap-prefix "C-c l")
+  :hook (((clojure-mode sql-mode) . (lsp-deferred)))
+  :commands (lsp-deferred))
+
+
+(use-package lsp-ui
+  :straight t
+  :after (lsp-mode)
+  :hook
+  ((lsp-mode . lsp-ui-mode))
+  :commands (lsp-ui-mode))
 
 
 (use-package magit
