@@ -4,6 +4,7 @@
 
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (add-hook 'prog-mode-hook 'subword-mode)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 
 
 (fset 'yes-or-no-p 'y-or-n-p)
