@@ -114,13 +114,12 @@
   (after-init . selectrum-mode))
 
 
-(use-package selectrum-prescient
+(use-package orderless
   :straight t
   :defer t
-  :hook
-  (selectrum-mode . selectrum-prescient-mode)
-  :init
-  (add-hook 'selectrum-prescient-mode-hook 'prescient-persist-mode))
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
 
 
 (use-package ctrlf
@@ -370,14 +369,6 @@
   (after-init . which-key-mode))
 
 
-(use-package tempel
-  :straight (:host github
-                   :repo "minad/tempel"
-                   :branch "main")
-  :defer t
-  :bind (("M-+" . tempel-complete)))
-
-
 (use-package docker
   :defer t
   :straight t
@@ -427,22 +418,27 @@
   :straight t)
 
 
-;; (use-package mini-frame
-;;   :straight t
-;;   :defer t
-;;   :init
-;;   (setq mini-frame-ignore-commands '(eval-expression
-;;                                      "edebug-eval-expression"
-;;                                      debugger-eval-expression
-;;                                      "ctrlf-.*"))
-;;   :hook
-;;   (after-init . mini-frame-mode)
-;;   :config
-;;   (custom-set-variables '(mini-frame-show-parameters
-;;                           '((left . 0.0)
-;;                             (top . 0.3)
-;;                             (width . 1.0)
-;;                             (height . 1)))))
+(use-package yasnippet
+  :straight t
+  :defer t
+  :hook (after-init . yas-global-mode))
+
+
+(use-package yasnippet-snippets
+  :straight t
+  :after (yasnippet))
+
+
+(use-package rainbow-delimiters
+  :straight t
+  :defer t
+  :hook (paredit-mode . rainbow-delimiters-mode))
+
+
+(use-package rainbow-identifiers
+  :straight t
+  :defer t
+  :hook (prog-mode . rainbow-identifiers-mode))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
