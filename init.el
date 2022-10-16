@@ -339,12 +339,21 @@
      (plantuml . t)
      (sql . t)
      (verb . t)
-     (shell . t))))
+     (shell . t)))
+  ;; (org-setup)
+  (add-hook 'org-mode-hook 'visual-line-mode))
 
 
 (use-package org-contrib
   :straight t
   :after (org))
+
+
+(use-package org-bullets
+  :straight t
+  :after (org)
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 
 (use-package lsp-haskell
