@@ -175,6 +175,9 @@
 
 (use-package lsp-mode
   :straight t
+  :ensure-system-package
+  ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
+   (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :defer t
   :custom
   ;; customize for sql mode
