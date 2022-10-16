@@ -182,7 +182,7 @@
   (lsp-enable-completion-at-point nil)
   (lsp-eldoc-enable-hover nil)
   :init (setq lsp-keymap-prefix "C-c l")
-  :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode) . (lsp-deferred)))
+  :hook ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . (lsp-deferred))
   :commands (lsp-deferred))
 
 
