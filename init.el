@@ -175,8 +175,13 @@
 (use-package lsp-mode
   :straight t
   :defer t
+  :custom
+  ;; customize for sql mode
+  (lsp-enable-indentation nil)
+  (lsp-enable-completion-at-point nil)
+  (lsp-eldoc-enable-hover nil)
   :init (setq lsp-keymap-prefix "C-c l")
-  :hook (((clojure-mode sql-mode) . (lsp-deferred)))
+  :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode) . (lsp-deferred)))
   :commands (lsp-deferred))
 
 
@@ -333,7 +338,8 @@
      (shell . t)
      (plantuml . t)
      (sql . t)
-     (verb . t))))
+     (verb . t)
+     (shell . t))))
 
 
 (use-package org-contrib
