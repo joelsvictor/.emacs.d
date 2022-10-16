@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# key: obsql
+# name: obsql
+# --
+#+BEGIN_SRC sql
+  SELECT $1 FROM $2;
+#+END_SRC
