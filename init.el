@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(add-hook 'after-init-hook (lambda () (toggle-frame-maximized)))
 (add-hook 'prog-mode-hook 'prettify-symbols-mode)
 (add-hook 'prog-mode-hook 'subword-mode)
 
@@ -10,7 +9,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 
-(setq show-paren-style 'expression)
+(setq show-paren-style 'parenthesis)
 (setq cursor-type 'box)
 (setq-default indent-tabs-mode nil)
 (setq backup-by-copying t)
@@ -175,12 +174,15 @@
 
 
 (use-package eglot
+  ;; :ensure-system-package
+  ;; (clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
+  ;; (sqls . "go install github.com/lighttiger2505/sqls@latest")
   :straight t
   :ensure t
   :defer t
   :config
   (setq eglot-stay-out-of '(company eldoc flycheck flymake))
-  :hook (clojure-mode . eglot-ensure))
+  :hook ((clojure-mode sql-mode) . eglot-ensure))
 
 
 (use-package magit
