@@ -465,6 +465,14 @@
   :hook (prog-mode . rainbow-identifiers-mode))
 
 
+(use-package vterm
+  :straight t
+  :ensure-system-package
+  ((libvterm . "brew install libvterm"))
+  :bind (("C-c v t" . vterm))
+  :defer t)
+
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
