@@ -323,6 +323,11 @@
   (plantuml . "brew install plantuml")
   :defer t
   :config
+  (setq org-startup-folded t
+        org-startup-indented t
+        org-adapt-indentation t
+        org-hide-leading-stars t
+        org-odd-levels-only t)
   (setq org-babel-clojure-backend 'cider)
   (setq org-babel-python-command "python3")
   (setq org-hide-emphasis-markers t)
@@ -340,8 +345,8 @@
      (sql . t)
      (verb . t)
      (shell . t)))
-  ;; (org-setup)
-  (add-hook 'org-mode-hook 'visual-line-mode))
+  ;; (add-hook 'org-mode-hook 'visual-line-mode)
+  )
 
 
 (use-package org-contrib
@@ -349,11 +354,11 @@
   :after (org))
 
 
-(use-package org-bullets
-  :straight t
-  :after (org)
-  :config
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+;; (use-package org-bullets
+;;   :straight t
+;;   :after (org)
+;;   :config
+;;   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 
 (use-package lsp-haskell
