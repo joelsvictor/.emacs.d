@@ -336,6 +336,11 @@
      (verb . t))))
 
 
+(use-package org-contrib
+  :straight t
+  :after (org))
+
+
 (use-package lsp-haskell
   :defer t
   :straight t
