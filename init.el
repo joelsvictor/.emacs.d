@@ -79,11 +79,11 @@
   (after-init . winner-mode))
 
 
-(use-package zerodark-theme
+(use-package kaolin-themes
   :straight t
   :ensure t
   :hook
-  (after-init . (lambda () (load-theme 'zerodark t))))
+  (after-init . (lambda () (load-theme 'kaolin-aurora t))))
 
 
 ;; this takes a second, this is becase of my .zshrc
