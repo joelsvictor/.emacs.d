@@ -3,6 +3,7 @@
 ;;; Code:
 
 (setq package-enable-at-startup nil)
+(setq-default line-spacing 6)
 (setq gc-cons-threshold 128000000)
 (setq read-process-output-max 16777216)
 
