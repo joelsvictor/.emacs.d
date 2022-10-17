@@ -328,7 +328,7 @@
   :defer t
   :config
   (setq org-startup-folded t
-        org-ellipsis " ↓"
+        org-ellipsis " ⇓"
         org-startup-indented t
         org-hide-emphasis-markers t
         org-adapt-indentation t
@@ -362,7 +362,7 @@
   :after (org)
   :hook (org-mode . org-bullets-mode)
   :config
-  (setq org-bullets-bullet-list '("→")))
+  (setq org-bullets-bullet-list '("◯" "⟶" "→" "•" "⇒" "↣" "⇉")))
 
 
 (use-package org-appear
