@@ -321,7 +321,6 @@
   :straight t
   :ensure t)
 
-
 (use-package org
   :straight t
   :ensure-system-package
@@ -329,15 +328,16 @@
   :defer t
   :config
   (setq org-startup-folded t
+        org-ellipsis " ↓"
         org-startup-indented t
+        org-hide-emphasis-markers t
         org-adapt-indentation t
         org-hide-leading-stars t
-        org-odd-levels-only t)
-  (setq org-babel-clojure-backend 'cider)
-  (setq org-babel-python-command "python3")
-  (setq org-hide-emphasis-markers t)
-  (setq org-src-fontify-natively t)
-  (setq org-plantuml-exec-mode 'plantuml)
+        org-src-fontify-natively t
+        org-odd-levels-only t
+        org-babel-clojure-backend 'cider
+        org-babel-python-command "python3"
+        org-plantuml-exec-mode 'plantuml)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
@@ -355,6 +355,26 @@
 (use-package org-contrib
   :straight t
   :after (org))
+
+
+(use-package org-bullets
+  :straight t
+  :after (org)
+  :hook (org-mode . org-bullets-mode)
+  :config
+  (setq org-bullets-bullet-list '("→")))
+
+
+(use-package org-appear
+  :straight t
+  :after (org)
+  :hook (org-mode . org-appear-mode))
+
+
+(use-package org-pretty-table
+  :straight (:host github :repo "Fuco1/org-pretty-table" :branch "master")
+  :after (org)
+  :hook (org-mode . org-pretty-table-mode))
 
 
 (use-package lsp-haskell
