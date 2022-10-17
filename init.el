@@ -185,7 +185,8 @@
   (lsp-enable-completion-at-point nil)
   (lsp-eldoc-enable-hover nil)
   :init (setq lsp-keymap-prefix "C-c l")
-  :hook ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . (lsp))
+  :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp)
+         ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp-deferred))
   :commands (lsp lsp-deferred))
 
 
@@ -465,7 +466,7 @@
 (use-package rainbow-delimiters
   :straight t
   :defer t
-  :hook (paredit-mode . rainbow-delimiters-mode))
+  :hook ((electric-pair-mode paredit-mode) . rainbow-delimiters-mode))
 
 
 (use-package rainbow-identifiers
@@ -487,6 +488,11 @@
   :defer t
   :bind (:map global-map
               ("C-c t t" . treemacs)))
+
+
+(use-package sql
+  :ensure t
+  :hook ((sql-mode) . electric-pair-mode))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
