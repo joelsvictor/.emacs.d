@@ -51,6 +51,7 @@
 
 (use-package kaolin-themes
   :straight t
+  :defer t
   :hook
   (after-init . (lambda () (load-theme 'kaolin-aurora t))))
 
