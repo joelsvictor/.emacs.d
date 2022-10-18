@@ -296,7 +296,7 @@
         org-adapt-indentation t
         org-hide-leading-stars t
         org-src-fontify-natively t
-        org-odd-levels-only t
+        ;; org-odd-levels-only t
         org-babel-clojure-backend 'cider
         org-babel-python-command "python3"
         org-plantuml-exec-mode 'plantuml)
@@ -324,7 +324,13 @@
   :after (org)
   :hook (org-mode . org-bullets-mode)
   :config
-  (setq org-bullets-bullet-list '("◯" "⟶" "→" "•" "⇒" "↣" "⇉")))
+  (setq org-bullets-bullet-list '("◯"
+                                  "⟶"
+                                  "→"
+                                  "•"
+                                  "⇒"
+                                  "↣"
+                                  "⇉")))
 
 
 (use-package org-appear
@@ -442,7 +448,7 @@
 (use-package vterm
   :straight t
   :ensure-system-package
-  ((libvterm . "brew install libvterm"))
+  ((cmake . "brew install cmake"))
   :bind (("C-c v t" . vterm))
   :defer t)
 

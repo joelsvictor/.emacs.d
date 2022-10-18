@@ -6,7 +6,6 @@
 (setq native-comp-deferred-compilation nil)
 (setq load-prefer-newer noninteractive)
 (setq package-enable-at-startup nil)
-(setq-default line-spacing 3)
 (setq read-process-output-max 16777216)
 (setq straight-check-for-modifications 'live-with-find)
 (setq use-package-enable-imenu-support t)
