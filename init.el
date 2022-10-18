@@ -472,7 +472,7 @@
 
 (use-package elec-pair
   :hook
-  ((sql-mode) electric-pair-mode))
+  ((sql-mode) . electric-pair-mode))
 
 
 (use-package avy
