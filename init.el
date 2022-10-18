@@ -6,56 +6,25 @@
 (add-hook 'prog-mode-hook 'subword-mode)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
-
-(fset 'yes-or-no-p 'y-or-n-p)
-
-
 (setq show-paren-style 'parenthesis)
 (setq cursor-type 'box)
 (setq-default indent-tabs-mode nil)
 (setq backup-by-copying t)
-(setq backup-directory-alist `(("" . ,(expand-file-name "backups/" user-emacs-directory))))
+(setq backup-directory-alist
+      `(("" . ,(expand-file-name "backups/" user-emacs-directory))))
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-
-(defvar bootstrap-version)
-
-
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
-
-(setq straight-check-for-modifications nil)
-
-
-(let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  ;; This takes a second
-  (load bootstrap-file nil 'nomessage))
-
-
-(straight-use-package 'use-package)
-(straight-use-package 'use-package-ensure-system-package)
-
 
 (require 'use-package)
 
-
-(setq use-package-verbose t)
-
-
-(add-hook 'after-init-hook (lambda ()
-                             (save-place-mode +1)
-                             (blink-cursor-mode -1)
-                             (column-number-mode +1)
-                             (size-indication-mode +1)))
+(add-hook 'after-init-hook
+          (lambda ()
+            (save-place-mode +1)
+            (blink-cursor-mode -1)
+            (column-number-mode +1)
+            (size-indication-mode +1)))
 
 
 (use-package hi-lock
@@ -82,7 +51,6 @@
 
 (use-package kaolin-themes
   :straight t
-  :ensure t
   :hook
   (after-init . (lambda () (load-theme 'kaolin-aurora t))))
 
@@ -141,7 +109,7 @@
   (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
   (setf (alist-get 'clojure-mode apheleia-mode-alist)
         '(cljstyle))
-  (push '(pg_format . ("pg_format")) apheleia-formatters)
+  (push '(pg_format . ("pg_format" "-g")) apheleia-formatters)
   (setf (alist-get 'sql-mode apheleia-mode-alist)
         '(pg_format)))
 
@@ -152,7 +120,6 @@
 (use-package flycheck
   :straight t
   :defer t
-  :ensure t
   :config
   (setq flycheck-indication-mode 'left-margin)
   (setq flycheck-highlighting-mode 'symbols)
@@ -163,7 +130,6 @@
 (use-package paredit
   :straight t
   :defer t
-  :ensure t
   :bind
   (("M-{" . paredit-wrap-curly)
    ("M-[" . paredit-wrap-square))
@@ -201,7 +167,6 @@
 (use-package magit
   :straight t
   :defer t
-  :ensure t
   :config
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
@@ -210,7 +175,6 @@
 (use-package git-timemachine
   :straight t
   :defer t
-  :ensure t
   :after
   (magit))
 
@@ -218,7 +182,6 @@
 (use-package diff-hl
   :straight t
   :defer t
-  :ensure t
   :hook
   (prog-mode . diff-hl-mode))
 
@@ -228,7 +191,6 @@
                    :repo "minad/corfu"
                    :branch "main"
                    :files (:defaults "extensions/*.el"))
-  :ensure t
   :defer t
   :hook ((prog-mode . corfu-mode)
          (corfu-mode . corfu-history-mode))
@@ -281,12 +243,14 @@
      ("Asia/Dubai" "Dubai")
      ("Australia/Perth" "Perth")
      ("Etc/UTC" "UTC"))
-   (world-clock-time-format "%a, %d %b %I:%M %p %Z")))
+   (world-clock-time-format "%a, %d %b %I:%M %p %Z"))
+  (use-short-answers t)
+  :config
+  (setq-default cursor-in-non-selected-windows nil))
 
 
 (use-package marginalia
   :straight t
-  :ensure t
   :defer t
   :hook
   (selectrum-mode . marginalia-mode))
@@ -294,19 +258,16 @@
 
 (use-package yaml-mode
   :straight t
-  :defer t
-  :ensure t)
+  :defer t)
 
 
 (use-package rg
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package projectile
   :straight t
-  :ensure t
   :defer t
   :bind-keymap*
   (("C-c p" . projectile-command-map))
@@ -318,8 +279,8 @@
 (use-package verb
   :defer t
   :mode "\\.http\\'"
-  :straight t
-  :ensure t)
+  :straight t)
+
 
 (use-package org
   :straight t
@@ -379,27 +340,23 @@
 
 (use-package lsp-haskell
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package haskell-mode
   :defer t
   :straight t
-  :ensure t
   :config (setq haskell-process-type 'stack-ghci))
 
 
 (use-package lsp-java
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package ansible
   :straight t
   :defer t
-  :ensure t
   :hook
   (yaml-mode . ansible)
   :config
@@ -408,7 +365,6 @@
 
 (use-package which-key
   :straight t
-  :ensure t
   :defer t
   :hook
   (after-init . which-key-mode))
@@ -416,19 +372,16 @@
 
 (use-package docker
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package dockerfile-mode
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package eldoc
   :straight t
-  :ensure t
   :defer t
   :hook
   (prog-mode . eldoc-mode))
@@ -436,14 +389,12 @@
 
 (use-package json-mode
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package groovy-mode
   :defer t
-  :straight t
-  :ensure t)
+  :straight t)
 
 
 (use-package tramp
@@ -470,6 +421,7 @@
 
 
 (use-package yasnippet-snippets
+  :defer t
   :straight t
   :after (yasnippet))
 
@@ -498,13 +450,54 @@
   :straight t
   :defer t
   :bind (:map global-map
-              ("C-c t t" . treemacs)))
+              ("C-c t t" . treemacs))
+  :commands (treemacs-follow-mode
+             treemacs-filewatch-mode
+             treemacs-git-mode)
+  :config
+  (treemacs-git-mode 'deferred)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t))
 
 
-(use-package sql
-  :ensure t
-  :hook ((sql-mode) . electric-pair-mode))
+(use-package sql)
 
+
+(use-package elec-pair
+  :hook
+  ((sql-mode) electric-pair-mode))
+
+
+(use-package avy
+  :straight t
+  :defer t
+  :bind (("C-x a c 0" . avy-goto-char)
+         ("C-x a c 2" . avy-goto-char-2)))
+
+
+(use-package uniquify
+  :custom
+  (uniquify-buffer-name-style 'forward))
+
+
+(use-package tree-sitter
+  :straight t
+  :defer t
+  :hook
+  (after-init . global-tree-sitter-mode)
+  (tree-sitter-after-on . tree-sitter-hl-mode))
+
+
+(use-package tree-sitter-langs
+  :straight t
+  :after (tree-sitter))
+
+
+(use-package elisp-slime-nav
+  :straight t
+  :defer t
+  :hook
+  ((emacs-lisp-mode) . turn-on-elisp-slime-nav-mode))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
