@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+(setq-default line-spacing 6)
+(setq-default linum-format " %4d ")
+(add-hook 'prog-mode-hook 'linum-mode)
 (setq gc-cons-threshold most-positive-fixnum)
 (setq native-comp-deferred-compilation nil)
 (setq load-prefer-newer noninteractive)
@@ -15,7 +18,7 @@
 (setq coding-system-for-write 'utf-8)
 (setq initial-major-mode 'fundamental-mode)
 (setq inhibit-splash-screen t)
-(setq default-frame-alist '((font . "Source Code Pro-17")))
+(setq default-frame-alist '((font . "JetBrains Mono-17")))
 (setq visible-bell t)
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)

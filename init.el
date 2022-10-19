@@ -328,9 +328,10 @@
                                   "⟶"
                                   "→"
                                   "•"
-                                  "⇒"
-                                  "↣"
-                                  "⇉")))
+                                  ;; "⇒"
+                                  ;; "↣"
+                                  ;; "⇉"
+                                  )))
 
 
 (use-package org-appear
@@ -436,11 +437,14 @@
 (use-package rainbow-delimiters
   :straight t
   :defer t
+  :custom
+  (rainbow-delimiters-max-face-count 5)
   :hook ((electric-pair-mode paredit-mode) . rainbow-delimiters-mode))
 
 
 (use-package rainbow-identifiers
   :straight t
+  :custom (rainbow-identifiers-face-count 5)
   :defer t
   :hook (prog-mode . rainbow-identifiers-mode))
 
@@ -505,6 +509,7 @@
   :defer t
   :hook
   ((emacs-lisp-mode) . turn-on-elisp-slime-nav-mode))
+
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
