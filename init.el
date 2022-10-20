@@ -135,7 +135,7 @@
   (("M-{" . paredit-wrap-curly)
    ("M-[" . paredit-wrap-square))
   :hook
-  ((emacs-lisp-mode clojure-mode cider-repl-mode) . paredit-mode)
+  ((emacs-lisp-mode clojure-mode cider-repl-mode lisp-data-mode) . paredit-mode)
   :config
   (add-hook 'paredit-mode-hook 'show-paren-mode))
 
