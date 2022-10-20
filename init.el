@@ -452,8 +452,11 @@
 (use-package vterm
   :straight t
   :ensure-system-package
-  ((cmake . "brew install cmake"))
+  ((cmake . "brew install cmake")
+   (fish . "brew install fish"))
   :bind (("C-c v t" . vterm))
+  :config
+  (setq vterm-shell "/usr/local/bin/fish")
   :defer t)
 
 
