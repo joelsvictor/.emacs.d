@@ -285,12 +285,10 @@
 
 (use-package org
   :straight t
-  :ensure-system-package
-  (plantuml . "brew install plantuml")
   :defer t
   :config
   (setq org-startup-folded t
-        org-ellipsis " ⇓"
+        org-ellipsis " ⇓ "
         org-startup-indented t
         org-hide-emphasis-markers t
         org-adapt-indentation t
@@ -311,7 +309,8 @@
      (plantuml . t)
      (sql . t)
      (verb . t)
-     (shell . t))))
+     (shell . t)
+     (json . t))))
 
 
 (use-package org-contrib
@@ -512,6 +511,19 @@
   :defer t
   :hook
   ((emacs-lisp-mode) . turn-on-elisp-slime-nav-mode))
+
+
+(use-package logview
+  :straight t
+  :defer t)
+
+
+(use-package plantuml-mode
+  :straight t
+  :ensure-system-package (plantuml . "brew install plantuml")
+  :defer t
+  :config
+  (setq plantuml-exec-mode 'executable))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
