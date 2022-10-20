@@ -18,7 +18,7 @@
 (setq coding-system-for-write 'utf-8)
 (setq initial-major-mode 'fundamental-mode)
 (setq inhibit-splash-screen t)
-(setq default-frame-alist '((font . "JetBrains Mono-17")))
+(setq default-frame-alist '((font . "Fira Code-17")))
 (setq visible-bell t)
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
