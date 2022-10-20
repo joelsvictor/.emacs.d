@@ -472,7 +472,9 @@
   (treemacs-filewatch-mode t))
 
 
-(use-package sql)
+(use-package sql
+  :custom
+  (sql-product 'postgres))
 
 
 (use-package elec-pair
