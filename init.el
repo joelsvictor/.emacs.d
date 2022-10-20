@@ -146,14 +146,13 @@
   ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
    (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :defer t
-  :custom
-  ;; customize for sql mode
-  (lsp-enable-indentation nil)
-  (lsp-enable-completion-at-point nil)
-  (lsp-eldoc-enable-hover nil)
   :init (setq lsp-keymap-prefix "C-c l")
   :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp)
-         ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp-deferred))
+         ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp-deferred)
+         ((clojure-mode clojurec-mode clojurescript-mode) . (lambda ()
+                                                              (setq-local lsp-enable-indentation nil)
+                                                              (setq-local lsp-enable-completion-at-point nil)
+                                                              (setq-local lsp-eldoc-enable-hover nil))))
   :commands (lsp lsp-deferred))
 
 
