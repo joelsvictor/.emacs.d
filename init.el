@@ -340,10 +340,10 @@
   :hook (org-mode . org-appear-mode))
 
 
-(use-package org-pretty-table
-  :straight (:host github :repo "Fuco1/org-pretty-table" :branch "master")
-  :after (org)
-  :hook (org-mode . org-pretty-table-mode))
+;; (use-package org-pretty-table
+;;   :straight (:host github :repo "Fuco1/org-pretty-table" :branch "master")
+;;   :after (org)
+;;   :hook (org-mode . org-pretty-table-mode))
 
 
 (use-package lsp-haskell
