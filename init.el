@@ -147,8 +147,7 @@
    (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :defer t
   :init (setq lsp-keymap-prefix "C-c l")
-  :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp)
-         ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . lsp-deferred)
+  :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode yaml-mode json-mode) . lsp)
          ((clojure-mode clojurec-mode clojurescript-mode) . (lambda ()
                                                               (setq-local lsp-enable-indentation nil)
                                                               (setq-local lsp-enable-completion-at-point nil)
