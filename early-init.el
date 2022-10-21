@@ -5,6 +5,7 @@
 (setq-default line-spacing 6)
 ;; (setq-default linum-format " %4d ")
 (setq-default display-line-numbers-width-start 4)
+(setq frame-resize-pixelwise t)
 (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (setq gc-cons-threshold most-positive-fixnum)
 (setq native-comp-deferred-compilation nil)
