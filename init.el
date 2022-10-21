@@ -14,7 +14,6 @@
       `(("" . ,(expand-file-name "backups/" user-emacs-directory))))
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 (require 'use-package)

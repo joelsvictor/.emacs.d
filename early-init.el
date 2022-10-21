@@ -3,8 +3,9 @@
 ;;; Code:
 
 (setq-default line-spacing 6)
-(setq-default linum-format " %4d ")
-(add-hook 'prog-mode-hook 'linum-mode)
+;; (setq-default linum-format " %4d ")
+(setq-default display-line-numbers-width-start 4)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
 (setq gc-cons-threshold most-positive-fixnum)
 (setq native-comp-deferred-compilation nil)
 (setq load-prefer-newer noninteractive)
