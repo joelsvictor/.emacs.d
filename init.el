@@ -220,7 +220,7 @@
 
 (use-package kind-icon
   :straight t
-  :after corfu
+  :after (corfu)
   :custom
   (kind-icon-default-face 'corfu-default)
   :config
@@ -308,7 +308,7 @@
      (sql . t)
      (verb . t)
      (shell . t)
-     (json . t))))
+     (js . t))))
 
 
 (use-package org-contrib
@@ -324,11 +324,7 @@
   (setq org-bullets-bullet-list '("◯"
                                   "⟶"
                                   "→"
-                                  "•"
-                                  ;; "⇒"
-                                  ;; "↣"
-                                  ;; "⇉"
-                                  )))
+                                  "•")))
 
 
 (use-package org-appear
@@ -364,8 +360,8 @@
   :defer t
   :hook
   (yaml-mode . ansible)
-  :config
-  (add-hook 'ansible-hook 'ansible-auto-decrypt-encrypt))
+  :hook
+  (ansible . ansible-auto-decrypt-encrypt))
 
 
 (use-package which-key
@@ -472,6 +468,7 @@
 
 
 (use-package sql
+  :defer t
   :custom
   (sql-product 'postgres))
 
@@ -497,8 +494,8 @@
   :straight t
   :defer t
   :hook
-  (after-init . global-tree-sitter-mode)
-  (tree-sitter-after-on . tree-sitter-hl-mode))
+  ((after-init . global-tree-sitter-mode)
+   (tree-sitter-after-on . tree-sitter-hl-mode)))
 
 
 (use-package tree-sitter-langs
@@ -524,6 +521,17 @@
   :defer t
   :config
   (setq plantuml-exec-mode 'executable))
+
+
+(use-package dashboard
+  :straight t
+  :defer t
+  :hook
+  (after-init . dashboard-setup-startup-hook)
+  :custom
+  (dashboard-items '((recents  . 5)
+                     (bookmarks . 5)
+                     (projects . 5))))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)

@@ -23,7 +23,7 @@
 
 
 (use-package flycheck-clj-kondo
-  :after (flycheck)
+  :after (flycheck cider)
   :straight t
   :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo"))
 
