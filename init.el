@@ -283,6 +283,9 @@
 (use-package org
   :straight t
   :defer t
+  :hook
+  (org-mode . (lambda ()
+                (setq-local mode-line-format nil)))
   :config
   (setq org-startup-folded t
         org-ellipsis " ⇓ "
