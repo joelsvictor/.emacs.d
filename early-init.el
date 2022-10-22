@@ -12,10 +12,6 @@
 (setq load-prefer-newer noninteractive)
 (setq package-enable-at-startup nil)
 (setq read-process-output-max 16777216)
-(setq straight-check-for-modifications 'live-with-find)
-(setq use-package-enable-imenu-support t)
-(setq use-package-verbose t)
-(setq straight-vc-git-default-protocol 'ssh)
 (setq coding-system-for-read 'utf-8)
 (setq coding-system-for-write 'utf-8)
 (setq initial-major-mode 'fundamental-mode)
@@ -35,21 +31,4 @@
   (setq mac-command-modifier 'meta)
   (setq mac-allow-anti-aliasing t))
 
-
-(defvar bootstrap-version)
-(let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  ;; This takes a second
-  (load bootstrap-file nil 'nomessage))
-
-
-(straight-use-package 'use-package)
-(straight-use-package 'use-package-ensure-system-package)
 ;;; early-init.el ends here

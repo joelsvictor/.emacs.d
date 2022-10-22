@@ -16,7 +16,28 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+
+(defvar bootstrap-version)
+(let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  ;; This takes a second
+  (load bootstrap-file nil 'nomessage))
+
+(setq straight-check-for-modifications nil ;; 'live-with-find
+      )
+
+(straight-use-package 'use-package)
 (require 'use-package)
+(setq use-package-enable-imenu-support t)
+(setq use-package-verbose t)
+(straight-use-package 'use-package-ensure-system-package)
 
 (add-hook 'after-init-hook
           (lambda ()
@@ -99,13 +120,14 @@
 
 
 (use-package apheleia
-  :ensure-system-package ((cljstyle . "brew install --cask cljstyle")
+  :ensure-system-package ((cljstyle . "brew install cljstyle")
                           (pg_format . "brew install pgformatter"))
   :defer t
   :straight t
   :hook
   (prog-mode . apheleia-mode)
   :config
+  ;; fixme: stopped working after emacs update.
   (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
   (setf (alist-get 'clojure-mode apheleia-mode-alist)
         '(cljstyle))
@@ -171,7 +193,10 @@
 
 
 (use-package git-timemachine
-  :straight t
+  :straight (:host gitlab
+                   :repo "pidu/git-timemachine"
+                   :fork (:host github
+                                :repo "emacsmirror/git-timemachine"))
   :defer t
   :after
   (magit))
