@@ -288,7 +288,6 @@
   :defer t
   :hook
   (org-mode . (lambda ()
-                (setq-local mode-line-format nil)
                 (visual-line-mode +1)))
   :config
   (setq org-startup-folded t

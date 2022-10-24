@@ -17,6 +17,7 @@
 (setq inhibit-splash-screen t)
 (setq visible-bell t)
 (setq default-frame-alist '((undecorated-rouded . t)
+                            (internal-border-width . 24)
                             (font . "Fira Code-17")))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -55,11 +56,17 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
 
-(setq-default mode-line-format '(
-                                 " "
-                                 ("%12b")
-                                 (vc-mode vc-mode)
-                                 " "))
+(setq-default mode-line-format
+              '(:propertize ((:eval
+                              (if (eql buffer-read-only t) "🔐" "🔓"))
+                             " "
+                             (:eval
+                              (if (buffer-modified-p) "📖" "📙"))
+                             " %b 〚"
+                             mode-name
+                             (vc-mode ("," vc-mode " 🐙")) "〛 %c %I")
+                            face
+                            (:foreground "#fe7706" :family "Monaco")))
 
 
 ;;; early-init.el ends here
