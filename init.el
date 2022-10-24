@@ -570,6 +570,8 @@
   ((prog-mode . flyspell-prog-mode)
    (text-mode . turn-on-flyspell))
   :config
+  (setq-default ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t)
   (flyspell-mode +1))
 
 
