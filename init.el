@@ -547,6 +547,30 @@
                      (projects . 5))))
 
 
+;; (use-package highlight-numbers-mode
+;;   :straight (:type git :host github :repo "Fanael/highlight-numbers" :branch "master")
+;;   :defer t
+;;   :hook (prog-mode . highlight-numbers-mode))
+
+
+(use-package flyspell
+  :straight nil
+  :ensure-system-package (hunspell)
+  :hook
+  ((prog-mode . flyspell-prog-mode)
+   (text-mode . turn-on-flyspell))
+  :config
+  (flyspell-mode +1))
+
+
+(use-package langtool
+  :ensure-system-package (languagetool)
+  :straight t
+  :init
+  (setq langtool-http-server-host "localhost"
+        langtool-http-server-port 8081))
+
+
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
