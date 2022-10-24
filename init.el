@@ -148,10 +148,13 @@
   ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
    (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :defer t
+  :config
+  (setq lsp-headerline-breadcrumb-enable nil)
   :init (setq lsp-keymap-prefix "C-c l")
   :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode yaml-mode json-mode) . lsp)
          ((clojure-mode clojurec-mode clojurescript-mode) . (lambda ()
                                                               (setq-local lsp-enable-indentation nil)
+
                                                               (setq-local lsp-enable-completion-at-point nil)
                                                               (setq-local lsp-eldoc-enable-hover nil))))
   :commands (lsp lsp-deferred))
@@ -162,7 +165,10 @@
   :after (lsp-mode)
   :hook
   ((lsp-mode . lsp-ui-mode))
-  :commands (lsp-ui-mode))
+  :commands (lsp-ui-mode)
+  :config
+  (setq lsp-ui-sideline-show-code-actions nil)
+  (setq lsp-ui-sideline-show-hover nil))
 
 
 (use-package magit
