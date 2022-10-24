@@ -2,21 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(add-hook 'prog-mode-hook 'prettify-symbols-mode)
-(add-hook 'prog-mode-hook 'subword-mode)
-(add-hook 'prog-mode-hook 'hs-minor-mode)
-
-(setq show-paren-style 'parenthesis)
-(setq cursor-type 'box)
-(setq-default indent-tabs-mode nil)
-(setq backup-by-copying t)
-(setq backup-directory-alist
-      `(("" . ,(expand-file-name "backups/" user-emacs-directory))))
-(setq auto-save-default t)
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
-
 (defvar bootstrap-version)
 (let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
@@ -30,21 +15,14 @@
   ;; This takes a second
   (load bootstrap-file nil 'nomessage))
 
-(setq straight-check-for-modifications nil ;; 'live-with-find
-      )
+(setq-default straight-check-for-modifications 'live-with-find)
 
 (straight-use-package 'use-package)
+(straight-use-package 'use-package-ensure-system-package)
+
 (require 'use-package)
 (setq use-package-enable-imenu-support t)
 (setq use-package-verbose t)
-(straight-use-package 'use-package-ensure-system-package)
-
-(add-hook 'after-init-hook
-          (lambda ()
-            (save-place-mode +1)
-            (blink-cursor-mode -1)
-            (column-number-mode +1)
-            (size-indication-mode +1)))
 
 
 (use-package hi-lock
@@ -77,15 +55,15 @@
 
 
 ;; this takes a second, this is becase of my .zshrc
-(use-package exec-path-from-shell
-  :straight
-  (:type git
-         :host github
-         :repo "purcell/exec-path-from-shell"
-         :branch "master")
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
+;; (use-package exec-path-from-shell
+;;   :straight
+;;   (:type git
+;;          :host github
+;;          :repo "purcell/exec-path-from-shell"
+;;          :branch "master")
+;;   :ensure t
+;;   :config
+;;   (exec-path-from-shell-initialize))
 
 
 (use-package expand-region
@@ -310,10 +288,11 @@
   :defer t
   :hook
   (org-mode . (lambda ()
-                (setq-local mode-line-format nil)))
+                (setq-local mode-line-format nil)
+                (visual-line-mode +1)))
   :config
   (setq org-startup-folded t
-        org-ellipsis " ⇓ "
+        org-ellipsis " 📂 "
         org-startup-indented t
         org-hide-emphasis-markers t
         org-adapt-indentation t
@@ -508,8 +487,7 @@
 (use-package avy
   :straight t
   :defer t
-  :bind (("C-x a c 0" . avy-goto-char)
-         ("C-x a c 2" . avy-goto-char-2)))
+  :bind (("C-x a c g" . avy-goto-char-timer)))
 
 
 (use-package uniquify
@@ -564,6 +542,7 @@
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-x a d s") 'delete-selection-mode)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 
