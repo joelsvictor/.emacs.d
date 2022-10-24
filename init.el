@@ -275,7 +275,8 @@
 
 (use-package yaml-mode
   :straight t
-  :defer t)
+  :defer t
+  :mode "\.ya?ml\'")
 
 
 (use-package rg
