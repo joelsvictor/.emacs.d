@@ -179,6 +179,13 @@
     '("-a" "Autostash" "--autostash")))
 
 
+(use-package git-modes
+  :straight t
+  :mode (("\\.gitattributes\\'" . gitattributes-mode)
+         ("\\.gitconfig\\'" . gitconfig-mode)
+         ("\\.gitignore\\'" . gitignore-mode)))
+
+
 (use-package git-timemachine
   :straight (:host gitlab
                    :repo "pidu/git-timemachine"
