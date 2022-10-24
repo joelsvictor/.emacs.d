@@ -50,9 +50,12 @@
 (use-package kaolin-themes
   :straight t
   :defer t
+  :custom
+  (kaolin-themes-italic-comments t)
+  (kaolin-themes-comments-style 'alt)
+  (kaolin-themes-modeline-border t)
   :hook
-  (after-init . (lambda () (load-theme 'kaolin-aurora t))))
-
+  (after-init . (lambda () (load-theme 'kaolin-blossom t))))
 
 ;; this takes a second, this is becase of my .zshrc
 ;; (use-package exec-path-from-shell
