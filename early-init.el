@@ -4,7 +4,10 @@
 
 (setq-default line-spacing 6)
 (setq-default display-line-numbers-width-start 4)
+(setq-default display-line-numbers-type t)
 (setq-default native-comp-deferred-compilation nil)
+(setq-default user-full-name "Joel Victor")
+(setq-default custom-safe-themes t)
 ;; (setq-default pixel-scroll-precision-mode t)
 (setq frame-resize-pixelwise t)
 (setq gc-cons-threshold most-positive-fixnum)
@@ -16,11 +19,13 @@
 (setq initial-major-mode 'fundamental-mode)
 (setq inhibit-splash-screen t)
 (setq visible-bell t)
-(setq default-frame-alist '((undecorated-rouded . t)
-                            (internal-border-width . 24)
-                            (font . "Fira Code-17")))
+(add-to-list 'default-frame-alist '(undecorated-rouded . t))
+(add-to-list 'default-frame-alist '(internal-border-width . 24))
+(add-to-list 'default-frame-alist '(font . "Fira Code-17"))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
+
 (add-hook 'after-init-hook
           (lambda ()
             (progn (tool-bar-mode -1)
@@ -54,7 +59,6 @@
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
 
 (setq-default mode-line-format
               '(:propertize ((:eval

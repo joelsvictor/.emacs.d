@@ -421,7 +421,10 @@
 
 (use-package tramp
   :defer t
-  :config (setq tramp-default-method "ssh"))
+  :config
+  (setq tramp-default-method "rsync")
+  (setq remote-file-name-inhibit-cache nil)
+  (setq tramp-verbose 1))
 
 
 (use-package io-mode-inf
