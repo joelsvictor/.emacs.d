@@ -567,10 +567,7 @@
   :ensure-system-package (hunspell)
   :hook
   ((prog-mode . flyspell-prog-mode)
-   (text-mode . turn-on-flyspell))
-  :init
-  (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t))
+   (text-mode . turn-on-flyspell)))
 
 
 (use-package langtool
@@ -624,6 +621,6 @@
               (format "%f"  gc-elapsed)
               " seconds performing "
               (format "%d" gcs-done)
-              " GCs"))
+              " GC's."))
 
 ;;; init.el ends here
