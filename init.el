@@ -58,15 +58,15 @@
   (after-init . (lambda () (load-theme 'kaolin-blossom t))))
 
 ;; this takes a second, this is becase of my .zshrc
-;; (use-package exec-path-from-shell
-;;   :straight
-;;   (:type git
-;;          :host github
-;;          :repo "purcell/exec-path-from-shell"
-;;          :branch "master")
-;;   :ensure t
-;;   :config
-;;   (exec-path-from-shell-initialize))
+(use-package exec-path-from-shell
+  :straight
+  (:type git
+         :host github
+         :repo "purcell/exec-path-from-shell"
+         :branch "master")
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
 
 
 (use-package expand-region
@@ -137,9 +137,11 @@
   (("M-{" . paredit-wrap-curly)
    ("M-[" . paredit-wrap-square))
   :hook
-  ((emacs-lisp-mode clojure-mode cider-repl-mode lisp-data-mode) . paredit-mode)
-  :config
-  (add-hook 'paredit-mode-hook 'show-paren-mode))
+  (((emacs-lisp-mode clojure-mode cider-repl-mode lisp-data-mode) . paredit-mode)
+   (paredit-mode . show-paren-mode))
+  ;; :config
+  ;; (add-hook 'paredit-mode-hook 'show-paren-mode)
+  )
 
 
 (use-package lsp-mode
@@ -246,6 +248,7 @@
 
 
 (use-package emacs
+  :defer 5
   :init
   (setq completion-cycle-threshold 3)
   (setq tab-always-indent 'complete)
@@ -442,12 +445,14 @@
 
 (use-package yasnippet
   :straight t
-  :defer t
-  :hook (after-init . yas-global-mode))
+  :defer 20
+  ;; :hook (after-init . yas-global-mode)
+  :config (yas-global-mode)
+  )
 
 
 (use-package yasnippet-snippets
-  :defer t
+  ;; :defer t
   :straight t
   :after (yasnippet))
 
@@ -511,15 +516,16 @@
 
 (use-package uniquify
   :custom
-  (uniquify-buffer-name-style 'forward))
+  (uniquify-buffer-name-style 'forward)
+  :defer 5)
 
 
 (use-package tree-sitter
   :straight t
-  :defer t
+  :defer 5
+  :config (global-tree-sitter-mode +1)
   :hook
-  ((after-init . global-tree-sitter-mode)
-   (tree-sitter-after-on . tree-sitter-hl-mode)))
+  ((tree-sitter-after-on . tree-sitter-hl-mode)))
 
 
 (use-package tree-sitter-langs
@@ -560,19 +566,20 @@
 
 (use-package flyspell
   :straight nil
+  :defer t
   :ensure-system-package (hunspell)
   :hook
   ((prog-mode . flyspell-prog-mode)
    (text-mode . turn-on-flyspell))
-  :config
+  :init
   (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t)
-  (flyspell-mode +1))
+  (setq ispell-really-hunspell t))
 
 
 (use-package langtool
   :ensure-system-package (languagetool)
   :straight t
+  :after (flyspell)
   :init
   (setq langtool-http-server-host "localhost"
         langtool-http-server-port 8081))
@@ -582,20 +589,20 @@
   :straight t
   :defer 10
   :if (display-graphic-p)
-  :config (setq inhibit-compacting-font-caches t))
+  :init (setq inhibit-compacting-font-caches t))
 
 
 (use-package all-the-icons-completion
   :straight t
-  :defer t
+  ;; :defer t
   :after (all-the-icons)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :init (all-the-icons-completion-mode))
+  :config (all-the-icons-completion-mode))
 
 
 (use-package all-the-icons-dired
   :straight t
-  :defer t
+  ;; :defer t
   :after (all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode))
 
