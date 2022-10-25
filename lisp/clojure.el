@@ -6,7 +6,7 @@
 
 
 (use-package cider
-  :defer t
+  :defer 60
   :straight t
   :ensure t
   :bind (:map clojure-mode-map
@@ -23,6 +23,7 @@
 
 
 (use-package flycheck-clj-kondo
+  :defer t
   :after (flycheck cider)
   :straight t
   :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo"))
