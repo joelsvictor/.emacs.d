@@ -60,17 +60,27 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+(defun make-mode-line-mouse-map (mouse function)
+       (let ((map (make-sparse-keymap)))
+         (define-key map (vector 'mode-line mouse) function)
+         map))
+
 (setq-default mode-line-format
-              '(:propertize ((:eval
-                              (if (eql buffer-read-only t) "🔐" "🔓"))
-                             " "
-                             (:eval
-                              (if (buffer-modified-p) "📖" "📙"))
-                             " %b 〚"
-                             mode-name
-                             (vc-mode ("," vc-mode " 🐙")) "〛 %c %I")
-                            face
-                            (:foreground "#fe7706" :family "Monaco")))
+              '((:eval
+                 (propertize (if (eql buffer-read-only t) "🔐" "🔓")
+                             'help-echo (if (eql buffer-read-only t)
+                                            "Toggle the buffer to read write mode."
+                                          "Toggle to read only mode.")
+                             'local-map (purecopy (make-mode-line-mouse-map
+                                                   'mouse-1
+                                                   #'mode-line-toggle-read-only))))
+                " "
+                (:eval
+                 (propertize (if (buffer-modified-p) "📖" "📙")
+                             'help-echo (when (buffer-modified-p) "Buffer contains unsaved changes.")))
+                " %b 〚"
+                mode-name
+                (vc-mode ("," vc-mode)) "〛 %c %I"))
 
 
 ;;; early-init.el ends here
