@@ -558,12 +558,6 @@
                      (projects . 5))))
 
 
-;; (use-package highlight-numbers-mode
-;;   :straight (:type git :host github :repo "Fanael/highlight-numbers" :branch "master")
-;;   :defer t
-;;   :hook (prog-mode . highlight-numbers-mode))
-
-
 (use-package flyspell
   :straight nil
   :ensure-system-package (hunspell)
@@ -582,6 +576,28 @@
   :init
   (setq langtool-http-server-host "localhost"
         langtool-http-server-port 8081))
+
+
+(use-package all-the-icons
+  :straight t
+  :defer 10
+  :if (display-graphic-p)
+  :config (setq inhibit-compacting-font-caches t))
+
+
+(use-package all-the-icons-completion
+  :straight t
+  :defer t
+  :after (all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init (all-the-icons-completion-mode))
+
+
+(use-package all-the-icons-dired
+  :straight t
+  :defer t
+  :after (all-the-icons)
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
