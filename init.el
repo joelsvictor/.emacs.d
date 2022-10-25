@@ -306,9 +306,6 @@
 (use-package org
   :straight t
   :defer t
-  :hook
-  (org-mode . (lambda ()
-                (visual-line-mode +1)))
   :config
   (setq org-startup-folded t
         org-ellipsis " 📂 "
