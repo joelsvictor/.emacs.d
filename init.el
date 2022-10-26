@@ -355,6 +355,24 @@
   :hook (org-mode . org-appear-mode))
 
 
+(use-package org-present
+  :straight (:type git :host github :repo "rlister/org-present" :branch "master")
+  :defer t
+  :after (org)
+  :hook ((org-present-mode . (lambda ()
+                               (org-present-big)
+                               (org-display-inline-images)
+                               (org-present-hide-cursor)
+                               (org-present-read-only)
+                               (toggle-frame-fullscreen)))
+         (org-present-mode-quit . (lambda ()
+                                    (org-present-small)
+                                    (org-remove-inline-images)
+                                    (org-present-show-cursor)
+                                    (org-present-read-write)
+                                    (toggle-frame-fullscreen)))))
+
+
 ;; (use-package org-pretty-table
 ;;   :straight (:host github :repo "Fuco1/org-pretty-table" :branch "master")
 ;;   :after (org)
@@ -394,13 +412,13 @@
 
 
 (use-package docker
-  :defer t
-  :straight t)
+  :straight t
+  :defer t)
 
 
 (use-package dockerfile-mode
-  :defer t
-  :straight t)
+  :straight t
+  :defer t)
 
 
 (use-package eldoc
@@ -616,6 +634,16 @@
                        ("ELisp" (mode . emacs-lisp-mode))
                        ("Dired" (mode . dired-mode))))))
   :bind ("C-x C-b" . ibuffer))
+
+
+(use-package doom-modeline
+  :straight t
+  :custom
+  (doom-modeline-hud t)
+  (doom-modeline-support-imenu t)
+  (doom-modeline-buffer-file-name-style 'truncate-all)
+  (doom-modeline-display-default-persp-name t)
+  :hook (after-init . doom-modeline-mode))
 
 
 (global-set-key (kbd "C-=") 'text-scale-increase)

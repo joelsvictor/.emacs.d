@@ -20,8 +20,8 @@
 (setq inhibit-splash-screen t)
 (setq visible-bell t)
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
-(add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "Fira Code-17"))
+(add-to-list 'default-frame-alist '(internal-border-width . 10))
+(add-to-list 'default-frame-alist '(font . "Fira Code-16"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -40,7 +40,6 @@
 (add-hook 'prog-mode-hook
           (lambda ()
             (progn
-              (scroll-lock-mode)
               (display-line-numbers-mode)
               (prettify-symbols-mode)
               (subword-mode)
@@ -59,28 +58,5 @@
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
-
-(defun make-mode-line-mouse-map (mouse function)
-       (let ((map (make-sparse-keymap)))
-         (define-key map (vector 'mode-line mouse) function)
-         map))
-
-(setq-default mode-line-format
-              '((:eval
-                 (propertize (if (eql buffer-read-only t) "🔐" "🔓")
-                             'help-echo (if (eql buffer-read-only t)
-                                            "Toggle the buffer to read write mode."
-                                          "Toggle to read only mode.")
-                             'local-map (purecopy (make-mode-line-mouse-map
-                                                   'mouse-1
-                                                   #'mode-line-toggle-read-only))))
-                " "
-                (:eval
-                 (propertize (if (buffer-modified-p) "📖" "📙")
-                             'help-echo (when (buffer-modified-p) "Buffer contains unsaved changes.")))
-                " %b 〚"
-                mode-name
-                (vc-mode ("," vc-mode)) "〛 %c %I"))
-
 
 ;;; early-init.el ends here
