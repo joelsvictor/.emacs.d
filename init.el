@@ -599,7 +599,25 @@
   :hook (dired-mode . all-the-icons-dired-mode))
 
 
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+(use-package ibuffer
+  :defer t
+  :init (setq ibuffer-saved-filter-groups
+              (quote (("Home"
+                       ("Clojure" (or (mode . clojure-mode)
+                                      (mode . clojurec-mode)
+                                      (mode . clojurescript-mode)))
+                       ("Cider REPL" (mode . cider-repl-mode))
+                       ("Org" (mode . org-mode))
+                       ("Emacs" (or
+                                 (name . "^\\*scratch\\*$")
+                                 (name . "^\\*Messages\\*$")
+                                 (name . "^\\*dashboard\\*$")
+                                 (name . "^\\*straight-process\\*$")))
+                       ("ELisp" (mode . emacs-lisp-mode))
+                       ("Dired" (mode . dired-mode))))))
+  :bind ("C-x C-b" . ibuffer))
+
+
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-x a d s") 'delete-selection-mode)
