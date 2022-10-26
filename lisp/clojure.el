@@ -12,6 +12,7 @@
   :bind (:map clojure-mode-map
               ("C-c c d d" . cider-debug-defun-at-point))
   :commands cider-debug-defun-at-point
+  :custom (cider-use-xref nil)
   :config
   (setq cider-prompt-for-symbol nil)
   (setq cider-repl-pop-to-buffer-on-connect nil)
