@@ -588,7 +588,6 @@
 
 (use-package all-the-icons-completion
   :straight t
-  ;; :defer t
   :after (all-the-icons)
   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
   :config (all-the-icons-completion-mode))
@@ -596,7 +595,6 @@
 
 (use-package all-the-icons-dired
   :straight t
-  ;; :defer t
   :after (all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode))
 
