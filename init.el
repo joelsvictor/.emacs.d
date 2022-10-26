@@ -120,14 +120,10 @@
 (require 'clojure)
 
 
-(use-package flycheck
-  :straight t
+(use-package flymake
   :defer t
-  :config
-  (setq flycheck-indication-mode 'left-margin)
-  (setq flycheck-highlighting-mode 'symbols)
   :hook
-  (prog-mode . flycheck-mode))
+  (prog-mode . flymake-mode))
 
 
 (use-package paredit

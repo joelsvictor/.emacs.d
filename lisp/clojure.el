@@ -22,11 +22,12 @@
   (setq cider-eldoc-display-context-dependent-info t))
 
 
-(use-package flycheck-clj-kondo
-  :defer t
-  :after (flycheck cider)
+(use-package flymake-kondor
+  :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo")
   :straight t
-  :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo"))
+  :defer t
+  :after (flymake cider)
+  :hook (clojure-mode . flymake-kondor-setup))
 
 
 (use-package clj-refactor
