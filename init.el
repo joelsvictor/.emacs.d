@@ -306,6 +306,8 @@
 (use-package org
   :straight t
   :defer t
+  :custom
+  (org-default-notes-file "./org/capture.org")
   :config
   (setq org-startup-folded t
         org-ellipsis " 📂 "
@@ -330,7 +332,9 @@
      (sql . t)
      (verb . t)
      (shell . t)
-     (js . t))))
+     (js . t)))
+  :bind (("C-c C-o C-c" . org-capture)
+         ("C-c C-o C-a" . org-agenda)))
 
 
 (use-package org-contrib
@@ -371,12 +375,6 @@
                                     (org-present-show-cursor)
                                     (org-present-read-write)
                                     (toggle-frame-fullscreen)))))
-
-
-;; (use-package org-pretty-table
-;;   :straight (:host github :repo "Fuco1/org-pretty-table" :branch "master")
-;;   :after (org)
-;;   :hook (org-mode . org-pretty-table-mode))
 
 
 (use-package lsp-haskell
@@ -492,7 +490,7 @@
   :ensure-system-package
   ((cmake . "brew install cmake")
    (fish . "brew install fish"))
-  :bind (("C-c v t" . vterm))
+  :bind (("C-c C-v C-t" . vterm))
   :config
   (setq vterm-shell "/usr/local/bin/fish")
   :defer t)
@@ -562,7 +560,7 @@
 
 (use-package plantuml-mode
   :straight t
-  :ensure-system-package (plantuml . "brew install plantuml")
+  :ensure-system-package (plantuml)
   :defer t
   :config
   (setq plantuml-exec-mode 'executable))
@@ -648,7 +646,6 @@
 
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
-(global-set-key (kbd "C-x a d s") 'delete-selection-mode)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 
