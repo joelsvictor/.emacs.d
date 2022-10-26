@@ -134,39 +134,25 @@
    ("M-[" . paredit-wrap-square))
   :hook
   (((emacs-lisp-mode clojure-mode cider-repl-mode lisp-data-mode) . paredit-mode)
-   (paredit-mode . show-paren-mode))
-  ;; :config
-  ;; (add-hook 'paredit-mode-hook 'show-paren-mode)
-  )
+   (paredit-mode . show-paren-mode)))
 
 
-(use-package lsp-mode
-  :straight t
+(use-package eglot
   :ensure-system-package
-  ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
-   (sqls . "go install github.com/lighttiger2505/sqls@latest"))
-  :defer t
-  :config
-  (setq lsp-headerline-breadcrumb-enable nil)
-  :init (setq lsp-keymap-prefix "C-c l")
-  :hook (((clojure-mode clojurec-mode clojurescript-mode sql-mode yaml-mode json-mode) . lsp)
-         ((clojure-mode clojurec-mode clojurescript-mode) . (lambda ()
-                                                              (setq-local lsp-enable-indentation nil)
-
-                                                              (setq-local lsp-enable-completion-at-point nil)
-                                                              (setq-local lsp-eldoc-enable-hover nil))))
-  :commands (lsp lsp-deferred))
-
-
-(use-package lsp-ui
+  (clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
   :straight t
-  :after (lsp-mode)
+  :defer t
+  :bind (:map eglot-mode-map
+              ("C-c C-l r r" . eglot-rename)
+              ("C-c C-l a a" . eglot-code-actions))
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-extend-to-xref t)
+  (eglot-ignored-server-capabilities '(:hoverProvider
+                                       :documentOnTypeFormattingProvider
+                                       :executeCommandProvider))
   :hook
-  ((lsp-mode . lsp-ui-mode))
-  :commands (lsp-ui-mode)
-  :config
-  (setq lsp-ui-sideline-show-code-actions nil)
-  (setq lsp-ui-sideline-show-hover nil))
+  ((clojure-mode clojurec-mode clojurescript-mode) . eglot-ensure))
 
 
 (use-package magit
