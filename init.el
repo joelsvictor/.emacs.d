@@ -30,7 +30,7 @@
   :config
   (setq hi-lock-auto-select-face t)
   :bind
-  ("C-x w p" . highlight-phrase))
+  ("C-c C-p" . highlight-phrase))
 
 
 (use-package windmove
@@ -232,9 +232,9 @@
   (corfu-doc-max-width 85)
   (corfu-doc-max-height 20)
   :bind (:map corfu-map
-              ("M-d" . #'corfu-doc-toggle)
-              ("M-p" . #'corfu-doc-scroll-down)
-              ("M-n" . #'corfu-doc-scroll-up))
+              ("C-c C-d" . #'corfu-doc-toggle)
+              ("M-n" . #'corfu-doc-scroll-down)
+              ("M-p" . #'corfu-doc-scroll-up))
   :hook (corfu-mode . corfu-doc-mode))
 
 
