@@ -152,7 +152,9 @@
                                        :documentOnTypeFormattingProvider
                                        :executeCommandProvider))
   :hook
-  ((clojure-mode clojurec-mode clojurescript-mode) . eglot-ensure))
+  ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs '(sql-mode . ("sqls"))))
 
 
 (use-package magit
