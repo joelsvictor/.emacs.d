@@ -291,9 +291,10 @@
   :defer 1
   :custom
   (org-default-notes-file (expand-file-name "~/org/capture.org"))
+  (org-agenda-files (list "~/org"))
   :config
   (setq org-startup-folded t
-        org-ellipsis " 📂 "
+        org-ellipsis " ↓ "
         org-startup-indented t
         org-hide-emphasis-markers t
         org-adapt-indentation t
@@ -328,13 +329,13 @@
 (use-package org-bullets
   :straight t
   :after (org)
-  ;; :hook (org-mode . org-bullets-mode)
-  :config
-  (org-bullets-mode)
-  (setq org-bullets-bullet-list '("◯"
-                                  "⟶"
-                                  "→"
-                                  "•")))
+  :defer t
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◯"
+                             "⟶"
+                             "→"
+                             "•")))
 
 
 (use-package org-appear
