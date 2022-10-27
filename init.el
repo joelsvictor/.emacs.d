@@ -30,21 +30,19 @@
   :config
   (setq hi-lock-auto-select-face t)
   :bind
-  ("C-c C-p" . highlight-phrase))
+  ("C-c h p" . highlight-phrase))
 
 
 (use-package windmove
-  :defer t
-  :hook
-  (after-init . windmove-mode)
+  :defer 1
   :config
   (windmove-default-keybindings))
 
 
 (use-package winner
-  :defer t
-  :hook
-  (after-init . winner-mode))
+  :defer 1
+  :config
+  (winner-mode))
 
 
 (use-package kaolin-themes
@@ -59,34 +57,33 @@
 
 ;; this takes a second, this is becase of my .zshrc
 (use-package exec-path-from-shell
-  :straight
-  (:type git
-         :host github
-         :repo "purcell/exec-path-from-shell"
-         :branch "master")
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
+  :straight (:type git
+                   :host github
+                   :repo "purcell/exec-path-from-shell"
+                   :branch "master")
+  :straight t
+  :defer 1
+  :config (exec-path-from-shell-initialize))
 
 
 (use-package expand-region
   :straight t
   :defer t
-  :config
-  (pending-delete-mode)
-  :bind
-  ("C-@" . er/expand-region))
+  :config (pending-delete-mode)
+  :bind ("C-c C-a" . er/expand-region))
 
 
 (use-package selectrum
   :straight t
-  :defer t
-  :hook
-  (after-init . selectrum-mode))
+  :defer 5
+  ;; :hook (after-init . selectrum-mode)
+  :config
+  (selectrum-mode))
 
 
 (use-package orderless
   :straight t
+  :after (selectrum)
   :defer t
   :custom
   (completion-styles '(orderless basic))
@@ -95,9 +92,10 @@
 
 (use-package ctrlf
   :straight t
-  :defer t
-  :hook
-  (after-init . ctrlf-mode))
+  :defer 1
+  :config (ctrlf-mode)
+  ;; :hook (after-init . ctrlf-mode)
+  )
 
 
 (use-package apheleia
@@ -122,8 +120,9 @@
 
 (use-package flymake
   :defer t
-  :hook
-  (prog-mode . flymake-mode))
+  :hook (prog-mode . flymake-mode)
+  :bind (:map flymake-mode-map
+              ("C-c ! l" . flymake-show-project-diagnostics)))
 
 
 (use-package paredit
@@ -143,8 +142,8 @@
   :straight t
   :defer t
   :bind (:map eglot-mode-map
-              ("C-c C-l r r" . eglot-rename)
-              ("C-c C-l a a" . eglot-code-actions))
+              ("C-c l r r" . eglot-rename)
+              ("C-c l a a" . eglot-code-actions))
   :custom
   (eglot-autoshutdown t)
   (eglot-extend-to-xref t)
@@ -159,7 +158,7 @@
 
 (use-package magit
   :straight t
-  :defer t
+  :defer 1
   :config
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
@@ -177,9 +176,9 @@
                    :repo "pidu/git-timemachine"
                    :fork (:host github
                                 :repo "emacsmirror/git-timemachine"))
-  :defer t
-  :after
-  (magit))
+  :defer 1
+  :bind (:map prog-mode-map
+              ("C-c g t" . git-timemachine)))
 
 
 (use-package diff-hl
@@ -210,7 +209,7 @@
 
 (use-package corfu-doc
   :straight t
-  :after corfu
+  :after (corfu)
   :custom
   (corfu-doc-auto nil)
   (corfu-doc-max-width 85)
@@ -232,7 +231,7 @@
 
 
 (use-package emacs
-  :defer 5
+  :defer 1
   :init
   (setq completion-cycle-threshold 3)
   (setq tab-always-indent 'complete)
@@ -255,9 +254,9 @@
 
 (use-package marginalia
   :straight t
-  :defer t
-  :hook
-  (selectrum-mode . marginalia-mode))
+  :after (selectrum)
+  ;; :hook (selectrum-mode . marginalia-mode)
+  :config (marginalia-mode))
 
 
 (use-package yaml-mode
@@ -267,13 +266,13 @@
 
 
 (use-package rg
-  :defer t
-  :straight t)
+  :straight t
+  :defer 1)
 
 
 (use-package projectile
   :straight t
-  :defer t
+  :defer 1
   :bind-keymap*
   (("C-c p" . projectile-command-map))
   :config
@@ -289,9 +288,9 @@
 
 (use-package org
   :straight t
-  :defer t
+  :defer 1
   :custom
-  (org-default-notes-file "./org/capture.org")
+  (org-default-notes-file (expand-file-name "~/org/capture.org"))
   :config
   (setq org-startup-folded t
         org-ellipsis " 📂 "
@@ -317,8 +316,8 @@
      (verb . t)
      (shell . t)
      (js . t)))
-  :bind (("C-c C-o C-c" . org-capture)
-         ("C-c C-o C-a" . org-agenda)))
+  :bind (("C-c C-o c" . org-capture)
+         ("C-c C-o a" . org-agenda)))
 
 
 (use-package org-contrib
@@ -329,8 +328,9 @@
 (use-package org-bullets
   :straight t
   :after (org)
-  :hook (org-mode . org-bullets-mode)
+  ;; :hook (org-mode . org-bullets-mode)
   :config
+  (org-bullets-mode)
   (setq org-bullets-bullet-list '("◯"
                                   "⟶"
                                   "→"
@@ -345,7 +345,7 @@
 
 (use-package org-present
   :straight (:type git :host github :repo "rlister/org-present" :branch "master")
-  :defer t
+  ;; :defer t
   :after (org)
   :hook ((org-present-mode . (lambda ()
                                (org-present-big)
@@ -421,7 +421,7 @@
 
 
 (use-package tramp
-  :defer t
+  :defer 1
   :config
   (setq tramp-default-method "rsync")
   (setq remote-file-name-inhibit-cache nil)
@@ -442,14 +442,11 @@
 
 (use-package yasnippet
   :straight t
-  :defer 20
-  ;; :hook (after-init . yas-global-mode)
-  :config (yas-global-mode)
-  )
+  :defer 1
+  :config (yas-global-mode))
 
 
 (use-package yasnippet-snippets
-  ;; :defer t
   :straight t
   :after (yasnippet))
 
@@ -457,8 +454,7 @@
 (use-package rainbow-delimiters
   :straight t
   :defer t
-  :custom
-  (rainbow-delimiters-max-face-count 5)
+  :custom (rainbow-delimiters-max-face-count 5)
   :hook ((electric-pair-mode paredit-mode) . rainbow-delimiters-mode))
 
 
@@ -474,7 +470,7 @@
   :ensure-system-package
   ((cmake . "brew install cmake")
    (fish . "brew install fish"))
-  :bind (("C-c C-v C-t" . vterm))
+  :bind (("C-c v t" . vterm))
   :config
   (setq vterm-shell "/usr/local/bin/fish")
   :defer t)
@@ -484,7 +480,7 @@
   :straight t
   :defer t
   :bind (:map global-map
-              ("C-c t t" . treemacs))
+              ("C-c C-t t" . treemacs))
   :commands (treemacs-follow-mode
              treemacs-filewatch-mode
              treemacs-git-mode)
@@ -501,25 +497,23 @@
 
 
 (use-package elec-pair
-  :hook
-  ((sql-mode) . electric-pair-mode))
+  :defer t
+  :hook ((sql-mode) . electric-pair-mode))
 
 
 (use-package avy
   :straight t
   :defer t
-  :bind (("C-x a c g" . avy-goto-char-timer)))
+  :bind (("C-c a c t" . avy-goto-char-timer)))
 
 
 (use-package uniquify
-  :custom
-  (uniquify-buffer-name-style 'forward)
-  :defer 5)
+  :custom (uniquify-buffer-name-style 'forward))
 
 
 (use-package tree-sitter
   :straight t
-  :defer 5
+  :defer 1
   :config (global-tree-sitter-mode +1)
   :hook
   ((tree-sitter-after-on . tree-sitter-hl-mode)))
@@ -533,8 +527,7 @@
 (use-package elisp-slime-nav
   :straight t
   :defer t
-  :hook
-  ((emacs-lisp-mode) . turn-on-elisp-slime-nav-mode))
+  :hook ((emacs-lisp-mode) . turn-on-elisp-slime-nav-mode))
 
 
 (use-package logview
@@ -564,7 +557,7 @@
 (use-package flyspell
   :straight nil
   :defer t
-  :ensure-system-package (hunspell)
+  :ensure-system-package (hunspell aspell)
   :hook
   ((prog-mode . flyspell-prog-mode)
    (text-mode . turn-on-flyspell)))
@@ -583,7 +576,11 @@
   :straight t
   :defer 10
   :if (display-graphic-p)
-  :init (setq inhibit-compacting-font-caches t))
+  :init (setq inhibit-compacting-font-caches t)
+  :custom
+  (all-the-icons-fonts-subdirectory "AllTheIcons")
+  :config (unless (file-directory-p "/Users/joelvictor/Library/Fonts/AllTheIcons")
+            (call-interactively 'all-the-icons-install-fonts)))
 
 
 (use-package all-the-icons-completion
@@ -624,7 +621,6 @@
   (doom-modeline-hud t)
   (doom-modeline-support-imenu t)
   (doom-modeline-buffer-file-name-style 'truncate-all)
-  (doom-modeline-display-default-persp-name t)
   :hook (after-init . doom-modeline-mode))
 
 

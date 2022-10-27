@@ -8,7 +8,7 @@
 (setq-default native-comp-deferred-compilation nil)
 (setq-default user-full-name "Joel Victor")
 (setq-default custom-safe-themes t)
-;; (setq-default pixel-scroll-precision-mode t)
+(setq-default pixel-scroll-precision-mode t)
 (setq frame-resize-pixelwise t)
 (setq gc-cons-threshold most-positive-fixnum)
 (setq load-prefer-newer noninteractive)
