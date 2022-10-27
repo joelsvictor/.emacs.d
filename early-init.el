@@ -35,7 +35,8 @@
                    (save-place-mode +1)
                    (blink-cursor-mode -1)
                    (column-number-mode +1)
-                   (size-indication-mode +1))))
+                   (size-indication-mode +1)
+                   (global-auto-revert-mode +1))))
 
 (add-hook 'prog-mode-hook
           (lambda ()
