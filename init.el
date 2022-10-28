@@ -56,18 +56,26 @@
   (kaolin-themes-comments-style 'alt)
   (kaolin-themes-modeline-border t)
   :hook
-  (after-init . (lambda () (load-theme 'kaolin-blossom t))))
+  (after-init . (lambda () (load-theme 'kaolin-mono-light t)))
+  :config
+  (defun my/apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (load-theme 'kaolin-mono-light t))
+      ('dark (load-theme 'kaolin-mono-dark t))))
+  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme))
 
 
 ;; this takes a second, this is becase of my .zshrc
-(use-package exec-path-from-shell
-  :straight (:type git
-                   :host github
-                   :repo "purcell/exec-path-from-shell"
-                   :branch "master")
-  :straight t
-  :defer 1
-  :config (exec-path-from-shell-initialize))
+;; (use-package exec-path-from-shell
+;;   :straight (:type git
+;;                    :host github
+;;                    :repo "purcell/exec-path-from-shell"
+;;                    :branch "master")
+;;   :straight t
+;;   :defer 1
+;;   :config (exec-path-from-shell-initialize))
 
 
 (use-package expand-region
