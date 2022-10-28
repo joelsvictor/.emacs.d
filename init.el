@@ -76,7 +76,6 @@
 (use-package selectrum
   :straight t
   :defer 5
-  ;; :hook (after-init . selectrum-mode)
   :config
   (selectrum-mode))
 
@@ -93,9 +92,7 @@
 (use-package ctrlf
   :straight t
   :defer 1
-  :config (ctrlf-mode)
-  ;; :hook (after-init . ctrlf-mode)
-  )
+  :config (ctrlf-mode))
 
 
 (use-package apheleia
@@ -255,7 +252,6 @@
 (use-package marginalia
   :straight t
   :after (selectrum)
-  ;; :hook (selectrum-mode . marginalia-mode)
   :config (marginalia-mode))
 
 
@@ -292,6 +288,7 @@
   :custom
   (org-default-notes-file (expand-file-name "~/org/capture.org"))
   (org-agenda-files (list "~/org"))
+  (org-bookmark-names-plist nil)
   :config
   (setq org-startup-folded t
         org-ellipsis " ↓ "
@@ -300,7 +297,6 @@
         org-adapt-indentation t
         org-hide-leading-stars t
         org-src-fontify-natively t
-        ;; org-odd-levels-only t
         org-babel-clojure-backend 'cider
         org-babel-python-command "python3"
         org-plantuml-exec-mode 'plantuml)
@@ -346,7 +342,6 @@
 
 (use-package org-present
   :straight (:type git :host github :repo "rlister/org-present" :branch "master")
-  ;; :defer t
   :after (org)
   :hook ((org-present-mode . (lambda ()
                                (org-present-big)
@@ -604,6 +599,7 @@
                        ("Clojure" (or (mode . clojure-mode)
                                       (mode . clojurec-mode)
                                       (mode . clojurescript-mode)))
+                       ("Terminals" (mode . vterm-mode))
                        ("Cider REPL" (mode . cider-repl-mode))
                        ("Org" (mode . org-mode))
                        ("Emacs" (or
