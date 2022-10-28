@@ -27,8 +27,8 @@
 
 (use-package hi-lock
   :defer t
-  :config
-  (setq hi-lock-auto-select-face t)
+  :custom
+  (hi-lock-auto-select-face t)
   :bind
   ("C-c h p" . highlight-phrase))
 
@@ -55,6 +55,7 @@
   :hook
   (after-init . (lambda () (load-theme 'kaolin-blossom t))))
 
+
 ;; this takes a second, this is becase of my .zshrc
 (use-package exec-path-from-shell
   :straight (:type git
@@ -75,7 +76,7 @@
 
 (use-package selectrum
   :straight t
-  :defer 5
+  :defer 1
   :config
   (selectrum-mode))
 
@@ -135,7 +136,8 @@
 
 (use-package eglot
   :ensure-system-package
-  (clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
+  ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
+   (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :straight t
   :defer t
   :bind (:map eglot-mode-map
@@ -181,8 +183,7 @@
 (use-package diff-hl
   :straight t
   :defer t
-  :hook
-  (prog-mode . diff-hl-mode))
+  :hook (prog-mode . diff-hl-mode))
 
 
 (use-package corfu
@@ -262,18 +263,19 @@
 
 
 (use-package rg
+  :ensure-system-package (ripgrep . "brew install ripgrep")
   :straight t
   :defer 1)
 
 
-(use-package projectile
-  :straight t
-  :defer 1
-  :bind-keymap*
-  (("C-c p" . projectile-command-map))
-  :config
-  (projectile-mode +1)
-  (setq projectile-sort-order 'default))
+;; (use-package projectile
+;;   :straight t
+;;   :defer 1
+;;   :bind-keymap*
+;;   (("C-c p" . projectile-command-map))
+;;   :config
+;;   (projectile-mode +1)
+;;   (setq projectile-sort-order 'default))
 
 
 (use-package verb
@@ -357,9 +359,9 @@
                                     (toggle-frame-fullscreen)))))
 
 
-(use-package lsp-haskell
-  :defer t
-  :straight t)
+;; (use-package lsp-haskell
+;;   :defer t
+;;   :straight t)
 
 
 (use-package haskell-mode
@@ -368,25 +370,22 @@
   :config (setq haskell-process-type 'stack-ghci))
 
 
-(use-package lsp-java
-  :defer t
-  :straight t)
+;; (use-package lsp-java
+;;   :defer t
+;;   :straight t)
 
 
 (use-package ansible
   :straight t
   :defer t
-  :hook
-  (yaml-mode . ansible)
-  :hook
-  (ansible . ansible-auto-decrypt-encrypt))
+  :hook (yaml-mode . ansible)
+  :hook (ansible . ansible-auto-decrypt-encrypt))
 
 
 (use-package which-key
   :straight t
   :defer t
-  :hook
-  (after-init . which-key-mode))
+  :hook (after-init . which-key-mode))
 
 
 (use-package docker
@@ -402,8 +401,7 @@
 (use-package eldoc
   :straight t
   :defer t
-  :hook
-  (prog-mode . eldoc-mode))
+  :hook (prog-mode . eldoc-mode))
 
 
 (use-package json-mode
@@ -426,9 +424,8 @@
 
 (use-package io-mode-inf
   :defer t
-  :straight
-  (:host github :repo "slackorama/io-emacs"
-         :branch "master"))
+  :straight (:host github :repo "slackorama/io-emacs"
+                   :branch "master"))
 
 
 (use-package csv-mode
@@ -463,12 +460,10 @@
 
 (use-package vterm
   :straight t
-  :ensure-system-package
-  ((cmake . "brew install cmake")
-   (fish . "brew install fish"))
+  :ensure-system-package ((cmake . "brew install cmake")
+                          (fish . "brew install fish"))
   :bind (("C-c v t" . vterm))
-  :config
-  (setq vterm-shell "/usr/local/bin/fish")
+  :custom (vterm-shell "/usr/local/bin/fish")
   :defer t)
 
 
@@ -488,19 +483,19 @@
 
 (use-package sql
   :defer t
-  :custom
-  (sql-product 'postgres))
+  :custom (sql-product 'postgres))
 
 
 (use-package elec-pair
   :defer t
-  :hook ((sql-mode) . electric-pair-mode))
+  :hook (sql-mode . electric-pair-mode))
 
 
 (use-package avy
   :straight t
   :defer t
-  :bind (("C-c a c t" . avy-goto-char-timer)))
+  :bind (:map global-map
+              ("C-c a c t" . avy-goto-char-timer)))
 
 
 (use-package uniquify
@@ -511,8 +506,7 @@
   :straight t
   :defer 1
   :config (global-tree-sitter-mode +1)
-  :hook
-  ((tree-sitter-after-on . tree-sitter-hl-mode)))
+  :hook (tree-sitter-after-on . tree-sitter-hl-mode))
 
 
 (use-package tree-sitter-langs
@@ -523,7 +517,7 @@
 (use-package elisp-slime-nav
   :straight t
   :defer t
-  :hook ((emacs-lisp-mode) . turn-on-elisp-slime-nav-mode))
+  :hook (emacs-lisp-mode . turn-on-elisp-slime-nav-mode))
 
 
 (use-package logview
@@ -535,28 +529,24 @@
   :straight t
   :ensure-system-package (plantuml)
   :defer t
-  :config
-  (setq plantuml-exec-mode 'executable))
+  :custom(plantuml-exec-mode 'executable))
 
 
 (use-package dashboard
   :straight t
   :defer t
-  :hook
-  (after-init . dashboard-setup-startup-hook)
-  :custom
-  (dashboard-items '((recents  . 5)
-                     (bookmarks . 5)
-                     (projects . 5))))
+  :hook (after-init . dashboard-setup-startup-hook)
+  :custom (dashboard-items '((recents  . 5)
+                             (bookmarks . 5)
+                             (projects . 5))))
 
 
 (use-package flyspell
   :straight nil
   :defer t
   :ensure-system-package (hunspell aspell)
-  :hook
-  ((prog-mode . flyspell-prog-mode)
-   (text-mode . turn-on-flyspell)))
+  :hook ((prog-mode . flyspell-prog-mode)
+         (text-mode . turn-on-flyspell)))
 
 
 (use-package langtool
@@ -573,8 +563,7 @@
   :defer 10
   :if (display-graphic-p)
   :init (setq inhibit-compacting-font-caches t)
-  :custom
-  (all-the-icons-fonts-subdirectory "AllTheIcons")
+  :custom (all-the-icons-fonts-subdirectory "AllTheIcons")
   :config (unless (file-directory-p "/Users/joelvictor/Library/Fonts/AllTheIcons")
             (call-interactively 'all-the-icons-install-fonts)))
 
@@ -594,21 +583,22 @@
 
 (use-package ibuffer
   :defer t
-  :init (setq ibuffer-saved-filter-groups
-              (quote (("Home"
-                       ("Clojure" (or (mode . clojure-mode)
-                                      (mode . clojurec-mode)
-                                      (mode . clojurescript-mode)))
-                       ("Terminals" (mode . vterm-mode))
-                       ("Cider REPL" (mode . cider-repl-mode))
-                       ("Org" (mode . org-mode))
-                       ("Emacs" (or
-                                 (name . "^\\*scratch\\*$")
-                                 (name . "^\\*Messages\\*$")
-                                 (name . "^\\*dashboard\\*$")
-                                 (name . "^\\*straight-process\\*$")))
-                       ("ELisp" (mode . emacs-lisp-mode))
-                       ("Dired" (mode . dired-mode))))))
+  :custom
+  (ibuffer-saved-filter-groups
+   (quote (("Home"
+            ("Clojure" (or (mode . clojure-mode)
+                           (mode . clojurec-mode)
+                           (mode . clojurescript-mode)))
+            ("Terminals" (mode . vterm-mode))
+            ("Cider REPL" (mode . cider-repl-mode))
+            ("Org" (mode . org-mode))
+            ("Emacs" (or
+                      (name . "^\\*scratch\\*$")
+                      (name . "^\\*Messages\\*$")
+                      (name . "^\\*dashboard\\*$")
+                      (name . "^\\*straight-process\\*$")))
+            ("ELisp" (mode . emacs-lisp-mode))
+            ("Dired" (mode . dired-mode))))))
   :bind ("C-x C-b" . ibuffer))
 
 
