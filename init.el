@@ -3,6 +3,7 @@
 ;;; Code:
 
 (defvar bootstrap-version)
+
 (let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
@@ -15,7 +16,9 @@
   ;; This takes a second
   (load bootstrap-file nil 'nomessage))
 
+
 (setq-default straight-check-for-modifications 'live-with-find)
+
 
 (straight-use-package 'use-package)
 (straight-use-package 'use-package-ensure-system-package)
@@ -263,19 +266,11 @@
 
 
 (use-package rg
-  :ensure-system-package (ripgrep . "brew install ripgrep")
+  :ensure-system-package (rg . "brew install ripgrep")
   :straight t
-  :defer 1)
-
-
-;; (use-package projectile
-;;   :straight t
-;;   :defer 1
-;;   :bind-keymap*
-;;   (("C-c p" . projectile-command-map))
-;;   :config
-;;   (projectile-mode +1)
-;;   (setq projectile-sort-order 'default))
+  :defer 1
+  :bind (:map global-map
+              ("C-c r g" . rg)))
 
 
 (use-package verb
@@ -536,9 +531,11 @@
   :straight t
   :defer t
   :hook (after-init . dashboard-setup-startup-hook)
-  :custom (dashboard-items '((recents  . 5)
-                             (bookmarks . 5)
-                             (projects . 5))))
+  :custom
+  (dashboard-items '((recents  . 10)
+                     (bookmarks . 10)
+                     (projects . 10)))
+  (dashboard-projects-backend 'project-el))
 
 
 (use-package flyspell
@@ -609,6 +606,13 @@
   (doom-modeline-support-imenu t)
   (doom-modeline-buffer-file-name-style 'truncate-all)
   :hook (after-init . doom-modeline-mode))
+
+
+(use-package xref
+  :straight nil
+  :bind (:map prog-mode-map
+              (("C-c x r" . xref-find-references)
+               ("C-c x d" . xref-find-definitions))))
 
 
 (global-set-key (kbd "C-=") 'text-scale-increase)
