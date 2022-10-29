@@ -465,23 +465,43 @@
   :straight t
   :ensure-system-package ((cmake . "brew install cmake")
                           (fish . "brew install fish"))
-  :bind (("C-c v t" . vterm))
+  :after (project)
+  :bind (("C-c v t" . vterm)
+         (:map project-prefix-map
+               ("t" . project-vterm)))
   :custom (vterm-shell "/usr/local/bin/fish")
-  :defer t)
-
-
-(use-package treemacs
-  :straight t
   :defer t
-  :bind (:map global-map
-              ("C-c C-t t" . treemacs))
-  :commands (treemacs-follow-mode
-             treemacs-filewatch-mode
-             treemacs-git-mode)
   :config
-  (treemacs-git-mode 'deferred)
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t))
+  (defun project-vterm ()
+    "Start an inferior shell in the current project's root directory.
+If a buffer already exists for running a shell in the project's root,
+switch to it.  Otherwise, create a new shell buffer.
+With \\[universal-argument] prefix arg, create a new inferior shell buffer even
+if one already exists."
+    (interactive)
+    (require 'comint)
+    (let* ((default-directory (project-root (project-current t)))
+           (default-project-shell-name (project-prefixed-buffer-name "vterm"))
+           (shell-buffer (get-buffer default-project-shell-name)))
+      (if (and shell-buffer (not current-prefix-arg))
+          (if (comint-check-proc shell-buffer)
+              (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
+            (vterm shell-buffer))
+        (vterm (generate-new-buffer-name default-project-shell-name))))))
+
+
+;; (use-package treemacs
+;;   :straight t
+;;   :defer t
+;;   :bind (:map global-map
+;;               ("C-c t t" . treemacs))
+;;   :commands (treemacs-follow-mode
+;;              treemacs-filewatch-mode
+;;              treemacs-git-mode)
+;;   :config
+;;   (treemacs-git-mode 'deferred)
+;;   (treemacs-follow-mode t)
+;;   (treemacs-filewatch-mode t))
 
 
 (use-package sql
