@@ -327,7 +327,9 @@
      (shell . t)
      (js . t)))
   :bind (("C-c C-o c" . org-capture)
-         ("C-c C-o a" . org-agenda)))
+         ("C-c C-o a" . org-agenda))
+  :hook (org-babel-after-execute . (lambda ()
+                                     (org-display-inline-images))))
 
 
 (use-package org-contrib
