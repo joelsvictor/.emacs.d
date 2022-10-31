@@ -230,6 +230,14 @@
   :hook (corfu-mode . corfu-doc-mode))
 
 
+(use-package cape
+  :init
+  ;; Add `completion-at-point-functions', used by `completion-at-point'.
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  :straight t
+  :after (corfu))
+
+
 (use-package kind-icon
   :straight t
   :after (corfu)
