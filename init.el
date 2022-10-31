@@ -291,8 +291,9 @@
 
 (use-package verb
   :defer t
-  :mode "\\.http\\'"
-  :straight t)
+  :mode ("\\.http\\'" . verb-mode)
+  :straight t
+  :custom (verb-base-headers . '(("User-Agent" . "Joel's Emacs"))))
 
 
 (use-package org
@@ -303,6 +304,8 @@
   (org-agenda-files (list "~/org"))
   (org-bookmark-names-plist nil)
   :config
+  (setq org-babel-default-header-args:verb
+        '((:op . "send get-body") (:wrap . "src ob-verb-response")))
   (setq org-startup-folded t
         org-ellipsis " ↓ "
         org-startup-indented t
