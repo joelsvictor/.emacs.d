@@ -293,7 +293,7 @@
   :defer t
   :mode ("\\.http\\'" . verb-mode)
   :straight t
-  :custom (verb-base-headers . '(("User-Agent" . "Joel's Emacs"))))
+  :custom (verb-base-headers . `(("User-Agent" . ,(concat (user-full-name) "@" (system-name))))))
 
 
 (use-package org
