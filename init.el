@@ -487,7 +487,9 @@ if one already exists."
           (if (comint-check-proc shell-buffer)
               (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
             (vterm shell-buffer))
-        (vterm (generate-new-buffer-name default-project-shell-name))))))
+        (vterm (generate-new-buffer-name default-project-shell-name)))))
+  :hook (vterm-mode . (lambda ()
+                        (goto-address-mode))))
 
 
 ;; (use-package treemacs
