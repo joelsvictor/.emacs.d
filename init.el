@@ -281,12 +281,12 @@
   :mode "\.ya?ml\'")
 
 
-(use-package rg
+(use-package deadgrep
   :ensure-system-package (rg . "brew install ripgrep")
   :straight t
   :defer 1
   :bind (:map global-map
-              ("C-c r g" . rg)))
+              ("C-c r g" . deadgrep)))
 
 
 (use-package verb
