@@ -56,15 +56,7 @@
   (kaolin-themes-comments-style 'alt)
   (kaolin-themes-modeline-border t)
   :hook
-  (after-init . (lambda () (load-theme 'kaolin-mono-light t)))
-  :config
-  (defun my/apply-theme (appearance)
-    "Load theme, taking current system APPEARANCE into consideration."
-    (mapc #'disable-theme custom-enabled-themes)
-    (pcase appearance
-      ('light (load-theme 'kaolin-mono-light t))
-      ('dark (load-theme 'kaolin-mono-dark t))))
-  (add-hook 'ns-system-appearance-change-functions #'my/apply-theme))
+  (after-init . (lambda () (load-theme 'kaolin-breeze t))))
 
 
 ;; this takes a second, this is becase of my .zshrc

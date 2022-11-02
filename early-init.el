@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(setq-default line-spacing 0.2)
+(setq-default line-spacing 3)
 (setq-default display-line-numbers-width-start 4)
 (setq-default display-line-numbers-type t)
 (setq-default native-comp-deferred-compilation nil)
@@ -21,7 +21,7 @@
 (setq visible-bell t)
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
 (add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "Source Code Pro-12"))
+(add-to-list 'default-frame-alist '(font . "Iosevka-16:normal:normal:normal"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
