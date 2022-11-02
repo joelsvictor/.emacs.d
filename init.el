@@ -340,22 +340,27 @@
   :after (org))
 
 
-(use-package org-bullets
-  :straight t
-  :after (org)
-  :defer t
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◯"
-                             "⟶"
-                             "→"
-                             "•")))
-
-
 (use-package org-appear
   :straight t
   :after (org)
   :hook (org-mode . org-appear-mode))
+
+
+(use-package org-superstar
+  :straight t
+  :after (org)
+  :defer t
+  :hook (org-mode . org-superstar-mode))
+
+
+(use-package org-bars
+  :straight (:type git
+                   :host github
+                   :repo "tonyaldon/org-bars"
+                   :branch "master")
+  :after (org)
+  :defer t
+  :hook (org-mode . org-bars-mode))
 
 
 (use-package org-present
