@@ -663,6 +663,17 @@ if one already exists."
                ("C-c x d" . xref-find-definitions))))
 
 
+(use-package goggles
+  :straight t
+  :hook (after-init . goggles-mode))
+
+
+(use-package vundo
+  :straight t
+  :bind ("C-c u" . vundo))
+
+
+
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (add-hook 'before-save-hook 'whitespace-cleanup)
