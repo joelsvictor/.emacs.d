@@ -676,6 +676,7 @@ if one already exists."
 
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "C-c b u") 'browse-url-at-point)
 (add-hook 'before-save-hook 'whitespace-cleanup)
 
 
