@@ -226,6 +226,7 @@
   :init
   ;; Add `completion-at-point-functions', used by `completion-at-point'.
   (add-to-list 'completion-at-point-functions #'cape-file)
+  :bind (("C-c c p f" . cape-file))
   :straight t
   :after (corfu))
 
@@ -657,13 +658,18 @@ if one already exists."
 
 (use-package goggles
   :straight t
-  :hook (after-init . goggles-mode))
+  :hook (prog-mode . goggles-mode))
 
 
 (use-package vundo
   :straight t
   :bind ("C-c u" . vundo))
 
+
+(use-package keepass
+  :straight (:type git :host gitlab :repo "tay-dev/keepass.el" :branch "main")
+  :config
+  (keepass-global (kbd "C-c k p")))
 
 
 (global-set-key (kbd "C-=") 'text-scale-increase)
