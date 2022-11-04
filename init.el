@@ -56,7 +56,7 @@
   (kaolin-themes-comments-style 'alt)
   (kaolin-themes-modeline-border t)
   :hook
-  (after-init . (lambda () (load-theme 'kaolin-breeze t))))
+  (after-init . (lambda () (load-theme 'kaolin-valley-light t))))
 
 
 ;; this takes a second, this is becase of my .zshrc
@@ -111,7 +111,12 @@
   (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
   (setf (alist-get 'clojure-mode apheleia-mode-alist)
         '(cljstyle))
-  (push '(pg_format . ("pg_format" "-g")) apheleia-formatters)
+  (push '(pg_format . ("pg_format"
+                       "--comma-break"
+                       "--wrap-comment"
+                       "--nogrouping"
+                       "--keep-newline"
+                       "--maxlength 115")) apheleia-formatters)
   (setf (alist-get 'sql-mode apheleia-mode-alist)
         '(pg_format)))
 
