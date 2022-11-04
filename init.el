@@ -482,7 +482,7 @@
   :ensure-system-package ((cmake . "brew install cmake")
                           (fish . "brew install fish"))
   :after (project)
-  :bind (("C-c v t" . vterm)
+  :bind (("C-c v t" . vterm-other-window)
          (:map project-prefix-map
                ("t" . project-vterm)))
   :custom (vterm-shell "/usr/local/bin/fish")
@@ -502,8 +502,8 @@ if one already exists."
       (if (and shell-buffer (not current-prefix-arg))
           (if (comint-check-proc shell-buffer)
               (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
-            (vterm shell-buffer))
-        (vterm (generate-new-buffer-name default-project-shell-name)))))
+            (vterm-other-window shell-buffer))
+        (vterm-other-window (generate-new-buffer-name default-project-shell-name)))))
   :hook (vterm-mode . (lambda ()
                         (goto-address-mode))))
 
