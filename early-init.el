@@ -20,9 +20,9 @@
 (setq inhibit-splash-screen t)
 (setq visible-bell t)
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
-(add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "Iosevka-16:normal:normal:normal"))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(internal-border-width . 24))
+(add-to-list 'default-frame-alist '(font . "Iosevka-14:normal:normal:normal"))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
 
@@ -59,5 +59,14 @@
 (setq auto-save-default t)
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+(defun my/apply-theme (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (mapc #'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ('light (load-theme 'leuven t))
+    ('dark (load-theme 'leuven-dark t))))
+
+(add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
 
 ;;; early-init.el ends here

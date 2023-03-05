@@ -6,7 +6,7 @@
 
 
 (use-package cider
-  :defer t
+  ;; :defer t
   :straight t
   :bind (:map clojure-mode-map
               ("C-c c d d" . cider-debug-defun-at-point))
@@ -25,13 +25,13 @@
 (use-package flymake-kondor
   :ensure-system-package (clj-kondo  . "brew install borkdude/brew/clj-kondo")
   :straight t
-  :defer t
+  ;; :defer t
   :hook (clojure-mode . flymake-kondor-setup))
 
 
 (use-package clj-refactor
   :straight t
-  :defer t
+  ;; :defer t
   :hook (clojure-mode . clj-refactor-mode)
   :config
   ;; disable clj-refactor adding ns to blank files
