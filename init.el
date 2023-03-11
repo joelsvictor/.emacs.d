@@ -5,7 +5,7 @@
 (defvar bootstrap-version)
 
 (let ((bootstrap-file (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
+      (bootstrap-version 6))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
@@ -28,37 +28,6 @@
 (setq use-package-verbose t)
 
 
-;; (use-package hi-lock
-;;   :defer t
-;;   :custom
-;;   (hi-lock-auto-select-face t)
-;;   :bind
-;;   ("C-c h p" . highlight-phrase))
-
-
-;; (use-package windmove
-;;   :defer 1
-;;   :config
-;;   (windmove-default-keybindings))
-
-
-;; (use-package winner
-;;   :defer 1
-;;   :config
-;;   (winner-mode))
-
-
-;; (use-package kaolin-themes
-;;   :straight t
-;;   :defer t
-;;   :custom
-;;   (kaolin-themes-italic-comments t)
-;;   (kaolin-themes-comments-style 'alt)
-;;   (kaolin-themes-modeline-border t)
-;;   :hook
-;;   (after-init . (lambda () (load-theme 'kaolin-valley-light t))))
-
-
 ;; this takes a second, this is becase of my .zshrc
 ;; (use-package exec-path-from-shell
 ;;   :straight (:type git
@@ -70,11 +39,11 @@
 ;;   :config (exec-path-from-shell-initialize))
 
 
-;; (use-package expand-region
-;;   :straight t
-;;   :defer t
-;;   :config (pending-delete-mode)
-;;   :bind ("C-c C-a" . er/expand-region))
+(use-package expand-region
+  :straight t
+  :defer t
+  :config (pending-delete-mode)
+  :bind ("C-c C-a" . er/expand-region))
 
 
 (use-package selectrum
@@ -107,7 +76,7 @@
   :hook
   (prog-mode . apheleia-mode)
   :config
-  ;; fixme: stopped working after emacs update.
+  ;; FIXME: stopped working after emacs update.
   (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
   (setf (alist-get 'clojure-mode apheleia-mode-alist)
         '(cljstyle))
@@ -182,14 +151,12 @@
                    :repo "pidu/git-timemachine"
                    :fork (:host github
                                 :repo "emacsmirror/git-timemachine"))
-  ;; :defer 1
   :bind (:map prog-mode-map
               ("C-c g t" . git-timemachine)))
 
 
 (use-package diff-hl
   :straight t
-  ;; :defer t
   :hook (prog-mode . diff-hl-mode))
 
 
@@ -198,7 +165,6 @@
                    :repo "minad/corfu"
                    :branch "main"
                    :files (:defaults "extensions/*.el"))
-  ;; :defer t
   :hook ((prog-mode . corfu-mode)
          (corfu-mode . corfu-history-mode))
   :bind (:map corfu-map
@@ -235,15 +201,6 @@
   :after (corfu))
 
 
-;; (use-package kind-icon
-;;   :straight t
-;;   :after (corfu)
-;;   :custom
-;;   (kind-icon-default-face 'corfu-default)
-;;   :config
-;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
-
 (use-package emacs
   ;; :defer 1
   :init
@@ -273,7 +230,6 @@
 
 (use-package yaml-mode
   :straight t
-  ;; :defer t
   :mode "\.ya?ml\'")
 
 
@@ -294,10 +250,9 @@
 
 (use-package org
   :straight t
-  ;; :defer 1
   :custom
-  (org-default-notes-file (expand-file-name "~/org/capture.org"))
-  (org-agenda-files (list "~/org"))
+  (org-default-notes-file (expand-file-name "/Users/joelvictor/Documents/Org/capture.org"))
+  (org-agenda-files (list "/Users/joelvictor/Documents/Org/"))
   (org-bookmark-names-plist nil)
   :config
   (setq org-babel-default-header-args:verb
@@ -336,46 +291,6 @@
   :after (org))
 
 
-;; (use-package org-appear
-;;   :straight t
-;;   :after (org)
-;;   :hook (org-mode . org-appear-mode))
-
-
-;; (use-package org-superstar
-;;   :straight t
-;;   :after (org)
-;;   :defer t
-;;   :hook (org-mode . org-superstar-mode))
-
-
-;; (use-package org-bars
-;;   :straight (:type git
-;;                    :host github
-;;                    :repo "tonyaldon/org-bars"
-;;                    :branch "master")
-;;   :after (org)
-;;   :defer t
-;;   :hook (org-mode . org-bars-mode))
-
-
-;; (use-package org-present
-;;   :straight (:type git :host github :repo "rlister/org-present" :branch "master")
-;;   :after (org)
-;;   :hook ((org-present-mode . (lambda ()
-;;                                (org-present-big)
-;;                                (org-display-inline-images)
-;;                                (org-present-hide-cursor)
-;;                                (org-present-read-only)
-;;                                (toggle-frame-fullscreen)))
-;;          (org-present-mode-quit . (lambda ()
-;;                                     (org-present-small)
-;;                                     (org-remove-inline-images)
-;;                                     (org-present-show-cursor)
-;;                                     (org-present-read-write)
-;;                                     (toggle-frame-fullscreen)))))
-
-
 ;; (use-package lsp-haskell
 ;;   :defer t
 ;;   :straight t)
@@ -387,33 +302,28 @@
 ;;   :config (setq haskell-process-type 'stack-ghci))
 
 
-;; (use-package lsp-java
-;;   :defer t
-;;   :straight t)
+(use-package lsp-java
+  :straight t)
 
 
 (use-package ansible
   :straight t
-  ;; :defer t
   :hook (yaml-mode . ansible)
   :hook (ansible . ansible-auto-decrypt-encrypt))
 
 
-;; (use-package which-key
-;;   :straight t
-;;   :defer t
-;;   :hook (after-init . which-key-mode))
+(use-package which-key
+  :straight t
+  :hook (after-init . which-key-mode))
 
 
-;; (use-package docker
-;;   :straight t
-;;   :defer t)
+(use-package docker
+  :straight t
+  :defer t)
 
 
 (use-package dockerfile-mode
-  :straight t
-  ;; :defer t
-  )
+  :straight t)
 
 
 (use-package eldoc
@@ -433,17 +343,10 @@
 
 
 (use-package tramp
-  ;; :defer 1
   :config
   (setq tramp-default-method "rsync")
   (setq remote-file-name-inhibit-cache nil)
   (setq tramp-verbose 1))
-
-
-;; (use-package io-mode-inf
-;;   :defer t
-;;   :straight (:host github :repo "slackorama/io-emacs"
-;;                    :branch "master"))
 
 
 (use-package csv-mode
@@ -460,20 +363,6 @@
 (use-package yasnippet-snippets
   :straight t
   :after (yasnippet))
-
-
-;; (use-package rainbow-delimiters
-;;   :straight t
-;;   :defer t
-;;   :custom (rainbow-delimiters-max-face-count 5)
-;;   :hook ((electric-pair-mode paredit-mode) . rainbow-delimiters-mode))
-
-
-;; (use-package rainbow-identifiers
-;;   :straight t
-;;   :custom (rainbow-identifiers-face-count 5)
-;;   :defer t
-;;   :hook (prog-mode . rainbow-identifiers-mode))
 
 
 (use-package vterm
@@ -507,20 +396,6 @@ if one already exists."
                         (goto-address-mode))))
 
 
-;; (use-package treemacs
-;;   :straight t
-;;   :defer t
-;;   :bind (:map global-map
-;;               ("C-c t t" . treemacs))
-;;   :commands (treemacs-follow-mode
-;;              treemacs-filewatch-mode
-;;              treemacs-git-mode)
-;;   :config
-;;   (treemacs-git-mode 'deferred)
-;;   (treemacs-follow-mode t)
-;;   (treemacs-filewatch-mode t))
-
-
 (use-package sql
   ;; :defer t
   :custom (sql-product 'postgres))
@@ -544,7 +419,6 @@ if one already exists."
 
 (use-package tree-sitter
   :straight t
-  ;; :defer 1
   :config (global-tree-sitter-mode +1)
   :hook (tree-sitter-after-on . tree-sitter-hl-mode))
 
@@ -561,21 +435,17 @@ if one already exists."
 
 
 (use-package logview
-  :straight t
-  ;; :defer t
-  )
+  :straight t)
 
 
 (use-package plantuml-mode
   :straight t
   :ensure-system-package (plantuml)
-  ;; :defer t
-  :custom(plantuml-exec-mode 'executable))
+  :custom (plantuml-exec-mode 'executable))
 
 
 (use-package dashboard
   :straight t
-  ;; :defer t
   :hook (after-init . dashboard-setup-startup-hook)
   :custom
   (dashboard-items '((recents  . 10)
@@ -586,7 +456,6 @@ if one already exists."
 
 (use-package flyspell
   :straight nil
-  ;; :defer t
   :ensure-system-package (hunspell aspell)
   :hook ((prog-mode . flyspell-prog-mode)
          (text-mode . turn-on-flyspell)))
@@ -601,31 +470,7 @@ if one already exists."
         langtool-http-server-port 8081))
 
 
-;; (use-package all-the-icons
-;;   :straight t
-;;   :defer 10
-;;   :if (display-graphic-p)
-;;   :init (setq inhibit-compacting-font-caches t)
-;;   :custom (all-the-icons-fonts-subdirectory "AllTheIcons")
-;;   :config (unless (file-directory-p "/Users/joelvictor/Library/Fonts/AllTheIcons")
-;;             (call-interactively 'all-the-icons-install-fonts)))
-
-
-;; (use-package all-the-icons-completion
-;;   :straight t
-;;   :after (all-the-icons)
-;;   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-;;   :config (all-the-icons-completion-mode))
-
-
-;; (use-package all-the-icons-dired
-;;   :straight t
-;;   :after (all-the-icons)
-;;   :hook (dired-mode . all-the-icons-dired-mode))
-
-
 (use-package ibuffer
-  ;; :defer t
   :custom
   (ibuffer-saved-filter-groups
    (quote (("Home"
@@ -666,17 +511,6 @@ if one already exists."
   :hook (prog-mode . goggles-mode))
 
 
-;; (use-package vundo
-;;   :straight t
-;;   :bind ("C-c u" . vundo))
-
-
-;; (use-package keepass
-;;   :straight (:type git :host gitlab :repo "tay-dev/keepass.el" :branch "main")
-;;   :config
-;;   (keepass-global (kbd "C-c k p")))
-
-
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-c b u") 'browse-url-at-point)
@@ -688,14 +522,5 @@ if one already exists."
 
 (unless (server-running-p)
   (server-start))
-
-
-;; (setq initial-scratch-message
-;;       (concat ";; Took " (emacs-init-time)
-;;               " for initializing emacs. Spent "
-;;               (format "%f"  gc-elapsed)
-;;               " seconds performing "
-;;               (format "%d" gcs-done)
-;;               " GC's."))
 
 ;;; init.el ends here
