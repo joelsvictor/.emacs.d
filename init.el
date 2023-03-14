@@ -511,6 +511,17 @@ if one already exists."
   :hook (prog-mode . goggles-mode))
 
 
+(use-package evil
+  :straight t
+  :config (evil-mode))
+
+
+(use-package evil-collection
+  :straight t
+  :after (evil)
+  :config (evil-collection-init))
+
+
 (global-set-key (kbd "C-=") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-c b u") 'browse-url-at-point)
