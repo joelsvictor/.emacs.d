@@ -4,7 +4,7 @@
 
 (setq-default line-spacing 3)
 (setq-default display-line-numbers-width-start 4)
-(setq-default display-line-numbers-type t)
+;; (setq-default display-line-numbers-type nil)
 (setq-default native-comp-deferred-compilation nil)
 (setq-default user-full-name "Joel Victor")
 (setq-default custom-safe-themes t)
@@ -21,7 +21,7 @@
 (setq visible-bell t)
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
 ;; (add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "Iosevka-14:normal:normal:normal"))
+(add-to-list 'default-frame-alist '(font . "Monaco-14:normal:normal:normal"))
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -41,7 +41,7 @@
 (add-hook 'prog-mode-hook
           (lambda ()
             (progn
-              (display-line-numbers-mode)
+              ;; (display-line-numbers-mode)
               (prettify-symbols-mode)
               (subword-mode)
               (hs-minor-mode))))
@@ -65,7 +65,7 @@
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
     ('light (load-theme 'leuven t))
-    ('dark (load-theme 'leuven-dark t))))
+    ('dark (load-theme 'tango-dark t))))
 
 (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
 
