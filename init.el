@@ -9,7 +9,7 @@
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         "HTTP://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
@@ -26,6 +26,27 @@
 (require 'use-package)
 (setq use-package-enable-imenu-support t)
 (setq use-package-verbose t)
+
+
+(use-package evil
+  :straight t
+  :config
+  (evil-mode)
+  (evil-set-leader 'normal (kbd "SPC")))
+
+
+(use-package evil-collection
+  :straight t
+  :after (evil)
+  :config (evil-collection-init))
+
+
+(use-package project
+  :straight nil
+  :after (evil)
+  :config
+  (evil-define-key 'normal 'global (kbd "<leader>pp") 'project-switch-project)
+  (evil-define-key 'normal 'global (kbd "<leader>pf") 'project-find-file))
 
 
 ;; this takes a second, this is becase of my .zshrc
@@ -94,9 +115,11 @@
 
 (use-package flymake
   ;; :defer t
+  :after (evil)
   :hook (prog-mode . flymake-mode)
+  :config (evil-define-key 'normal flymake-mode-map (kbd "<leader>fp")  'flymake-show-project-diagnostics)
   :bind (:map flymake-mode-map
-              ("C-c ! l" . flymake-show-project-diagnostics)))
+              ("C-c f p" . flymake-show-project-diagnostics)))
 
 
 (use-package paredit
@@ -111,14 +134,18 @@
 
 
 (use-package eglot
+  :after (evil)
   :ensure-system-package
   ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
    (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :straight t
+  :config (progn
+            (evil-define-key 'normal eglot-mode-map (kbd "<leader>eca")  'eglot-code-actions)
+            (evil-define-key 'normal eglot-mode-map (kbd "<leader>er")  'eglot-rename))
   ;; :defer t
   :bind (:map eglot-mode-map
-              ("C-c l r r" . eglot-rename)
-              ("C-c l a a" . eglot-code-actions))
+              ("C-c e c a" . eglot-rename)
+              ("C-c e r" . eglot-code-actions))
   :custom
   (eglot-autoshutdown t)
   (eglot-extend-to-xref t)
@@ -134,7 +161,9 @@
 (use-package magit
   :straight t
   ;; :defer 1
+  :after (evil)
   :config
+  (evil-define-key 'normal 'global (kbd "<leader>gg") 'magit)
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
 
@@ -151,6 +180,9 @@
                    :repo "pidu/git-timemachine"
                    :fork (:host github
                                 :repo "emacsmirror/git-timemachine"))
+  :after (evil)
+  :config (progn
+            (evil-define-key 'normal prog-mode-map (kbd "<leader>gt")  'git-timemachine))
   :bind (:map prog-mode-map
               ("C-c g t" . git-timemachine)))
 
@@ -237,8 +269,11 @@
   :ensure-system-package (rg . "brew install ripgrep")
   :straight t
   ;; :defer 1
+  :after (evil)
+  :config (evil-define-key 'normal 'global (kbd "<leader>rg") 'deadgrep)
   :bind (:map global-map
-              ("C-c r g" . deadgrep)))
+              ("C-c r g" . deadgrep))
+  )
 
 
 (use-package verb
@@ -501,6 +536,10 @@ if one already exists."
 
 (use-package xref
   :straight nil
+  :after (evil)
+  :config (progn
+            (evil-define-key 'normal prog-mode-map (kbd "<leader>xr") 'xref-find-references)
+            (evil-define-key 'normal prog-mode-map (kbd "<leader>xd") 'xref-find-definitions))
   :bind (:map prog-mode-map
               (("C-c x r" . xref-find-references)
                ("C-c x d" . xref-find-definitions))))
@@ -509,17 +548,6 @@ if one already exists."
 (use-package goggles
   :straight t
   :hook (prog-mode . goggles-mode))
-
-
-(use-package evil
-  :straight t
-  :config (evil-mode))
-
-
-(use-package evil-collection
-  :straight t
-  :after (evil)
-  :config (evil-collection-init))
 
 
 (global-set-key (kbd "C-=") 'text-scale-increase)
