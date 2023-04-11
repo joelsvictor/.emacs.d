@@ -28,27 +28,6 @@
 (setq use-package-verbose t)
 
 
-(use-package evil
-  :straight t
-  :config
-  (evil-mode)
-  (evil-set-leader 'normal (kbd "SPC")))
-
-
-(use-package evil-collection
-  :straight t
-  :after (evil)
-  :config (evil-collection-init))
-
-
-(use-package project
-  :straight nil
-  :after (evil)
-  :config
-  (evil-define-key 'normal 'global (kbd "<leader>pp") 'project-switch-project)
-  (evil-define-key 'normal 'global (kbd "<leader>pf") 'project-find-file))
-
-
 ;; this takes a second, this is becase of my .zshrc
 ;; (use-package exec-path-from-shell
 ;;   :straight (:type git
@@ -64,12 +43,12 @@
   :straight t
   :defer t
   :config (pending-delete-mode)
-  :bind ("C-c C-a" . er/expand-region))
+  :bind (:map global-map
+              ("C-c C-a" . er/expand-region)))
 
 
 (use-package selectrum
   :straight t
-  ;; :defer 1
   :config
   (selectrum-mode))
 
@@ -77,7 +56,6 @@
 (use-package orderless
   :straight t
   :after (selectrum)
-  ;; :defer t
   :custom
   (completion-styles '(orderless basic))
   (completion-category-overrides '((file (styles basic partial-completion)))))
@@ -85,22 +63,20 @@
 
 (use-package ctrlf
   :straight t
-  ;; :defer 1
   :config (ctrlf-mode))
 
 
 (use-package apheleia
   :ensure-system-package ((cljstyle . "brew install cljstyle")
                           (pg_format . "brew install pgformatter"))
-  ;; :defer t
   :straight t
   :hook
   (prog-mode . apheleia-mode)
   :config
   ;; FIXME: stopped working after emacs update.
-  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
-  (setf (alist-get 'clojure-mode apheleia-mode-alist)
-        '(cljstyle))
+  ;; (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
+  ;; (setf (alist-get 'clojure-mode apheleia-mode-alist)
+  ;;       '(cljstyle))
   (push '(pg_format . ("pg_format"
                        "--comma-break"
                        "--wrap-comment"
@@ -114,12 +90,10 @@
 
 
 (use-package flymake
-  ;; :defer t
-  :after (evil)
   :hook (prog-mode . flymake-mode)
-  :config (evil-define-key 'normal flymake-mode-map (kbd "<leader>fp")  'flymake-show-project-diagnostics)
   :bind (:map flymake-mode-map
-              ("C-c f p" . flymake-show-project-diagnostics)))
+              ("C-c f p" . flymake-show-project-diagnostics)
+              ("C-c f l" . flymake-show-buffer-diagnostics)))
 
 
 (use-package paredit
@@ -134,15 +108,10 @@
 
 
 (use-package eglot
-  :after (evil)
   :ensure-system-package
   ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
    (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :straight t
-  :config (progn
-            (evil-define-key 'normal eglot-mode-map (kbd "<leader>eca")  'eglot-code-actions)
-            (evil-define-key 'normal eglot-mode-map (kbd "<leader>er")  'eglot-rename))
-  ;; :defer t
   :bind (:map eglot-mode-map
               ("C-c e c a" . eglot-rename)
               ("C-c e r" . eglot-code-actions))
@@ -160,10 +129,7 @@
 
 (use-package magit
   :straight t
-  ;; :defer 1
-  :after (evil)
   :config
-  (evil-define-key 'normal 'global (kbd "<leader>gg") 'magit)
   (transient-append-suffix 'magit-pull "-r"
     '("-a" "Autostash" "--autostash")))
 
@@ -180,9 +146,6 @@
                    :repo "pidu/git-timemachine"
                    :fork (:host github
                                 :repo "emacsmirror/git-timemachine"))
-  :after (evil)
-  :config (progn
-            (evil-define-key 'normal prog-mode-map (kbd "<leader>gt")  'git-timemachine))
   :bind (:map prog-mode-map
               ("C-c g t" . git-timemachine)))
 
@@ -234,7 +197,6 @@
 
 
 (use-package emacs
-  ;; :defer 1
   :init
   (setq completion-cycle-threshold 3)
   (setq tab-always-indent 'complete)
@@ -268,16 +230,11 @@
 (use-package deadgrep
   :ensure-system-package (rg . "brew install ripgrep")
   :straight t
-  ;; :defer 1
-  :after (evil)
-  :config (evil-define-key 'normal 'global (kbd "<leader>rg") 'deadgrep)
   :bind (:map global-map
-              ("C-c r g" . deadgrep))
-  )
+              ("C-c r g" . deadgrep)))
 
 
 (use-package verb
-  ;; :defer t
   :mode ("\\.http\\'" . verb-mode)
   :straight t
   :custom (verb-base-headers `(("User-Agent" . ,(concat (user-full-name) "@" (system-name))))))
@@ -326,15 +283,15 @@
   :after (org))
 
 
-;; (use-package lsp-haskell
-;;   :defer t
-;;   :straight t)
+(use-package lsp-haskell
+  :defer t
+  :straight t)
 
 
-;; (use-package haskell-mode
-;;   :defer t
-;;   :straight t
-;;   :config (setq haskell-process-type 'stack-ghci))
+(use-package haskell-mode
+  :defer t
+  :straight t
+  :config (setq haskell-process-type 'stack-ghci))
 
 
 (use-package lsp-java
@@ -363,17 +320,16 @@
 
 (use-package eldoc
   :straight t
-  ;; :defer t
   :hook (prog-mode . eldoc-mode))
 
 
 (use-package json-mode
-  ;; :defer t
-  :straight t)
+  :straight t
+  :bind (:map json-mode-map
+              ("C-c f" . json-pretty-print-buffer)))
 
 
 (use-package groovy-mode
-  ;; :defer t
   :straight t)
 
 
@@ -385,13 +341,11 @@
 
 
 (use-package csv-mode
-  ;; :defer t
   :straight t)
 
 
 (use-package yasnippet
   :straight t
-  ;; :defer 1
   :config (yas-global-mode))
 
 
@@ -409,7 +363,6 @@
          (:map project-prefix-map
                ("t" . project-vterm)))
   :custom (vterm-shell "/opt/homebrew/bin/fish")
-  ;; :defer t
   :config
   (defun project-vterm ()
     "Start an inferior shell in the current project's root directory.
@@ -432,20 +385,17 @@ if one already exists."
 
 
 (use-package sql
-  ;; :defer t
   :custom (sql-product 'postgres))
 
 
 (use-package elec-pair
-  ;; :defer t
   :hook (sql-mode . electric-pair-mode))
 
 
 (use-package avy
   :straight t
-  ;; :defer t
   :bind (:map global-map
-              ("C-c a c t" . avy-goto-char-timer)))
+              ("C-c a c" . avy-goto-char-timer)))
 
 
 (use-package uniquify
@@ -465,7 +415,6 @@ if one already exists."
 
 (use-package elisp-slime-nav
   :straight t
-  ;; :defer t
   :hook (emacs-lisp-mode . turn-on-elisp-slime-nav-mode))
 
 
@@ -536,10 +485,6 @@ if one already exists."
 
 (use-package xref
   :straight nil
-  :after (evil)
-  :config (progn
-            (evil-define-key 'normal prog-mode-map (kbd "<leader>xr") 'xref-find-references)
-            (evil-define-key 'normal prog-mode-map (kbd "<leader>xd") 'xref-find-definitions))
   :bind (:map prog-mode-map
               (("C-c x r" . xref-find-references)
                ("C-c x d" . xref-find-definitions))))
