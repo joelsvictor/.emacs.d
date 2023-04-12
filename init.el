@@ -28,17 +28,6 @@
 (setq use-package-verbose t)
 
 
-;; this takes a second, this is becase of my .zshrc
-;; (use-package exec-path-from-shell
-;;   :straight (:type git
-;;                    :host github
-;;                    :repo "purcell/exec-path-from-shell"
-;;                    :branch "master")
-;;   :straight t
-;;   :defer 1
-;;   :config (exec-path-from-shell-initialize))
-
-
 (use-package expand-region
   :straight t
   :defer t
@@ -63,10 +52,12 @@
 
 (use-package ctrlf
   :straight t
+  :defer t
   :config (ctrlf-mode))
 
 
 (use-package apheleia
+  :defer t
   :ensure-system-package ((cljstyle . "brew install cljstyle")
                           (pg_format . "brew install pgformatter"))
   :straight t
@@ -90,6 +81,7 @@
 
 
 (use-package flymake
+  :defer t
   :hook (prog-mode . flymake-mode)
   :bind (:map flymake-mode-map
               ("C-c f p" . flymake-show-project-diagnostics)
@@ -98,7 +90,7 @@
 
 (use-package paredit
   :straight t
-  ;; :defer t
+  :defer t
   :bind
   (("M-{" . paredit-wrap-curly)
    ("M-[" . paredit-wrap-square))
@@ -108,26 +100,33 @@
 
 
 (use-package eglot
+  :defer t
   :ensure-system-package
   ((clojure-lsp . "brew install clojure-lsp/brew/clojure-lsp-native")
    (sqls . "go install github.com/lighttiger2505/sqls@latest"))
   :straight t
   :bind (:map eglot-mode-map
-              ("C-c e c a" . eglot-rename)
-              ("C-c e r" . eglot-code-actions))
+              ("C-c e c a" . eglot-code-actions)
+              ("C-c e r" . eglot-rename))
   :custom
   (eglot-autoshutdown t)
   (eglot-extend-to-xref t)
-  (eglot-ignored-server-capabilities '(:hoverProvider
-                                       :documentOnTypeFormattingProvider
-                                       :executeCommandProvider))
+  ;; (eglot-ignored-server-capabilities '(:hoverProvider
+  ;;                                      :documentOnTypeFormattingProvider
+  ;;                                      :executeCommandProvider))
   :hook
-  ((clojure-mode clojurec-mode clojurescript-mode sql-mode) . eglot-ensure)
+  ((clojure-mode clojurec-mode clojurescript-mode sql-mode haskell-mode) . eglot-ensure)
   :config
-  (add-to-list 'eglot-server-programs '(sql-mode . ("sqls"))))
-
+  (add-to-list 'eglot-server-programs '(sql-mode . ("sqls")))
+  (setq-default eglot-workspace-configuration
+                '((haskell
+                   (plugin
+                    (stan
+                     (globalOn . :json-false))))))  ;; disable stan
+  )
 
 (use-package magit
+  :defer t
   :straight t
   :config
   (transient-append-suffix 'magit-pull "-r"
@@ -135,6 +134,7 @@
 
 
 (use-package git-modes
+  :defer t
   :straight t
   :mode (("\\.gitattributes\\'" . gitattributes-mode)
          ("\\.gitconfig\\'" . gitconfig-mode)
@@ -142,6 +142,7 @@
 
 
 (use-package git-timemachine
+  :defer t
   :straight (:host gitlab
                    :repo "pidu/git-timemachine"
                    :fork (:host github
@@ -151,11 +152,13 @@
 
 
 (use-package diff-hl
+  :defer t
   :straight t
   :hook (prog-mode . diff-hl-mode))
 
 
 (use-package corfu
+  :defer t
   :straight (:host github
                    :repo "minad/corfu"
                    :branch "main"
@@ -174,6 +177,7 @@
 
 
 (use-package corfu-doc
+  :defer t
   :straight t
   :after (corfu)
   :custom
@@ -188,6 +192,7 @@
 
 
 (use-package cape
+  :defer t
   :init
   ;; Add `completion-at-point-functions', used by `completion-at-point'.
   (add-to-list 'completion-at-point-functions #'cape-file)
@@ -223,11 +228,13 @@
 
 
 (use-package yaml-mode
+  :defer t
   :straight t
   :mode "\.ya?ml\'")
 
 
 (use-package deadgrep
+  :defer t
   :ensure-system-package (rg . "brew install ripgrep")
   :straight t
   :bind (:map global-map
@@ -235,12 +242,14 @@
 
 
 (use-package verb
+  :defer t
   :mode ("\\.http\\'" . verb-mode)
   :straight t
   :custom (verb-base-headers `(("User-Agent" . ,(concat (user-full-name) "@" (system-name))))))
 
 
 (use-package org
+  :defer t
   :straight t
   :custom
   (org-default-notes-file (expand-file-name "/Users/joelvictor/Documents/Org/capture.org"))
@@ -279,19 +288,14 @@
 
 
 (use-package org-contrib
+  :defer t
   :straight t
   :after (org))
 
 
-(use-package lsp-haskell
-  :defer t
-  :straight t)
-
-
 (use-package haskell-mode
   :defer t
-  :straight t
-  :config (setq haskell-process-type 'stack-ghci))
+  :straight t)
 
 
 (use-package lsp-java
@@ -299,12 +303,14 @@
 
 
 (use-package ansible
+  :defer t
   :straight t
   :hook (yaml-mode . ansible)
   :hook (ansible . ansible-auto-decrypt-encrypt))
 
 
 (use-package which-key
+  :defer t
   :straight t
   :hook (after-init . which-key-mode))
 
@@ -315,15 +321,18 @@
 
 
 (use-package dockerfile-mode
-  :straight t)
+  :straight t
+  :defer t)
 
 
 (use-package eldoc
+  :defer t
   :straight t
   :hook (prog-mode . eldoc-mode))
 
 
 (use-package json-mode
+  :defer t
   :straight t
   :bind (:map json-mode-map
               ("C-c f" . json-pretty-print-buffer)))
@@ -385,14 +394,17 @@ if one already exists."
 
 
 (use-package sql
+  :defer t
   :custom (sql-product 'postgres))
 
 
 (use-package elec-pair
+  :defer t
   :hook (sql-mode . electric-pair-mode))
 
 
 (use-package avy
+  :defer t
   :straight t
   :bind (:map global-map
               ("C-c a c" . avy-goto-char-timer)))
@@ -414,31 +426,25 @@ if one already exists."
 
 
 (use-package elisp-slime-nav
+  :defer t
   :straight t
   :hook (emacs-lisp-mode . turn-on-elisp-slime-nav-mode))
 
 
 (use-package logview
+  :defer t
   :straight t)
 
 
 (use-package plantuml-mode
+  :defer t
   :straight t
   :ensure-system-package (plantuml)
   :custom (plantuml-exec-mode 'executable))
 
 
-(use-package dashboard
-  :straight t
-  :hook (after-init . dashboard-setup-startup-hook)
-  :custom
-  (dashboard-items '((recents  . 10)
-                     (bookmarks . 10)
-                     (projects . 10)))
-  (dashboard-projects-backend 'project-el))
-
-
 (use-package flyspell
+  :defer t
   :straight nil
   :ensure-system-package (hunspell aspell)
   :hook ((prog-mode . flyspell-prog-mode)
@@ -484,6 +490,7 @@ if one already exists."
 
 
 (use-package xref
+  :defer t
   :straight nil
   :bind (:map prog-mode-map
               (("C-c x r" . xref-find-references)
@@ -491,6 +498,7 @@ if one already exists."
 
 
 (use-package goggles
+  :defer t
   :straight t
   :hook (prog-mode . goggles-mode))
 
@@ -499,6 +507,17 @@ if one already exists."
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key (kbd "C-c b u") 'browse-url-at-point)
 (add-hook 'before-save-hook 'whitespace-cleanup)
+
+
+(use-package string-inflection
+  :straight t
+  :bind (:map prog-mode-map
+              ("C-c C-s" . string-inflection-all-cycle)))
+
+
+(use-package zig-mode
+  :defer t
+  :straight t)
 
 
 (require 'server)
