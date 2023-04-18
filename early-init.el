@@ -19,8 +19,8 @@
 (setq visible-bell t)
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "JetBrains Mono-14:regular:normal:normal"))
+;; (add-to-list 'default-frame-alist '(internal-border-width . 24))
+(add-to-list 'default-frame-alist '(font . "Fira Code-14:regular:normal:normal"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -61,8 +61,8 @@
   "Load theme, taking current system APPEARANCE into consideration."
   (mapc #'disable-theme custom-enabled-themes)
   (pcase appearance
-    ('light (load-theme 'leuven t))
-    ('dark (load-theme 'leuven-dark t))))
+    ('light (load-theme 'material-light t))
+    ('dark (load-theme 'material t))))
 
 (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
 

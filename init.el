@@ -510,6 +510,7 @@ if one already exists."
 
 
 (use-package string-inflection
+  :defer t
   :straight t
   :bind (:map prog-mode-map
               ("C-c C-s" . string-inflection-all-cycle)))
@@ -517,6 +518,10 @@ if one already exists."
 
 (use-package zig-mode
   :defer t
+  :straight t)
+
+
+(use-package material-theme
   :straight t)
 
 
