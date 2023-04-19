@@ -20,7 +20,7 @@
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 ;; (add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "Fira Code-14:regular:normal:normal"))
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-14:regular:normal:normal"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
