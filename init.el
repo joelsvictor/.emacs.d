@@ -9,7 +9,7 @@
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
-         "HTTP://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         "http://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
          'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
@@ -24,6 +24,7 @@
 (straight-use-package 'use-package-ensure-system-package)
 
 (require 'use-package)
+
 (setq use-package-enable-imenu-support t)
 (setq use-package-verbose t)
 
@@ -47,12 +48,12 @@
   :after (selectrum)
   :custom
   (completion-styles '(orderless basic))
-  (completion-category-overrides '((file (styles basic partial-completion)))))
+  ;; (completion-category-overrides '((file (styles basic partial-completion))))
+  )
 
 
 (use-package ctrlf
   :straight t
-  :defer t
   :config (ctrlf-mode))
 
 
@@ -111,9 +112,6 @@
   :custom
   (eglot-autoshutdown t)
   (eglot-extend-to-xref t)
-  ;; (eglot-ignored-server-capabilities '(:hoverProvider
-  ;;                                      :documentOnTypeFormattingProvider
-  ;;                                      :executeCommandProvider))
   :hook
   ((clojure-mode clojurec-mode clojurescript-mode sql-mode haskell-mode) . eglot-ensure)
   :config
@@ -211,9 +209,6 @@
   (world-clock-list
    '(("Asia/Calcutta" "Pune")
      ("America/Los_Angeles" "San Francisco")
-     ("America/New_York" "New York")
-     ("Europe/Vienna" "Austria")
-     ("Australia/Perth" "Perth")
      ("Etc/UTC" "UTC"))
    (world-clock-time-format "%a, %d %b %I:%M %p %Z"))
   (use-short-answers t)
@@ -521,7 +516,15 @@ if one already exists."
   :straight t)
 
 
-(use-package material-theme
+(use-package jarchive
+  :demand t
+  :straight (jarchive :type git :host sourcehut :repo "dannyfreeman/jarchive")
+  :config
+  (jarchive-setup)
+  (jarchive-patch-eglot))
+
+
+(use-package kaolin-themes
   :straight t)
 
 
@@ -535,5 +538,4 @@ if one already exists."
 
 (unless (server-running-p)
   (server-start))
-
 ;;; init.el ends here
