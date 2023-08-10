@@ -29,14 +29,6 @@
 (setq use-package-verbose t)
 
 
-(use-package expand-region
-  :straight t
-  :defer t
-  :config (pending-delete-mode)
-  :bind (:map global-map
-              ("C-c C-a" . er/expand-region)))
-
-
 (use-package selectrum
   :straight t
   :config
@@ -52,11 +44,6 @@
   )
 
 
-(use-package ctrlf
-  :straight t
-  :config (ctrlf-mode))
-
-
 (use-package apheleia
   :defer t
   :ensure-system-package ((cljstyle . "brew install cljstyle")
@@ -66,9 +53,9 @@
   (prog-mode . apheleia-mode)
   :config
   ;; FIXME: stopped working after emacs update.
-  ;; (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
-  ;; (setf (alist-get 'clojure-mode apheleia-mode-alist)
-  ;;       '(cljstyle))
+  (push '(cljstyle . ("cljstyle" "pipe")) apheleia-formatters)
+  (setf (alist-get 'clojure-mode apheleia-mode-alist)
+        '(cljstyle))
   (push '(pg_format . ("pg_format"
                        "--comma-break"
                        "--wrap-comment"
@@ -149,56 +136,6 @@
               ("C-c g t" . git-timemachine)))
 
 
-(use-package diff-hl
-  :defer t
-  :straight t
-  :hook (prog-mode . diff-hl-mode))
-
-
-(use-package corfu
-  :defer t
-  :straight (:host github
-                   :repo "minad/corfu"
-                   :branch "main"
-                   :files (:defaults "extensions/*.el"))
-  :hook ((prog-mode . corfu-mode)
-         (corfu-mode . corfu-history-mode))
-  :bind (:map corfu-map
-              ("C-q" . #'corfu-quick-insert))
-  :config
-  (setq corfu-on-exact-match 'quit)
-  (setq corfu-cycle t)
-  (setq corfu-auto t)
-  (setq corfu-quit-at-boundary nil)
-  (setq corfu-quit-no-match t)
-  (setq corfu-scroll-margin 5))
-
-
-(use-package corfu-doc
-  :defer t
-  :straight t
-  :after (corfu)
-  :custom
-  (corfu-doc-auto nil)
-  (corfu-doc-max-width 85)
-  (corfu-doc-max-height 20)
-  :bind (:map corfu-map
-              ("C-c C-d" . #'corfu-doc-toggle)
-              ("M-n" . #'corfu-doc-scroll-down)
-              ("M-p" . #'corfu-doc-scroll-up))
-  :hook (corfu-mode . corfu-doc-mode))
-
-
-(use-package cape
-  :defer t
-  :init
-  ;; Add `completion-at-point-functions', used by `completion-at-point'.
-  (add-to-list 'completion-at-point-functions #'cape-file)
-  :bind (("C-c c p f" . cape-file))
-  :straight t
-  :after (corfu))
-
-
 (use-package emacs
   :init
   (setq completion-cycle-threshold 3)
@@ -266,8 +203,6 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
-     (ruby . t)
-     (haskell . t)
      (clojure . t)
      (python . t)
      (shell . t)
@@ -286,15 +221,6 @@
   :defer t
   :straight t
   :after (org))
-
-
-(use-package haskell-mode
-  :defer t
-  :straight t)
-
-
-(use-package lsp-java
-  :straight t)
 
 
 (use-package ansible
@@ -358,34 +284,34 @@
   :after (yasnippet))
 
 
-(use-package vterm
-  :straight t
-  :ensure-system-package ((cmake . "brew install cmake")
-                          (fish . "brew install fish"))
-  :after (project)
-  :bind (("C-c v t" . vterm-other-window)
-         (:map project-prefix-map
-               ("t" . project-vterm)))
-  :custom (vterm-shell "/opt/homebrew/bin/fish")
-  :config
-  (defun project-vterm ()
-    "Start an inferior shell in the current project's root directory.
-If a buffer already exists for running a shell in the project's root,
-switch to it.  Otherwise, create a new shell buffer.
-With \\[universal-argument] prefix arg, create a new inferior shell buffer even
-if one already exists."
-    (interactive)
-    (require 'comint)
-    (let* ((default-directory (project-root (project-current t)))
-           (default-project-shell-name (project-prefixed-buffer-name "vterm"))
-           (shell-buffer (get-buffer default-project-shell-name)))
-      (if (and shell-buffer (not current-prefix-arg))
-          (if (comint-check-proc shell-buffer)
-              (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
-            (vterm-other-window shell-buffer))
-        (vterm-other-window (generate-new-buffer-name default-project-shell-name)))))
-  :hook (vterm-mode . (lambda ()
-                        (goto-address-mode))))
+;; (use-package vterm
+;;   :straight t
+;;   :ensure-system-package ((cmake . "brew install cmake")
+;;                           (fish . "brew install fish"))
+;;   :after (project)
+;;   :bind (("C-c v t" . vterm-other-window)
+;;          (:map project-prefix-map
+;;                ("t" . project-vterm)))
+;;   :custom (vterm-shell "/opt/homebrew/bin/fish")
+;;   :config
+;;   (defun project-vterm ()
+;;     "Start an inferior shell in the current project's root directory.
+;; If a buffer already exists for running a shell in the project's root,
+;; switch to it.  Otherwise, create a new shell buffer.
+;; With \\[universal-argument] prefix arg, create a new inferior shell buffer even
+;; if one already exists."
+;;     (interactive)
+;;     (require 'comint)
+;;     (let* ((default-directory (project-root (project-current t)))
+;;            (default-project-shell-name (project-prefixed-buffer-name "vterm"))
+;;            (shell-buffer (get-buffer default-project-shell-name)))
+;;       (if (and shell-buffer (not current-prefix-arg))
+;;           (if (comint-check-proc shell-buffer)
+;;               (pop-to-buffer shell-buffer (bound-and-true-p display-comint-buffer-action))
+;;             (vterm-other-window shell-buffer))
+;;         (vterm-other-window (generate-new-buffer-name default-project-shell-name)))))
+;;   :hook (vterm-mode . (lambda ()
+;;                         (goto-address-mode))))
 
 
 (use-package sql
@@ -511,11 +437,6 @@ if one already exists."
               ("C-c C-s" . string-inflection-all-cycle)))
 
 
-(use-package zig-mode
-  :defer t
-  :straight t)
-
-
 (use-package jarchive
   :demand t
   :straight (jarchive :type git :host sourcehut :repo "dannyfreeman/jarchive")
@@ -525,12 +446,30 @@ if one already exists."
 
 
 (use-package kaolin-themes
-  :straight t)
-
-
-(use-package desktop
+  :straight t
   :config
-  (desktop-save-mode +1))
+  (load-theme 'kaolin-temple t))
+
+
+(use-package evil
+  :straight t
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  :config
+  (evil-mode 1))
+
+
+(use-package evil-collection
+  :after evil
+  :straight t
+  :config
+  (evil-collection-init))
+
+
+(use-package company
+  :straight t
+  :config (global-company-mode))
 
 
 (require 'server)

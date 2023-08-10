@@ -20,7 +20,7 @@
 (add-to-list 'default-frame-alist '(undecorated-rouded . t))
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 ;; (add-to-list 'default-frame-alist '(internal-border-width . 24))
-(add-to-list 'default-frame-alist '(font . "JetBrains Mono-14:regular:normal:normal"))
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-16:regular:normal:normal"))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
@@ -34,7 +34,8 @@
                    (blink-cursor-mode -1)
                    (column-number-mode +1)
                    (size-indication-mode +1)
-                   (global-auto-revert-mode +1))))
+                   (global-auto-revert-mode +1)
+                   (global-display-line-numbers-mode +1))))
 
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -57,13 +58,13 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
-(defun my/apply-theme (appearance)
-  "Load theme, taking current system APPEARANCE into consideration."
-  (mapc #'disable-theme custom-enabled-themes)
-  (pcase appearance
-    ('light (load-theme 'kaolin-breeze  t))
-    ('dark (load-theme 'kaolin-aurora t))))
+;; (defun my/apply-theme (appearance)
+;;   "Load theme, taking current system APPEARANCE into consideration."
+;;   (mapc #'disable-theme custom-enabled-themes)
+;;   (pcase appearance
+;;     ('light (load-theme 'kaolin-breeze  t))
+;;     ('dark (load-theme 'kaolin-aurora t))))
 
-(add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
+;; (add-hook 'ns-system-appearance-change-functions #'my/apply-theme)
 
 ;;; early-init.el ends here
